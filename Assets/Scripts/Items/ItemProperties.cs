@@ -26,7 +26,7 @@ public class ItemProperties : MonoBehaviour
      public bool Consumable;
 
      private void Awake() {
-          Durability = MaxDurability;
+          if (ItemBehavior)ItemBehavior.Properties = this;
      }
 
      public void SetUpHands(){

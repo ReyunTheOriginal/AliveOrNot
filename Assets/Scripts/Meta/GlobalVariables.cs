@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
@@ -7,6 +8,7 @@ public class GlobalVariables : MonoBehaviour
     public Hand OffHandObject;
     public Camera Camera;
     public Material SpriteLitDefault;
+    public List<EnemyProperties> AllEnemies = new List<EnemyProperties>();
 
     private void Awake() {
         GameServices.GlobalVariables = this;

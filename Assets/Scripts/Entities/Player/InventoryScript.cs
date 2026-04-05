@@ -6,25 +6,24 @@ using UnityEngine.UI;
 
 public class InventoryScript : MonoBehaviour
 {
-    public Dictionary<int, Item> Inventory = new Dictionary<int, Item>();
-    public Item SelectedItem;
-    public CanvasGroup FullInventoryUI;
-    public List<CanvasGroup> UnderInventoryUI;
-    public SelectedItemUI selectedItemUI;
-    public GameObject SlotPrefab;
-    public Transform ContentTransform;
-    public Camera Cam;
+    public Dictionary<int, Item> Inventory = new Dictionary<int, Item>(); //the Dictionary of the Inventory's Items
+    public Item SelectedItem; //the Currently Selected Item, Selected by clicking on its inventory slot
+    public CanvasGroup FullInventoryUI; //the Whole Inventory Menu
+    public List<CanvasGroup> UnderInventoryUI; //the UI that the Inventory should close before Opening
+    public ItemInfoUI itemInfoUI; //the Window that Shows the Item Information such as Name, Description, and uses
+    public GameObject SlotPrefab; //a prefab of the Slot an Item is Displayed in, in the inventory
+    public Transform ContentTransform; //the parent the Slots Should be Children Of
 
     public void OnInputEdit(){
-        if (int.TryParse(selectedItemUI.InputField.text, out int value)){
-            selectedItemUI.DropInt = value;
+        if (int.TryParse(itemInfoUI.InputField.text, out int value)){
+            itemInfoUI.DropInt = value;
         }
     }
     public void ConfirmDrop(){
-        DropItem(SelectedItem, selectedItemUI.DropInt);
+        DropItem(SelectedItem, itemInfoUI.DropInt);
     }
     public void DropButton(){
-        GameServices.UI.ToggleUI(false, selectedItemUI.ConfirmationMenu, "Menu");
+        GameServices.UI.ToggleUI(false, itemInfoUI.ConfirmationMenu, "Menu");
     }
     public void UseButton(){
         if (SelectedItem != null){
@@ -38,21 +37,23 @@ public class InventoryScript : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        //toggle InventoryUI
         if (Input.GetKeyDown(KeyCode.E)){
             GameServices.UI.ToggleUI(true, FullInventoryUI, "Inventory");
             foreach (CanvasGroup Group in UnderInventoryUI){
                 GameServices.UI.ToggleUI(false, Group, "");
             }
-            GameServices.UI.SetActiveCanvasGroup(false, selectedItemUI.ConfirmationMenu, "Menu", false);
-            GameServices.UI.SetActiveCanvasGroup(false, selectedItemUI.WholeUI, "ItemInfo", false);
+            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
+            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
                 Slot.Value.InvUI.Outline.color = Color.white;
             }
         }
 
+        //TEMPORARY: picks up items when clicked on
         if (Input.GetMouseButtonDown(0)){
-            RaycastHit2D hit = Physics2D.Raycast(Cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            RaycastHit2D hit = Physics2D.Raycast(GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
             if (hit.collider && hit.collider.CompareTag("Item")){
                 ItemProperties ItemPro = hit.collider.GetComponent<ItemProperties>();
@@ -61,11 +62,12 @@ public class InventoryScript : MonoBehaviour
             }
         }
         
+        //if you click outside of UI, Unselect the Item
         if (GameServices.UI.IsActive(FullInventoryUI)){
             if (Input.GetMouseButtonDown(0)){
                 if (!EventSystem.current.IsPointerOverGameObject()){
-                    GameServices.UI.SetActiveCanvasGroup(false, selectedItemUI.ConfirmationMenu, "Menu", false);
-                    GameServices.UI.SetActiveCanvasGroup(false, selectedItemUI.WholeUI, "ItemInfo", false);
+                    GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
+                    GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
                     
                     SelectedItem = null;
                     foreach(var Slot in GameServices.Equipment.Equipment.Slots){
@@ -75,6 +77,7 @@ public class InventoryScript : MonoBehaviour
             }
         }
 
+        //Make the Item GameObjects Follow the Player instead of being stationary
         foreach(var Item in Inventory){
             Item.Value.GameObject.transform.position = transform.position;
         }
@@ -96,9 +99,9 @@ public class InventoryScript : MonoBehaviour
             Button SlotButton = NewSlot.GetComponent<Button>();
 
             //edit the components
-            ItemIcon.sprite = properties.ItemSprite;
-            NumberText.text = "X" + properties.Amount.ToString();
-            SlotButton.onClick.AddListener(() => SlotClick(properties.ID));
+            ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
+            NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
+            SlotButton.onClick.AddListener(() => SlotClick(properties.ID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
 
             //save the data to the Item class to enter
             NewItem.Amount = properties.Amount;
@@ -134,27 +137,33 @@ public class InventoryScript : MonoBehaviour
     }
     public void SlotClick(int ItemID){
         if (Inventory.ContainsKey(ItemID)){
-            SelectedItem = Inventory[ItemID];
+            //assign the slot to the Selected Item Variable
+            SelectedItem = Inventory[ItemID]; 
 
+            //Reset the Equipment Outlines to White
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
                 Slot.Value.InvUI.Outline.color = Color.white;
             }
 
+            //HighLight the Slot that the selected Item can be Equipt in
             if (SelectedItem.ItemProperties.Equippable){
                 GameServices.Equipment.Equipment.Slots[SelectedItem.ItemProperties.equipSlot].InvUI.Outline.color = Color.green;
             }
 
-            GameServices.UI.SetActiveCanvasGroup(false, selectedItemUI.WholeUI, "ItemInfo");
+            //show the ItemInfo Window
+            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
-            selectedItemUI.Name.text = Inventory[ItemID].ItemProperties.ItemName;
-            selectedItemUI.Description.text = Inventory[ItemID].ItemProperties.Description;
+            //Edit the ItemInfo Window
+            itemInfoUI.Name.text = Inventory[ItemID].ItemProperties.ItemName;
+            itemInfoUI.Description.text = Inventory[ItemID].ItemProperties.Description;
 
+            //Decide whether to show the Use Button
             if (!Inventory[ItemID].ItemProperties.Useable){
-                if (selectedItemUI.UseButton.gameObject.activeSelf)
-                    selectedItemUI.UseButton.gameObject.SetActive(false);
+                if (itemInfoUI.UseButton.gameObject.activeSelf)
+                    itemInfoUI.UseButton.gameObject.SetActive(false);
             }else{
-                if (selectedItemUI.UseButton.gameObject.activeSelf)
-                    selectedItemUI.UseButton.gameObject.SetActive(true);
+                if (itemInfoUI.UseButton.gameObject.activeSelf)
+                    itemInfoUI.UseButton.gameObject.SetActive(true);
             }
         }
     }
@@ -224,7 +233,7 @@ public class InventoryScript : MonoBehaviour
         public GameObject UISlot;
     }
     [System.Serializable]
-    public class SelectedItemUI{
+    public class ItemInfoUI{
         public CanvasGroup WholeUI;
         public CanvasGroup ConfirmationMenu;
         public TMP_Text Name;

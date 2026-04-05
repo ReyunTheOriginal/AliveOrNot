@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 79694ff7cfcf9a841b1b49910dd43c4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   UsesLeftHand: 1
   DistanceFromPlayer: 0
   MaxDurability: 65
-  Durability: 0
+  Durability: 65
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b03e6ace1b5c83499c0614685fd79a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Properties: {fileID: 0}

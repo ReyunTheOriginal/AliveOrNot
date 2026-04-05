@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ItemBehavior : MonoBehaviour
 {
+    [HideInInspector] public ItemProperties Properties; 
     //Runs one time when used with the "Use" button in the inventory
     public virtual void Use(){
 

@@ -3,14 +3,9 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject Canvas;
+    public Canvas OverlayCanvas;
+    public Canvas WorldCanvas;
     public Dictionary<string, CanvasGroup> OpenedMenus = new Dictionary<string, CanvasGroup>();
-
-    void Start() {
-        if (!Canvas){
-            Canvas = FindAnyObjectByType<Canvas>().gameObject;
-        }
-    }
 
     private void Awake() {
         GameServices.UI = this;

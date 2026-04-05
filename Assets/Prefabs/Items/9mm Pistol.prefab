@@ -114,7 +114,7 @@ MonoBehaviour:
   UsesLeftHand: 0
   DistanceFromPlayer: 0
   MaxDurability: 75
-  Durability: 0
+  Durability: 75
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
@@ -130,9 +130,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85405d04f7dadd4ab94ad1e2459b5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Properties: {fileID: 0}
+  Damage: 10
+  RandomDamageOffsit: 5
   Automatic: 1
   Cooldown: 0.15
   Range: 20
+  KnockBack: 20
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
   BarrelEndLocation: {x: 0.25, y: 0.109375}
   GunShotAudio: {fileID: 8300000, guid: 7b08b554305bb4f4bab71acddaade48c, type: 3}

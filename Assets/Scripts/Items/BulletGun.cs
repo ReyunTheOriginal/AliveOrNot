@@ -6,9 +6,12 @@ using UnityEngine;
 public class BulletGun : ItemBehavior
 {
     [Header("Settings")]
+    public float Damage;
+    public float RandomDamageOffsit;
     public bool Automatic;
     public float Cooldown;
     public float Range;
+    public float KnockBack;
     public GameObject MuzzleFlash;
     public Vector2 BarrelEndLocation;
 
@@ -68,7 +71,7 @@ public class BulletGun : ItemBehavior
         GameServices.GlobalVariables.PrimaryHandObject.AudioSource.clip = GunShotAudio;
 
         //randomly change the pitch of the audio slightly
-        float RanPitch = UnityEngine.Random.Range(0.7f, 1.3f);
+        float RanPitch = UnityEngine.Random.Range(0.8f, 1.2f);
         GameServices.GlobalVariables.PrimaryHandObject.AudioSource.pitch = RanPitch;
 
         //finally play the audio clip
@@ -88,6 +91,7 @@ public class BulletGun : ItemBehavior
 
         //Create a Raycast from the end of the barrel to the mouse's direction that's the length of {Range}
         RaycastHit2D hit = Physics2D.Raycast(GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.position, dir, Range);
+        Hit(hit, dir); //Register the Attack
 
         //if Debug Mode is on visualize the Raycast
         if(DebugMode)Debug.DrawRay(GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.position, dir*Range,Color.red);
@@ -100,5 +104,17 @@ public class BulletGun : ItemBehavior
         var main = ps.main;
         main.startRotation = -rotate;
         
+    }
+
+    public void Hit(RaycastHit2D Ray, Vector2 KnockBackDir){
+        if (Ray.collider != null){
+            if (Ray.collider.gameObject.CompareTag("Enemy")){
+                EnemyProperties Properties = Ray.collider.gameObject.GetComponent<EnemyProperties>();
+
+                float dam = Damage + UnityEngine.Random.Range(-RandomDamageOffsit, RandomDamageOffsit);
+                Properties.HitEnemy(dam);
+                Properties.rig.AddForce(KnockBackDir * KnockBack, ForceMode2D.Impulse);
+            }
+        }
     }
 }

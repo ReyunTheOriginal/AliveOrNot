@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 79694ff7cfcf9a841b1b49910dd43c4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,6 +106,17 @@ MonoBehaviour:
   ItemBehavior: {fileID: 0}
   Useable: 0
   Equippable: 0
+  equipSlot: 0
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0}
+  UsesRightHand: 0
+  UsesLeftHand: 0
+  DistanceFromPlayer: 0
+  MaxDurability: 0
+  Durability: 0
+  HasDurability: 0
+  Unstackable: 0
+  Consumable: 0
 --- !u!58 &5663280466221199414
 CircleCollider2D:
   m_ObjectHideFlags: 0
