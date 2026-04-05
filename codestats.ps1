@@ -57,7 +57,7 @@ $(
 "@
 
 # README path
-$readmePath = "..\README.md"
+$readmePath = ".\README.md"
 
 if (!(Test-Path $readmePath)) {
     # Create new README if it doesn't exist
