@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {   
-        if (Vector2.Dot(rig.velocity, DirectionalSpeed) < Speed){
+        if (!GameUtils.OverASpeedInDirection(rig.velocity, DirectionalSpeed, Speed)){
             rig.AddForce(DirectionalSpeed * Speed, ForceMode2D.Force);
         }
     }

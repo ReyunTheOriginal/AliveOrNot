@@ -136,10 +136,11 @@ MonoBehaviour:
   Automatic: 1
   Cooldown: 0.15
   Range: 20
-  KnockBack: 20
+  KnockBack: 5
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
   BarrelEndLocation: {x: 0.25, y: 0.109375}
   GunShotAudio: {fileID: 8300000, guid: 7b08b554305bb4f4bab71acddaade48c, type: 3}
+  GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
   DebugMode: 1
   Timer: 0
 --- !u!58 &7393778220934918630

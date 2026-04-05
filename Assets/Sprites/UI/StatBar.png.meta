@@ -121,8 +121,8 @@ TextureImporter:
       name: StatBar_1
       rect:
         serializedVersion: 2
-        x: 49
-        y: 0
+        x: 0
+        y: 28
         width: 49
         height: 28
       alignment: 0
@@ -142,8 +142,8 @@ TextureImporter:
       name: StatBar_2
       rect:
         serializedVersion: 2
-        x: 98
-        y: 0
+        x: 0
+        y: 56
         width: 49
         height: 28
       alignment: 0
@@ -155,6 +155,48 @@ TextureImporter:
       bones: []
       spriteID: 481894d8fe08f1d49907481d4b159bbc
       internalID: -312076166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StatBar_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 84
+        width: 49
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a4fc5bb6d73aec4d84a4ab850923dd8
+      internalID: 244702833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StatBar_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 49
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d78cc6c0ce444e42b69cff47a9e6d14
+      internalID: -1645261246
       vertices: []
       indices: 
       edges: []
@@ -173,6 +215,8 @@ TextureImporter:
       StatBar_0: -390065908
       StatBar_1: 1448251672
       StatBar_2: -312076166
+      StatBar_3: 244702833
+      StatBar_4: -1645261246
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,6 +4,7 @@ using UnityEngine;
 public class GlobalVariables : MonoBehaviour
 {
     public GameObject Player;
+    public HealthSystem PlayerHealth;
     public Hand PrimaryHandObject;
     public Hand OffHandObject;
     public Camera Camera;
@@ -20,6 +21,8 @@ public class GlobalVariables : MonoBehaviour
         public GameObject Center;
         public GameObject MuzzleFlashLocation;
         public AudioSource AudioSource;
+        public Collider2D Collider;
+        public AnimationPlayer AnimationPlayer;
         public GameObject Object;
         public GameObject RightHand;
         public GameObject LeftHand;

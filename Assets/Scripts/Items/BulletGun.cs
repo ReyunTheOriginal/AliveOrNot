@@ -16,6 +16,7 @@ public class BulletGun : ItemBehavior
     public Vector2 BarrelEndLocation;
 
     public AudioClip GunShotAudio;
+    public AnimationClip GunShotAnimation;
 
     [Header("Debug")]
     public bool DebugMode;
@@ -27,7 +28,7 @@ public class BulletGun : ItemBehavior
     }
     public override void Hold(){
         //make the primary hand face the mouse for aiming
-        Rotate();
+        GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.PrimaryHandObject.Center, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0, true);
 
         //increase the timer for the cooldown
         Timer += Time.deltaTime;
@@ -51,31 +52,13 @@ public class BulletGun : ItemBehavior
 
     }
 
-    public void Rotate(){
-        //get the screen mouse position
-        Vector2 MouseRawPos = Input.mousePosition;
-        Vector2 MousePos = Camera.main.ScreenToWorldPoint(MouseRawPos); //convert it to world position
-
-        //get the direction from the Player position to the mouse world position;
-        Vector2 dir = (MousePos - (Vector2)GameServices.GlobalVariables.Player.transform.position).normalized; 
-
-        //get the angle of the direction (Degrees)
-        float rotate = Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg;
-
-        //set the rotation of the Primary hand Pivot to the angle of the Player position -> Mouse position direction
-        GameServices.GlobalVariables.PrimaryHandObject.Center.transform.rotation = Quaternion.Euler(0,0,rotate);
-    }
-
     public void PlayAudio(){
-        //set the primary hand AudioSource Clip to the GunShot
-        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.clip = GunShotAudio;
-
         //randomly change the pitch of the audio slightly
         float RanPitch = UnityEngine.Random.Range(0.8f, 1.2f);
         GameServices.GlobalVariables.PrimaryHandObject.AudioSource.pitch = RanPitch;
 
         //finally play the audio clip
-        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.Play();
+        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.PlayOneShot(GunShotAudio);
     }
 
     public void Shoot(){
@@ -104,6 +87,7 @@ public class BulletGun : ItemBehavior
         var main = ps.main;
         main.startRotation = -rotate;
         
+        GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.PlayClip(GunShotAnimation);
     }
 
     public void Hit(RaycastHit2D Ray, Vector2 KnockBackDir){

@@ -166,3 +166,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+  Damage: 0
+  RandomDamageOffsit: 0
+  Automatic: 0
+  Cooldown: 0
+  Range: 0
+  KnockBack: 0
+  SlashAudio: {fileID: 8300000, guid: 27d2b89a8c00cbe40b70f45c97a2f2e6, type: 3}
+  SlashAnimation: {fileID: 7400000, guid: 49e41902f03fc8e45be42b6174ca2d67, type: 2}
+  DebugMode: 1
+  Timer: 0
