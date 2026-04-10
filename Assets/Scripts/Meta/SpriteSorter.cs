@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class SpriteSorter : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class SpriteSorter : MonoBehaviour
     private int CurrentAntiZFighting;
     public float Offsit;
     [SerializeField] private SpriteRenderer SpriteRenderer;
+    [SerializeField] private TilemapRenderer TileRenderer;
     [SerializeField] private int OrderOffsit;
 
     private void Awake() {
@@ -17,10 +19,15 @@ public class SpriteSorter : MonoBehaviour
         if (SpriteRenderer == null)
             SpriteRenderer = GetComponent<SpriteRenderer>();
 
+        if (TileRenderer == null)
+            TileRenderer = GetComponent<TilemapRenderer>();
     }
 
     void Update()
     {
-        SpriteRenderer.sortingOrder = (int)(-(transform.position.y + Offsit) * 100) + OrderOffsit + CurrentAntiZFighting;
+        int order = (int)(-(transform.position.y + Offsit) * 100) + OrderOffsit;// + CurrentAntiZFighting;
+
+        if (SpriteRenderer)SpriteRenderer.sortingOrder = order;
+        if (TileRenderer)TileRenderer.sortingOrder = order;
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8735329611669649398}
   - component: {fileID: 7011517330005295484}
   - component: {fileID: 5180272834801611583}
-  - component: {fileID: 7167958557967201446}
   - component: {fileID: 4841240488167989892}
   m_Layer: 0
   m_Name: Dagger
@@ -99,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: d670f08603acb934b9b02870d590fc9f, type: 3}
   ItemName: Dagger
   Description: small stabby stabby
@@ -112,47 +112,11 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0.00000002980232}
   UsesRightHand: 0
   UsesLeftHand: 1
-  DistanceFromPlayer: 0
-  MaxDurability: 65
-  Durability: 65
+  MaxDurability: 260
+  Durability: 260
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
---- !u!58 &7167958557967201446
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2166095832711921992}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875
 --- !u!114 &4841240488167989892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,13 +130,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
-  Damage: 0
-  RandomDamageOffsit: 0
+  Damage: 10
+  RandomDamageOffsit: 5
   Automatic: 0
-  Cooldown: 0
-  Range: 0
-  KnockBack: 0
-  SlashAudio: {fileID: 8300000, guid: 27d2b89a8c00cbe40b70f45c97a2f2e6, type: 3}
+  Cooldown: 0.35
+  Range: 2.3
+  KnockBack: 10
+  StunLength: 0.3
+  SlashAudio: {fileID: 8300000, guid: c899901e66041d74ebece7e7ef51394f, type: 3}
   SlashAnimation: {fileID: 7400000, guid: 49e41902f03fc8e45be42b6174ca2d67, type: 2}
   DebugMode: 1
   Timer: 0
+  Hitting: 0
+  HitDir: {x: 0, y: 0}

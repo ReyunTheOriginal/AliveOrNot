@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class InventoryScript : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class InventoryScript : MonoBehaviour
     public ItemInfoUI itemInfoUI; //the Window that Shows the Item Information such as Name, Description, and uses
     public GameObject SlotPrefab; //a prefab of the Slot an Item is Displayed in, in the inventory
     public Transform ContentTransform; //the parent the Slots Should be Children Of
+    public Coroutine PickUpAnimationCoroutine;
+    public float DistanceForPickup;
+    public ItemProperties ClosestItem;
+    public float DistanceAwayFromClosestItem;
+    public RectTransform ClickIndicator;
 
     public void OnInputEdit(){
         if (int.TryParse(itemInfoUI.InputField.text, out int value)){
@@ -23,7 +29,7 @@ public class InventoryScript : MonoBehaviour
         DropItem(SelectedItem, itemInfoUI.DropInt);
     }
     public void DropButton(){
-        GameServices.UI.ToggleUI(false, itemInfoUI.ConfirmationMenu, "Menu");
+        GameServices.UI.ToggleCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu");
     }
     public void UseButton(){
         if (SelectedItem != null){
@@ -34,15 +40,18 @@ public class InventoryScript : MonoBehaviour
 
     private void Awake() {
         GameServices.Inventory = this;
+        PickUpAnimationCoroutine = null;
     }
 
     void Update()
     {   
+       CheckForClosestItem();
+
         //toggle InventoryUI
-        if (Input.GetKeyDown(KeyCode.E)){
-            GameServices.UI.ToggleUI(true, FullInventoryUI, "Inventory");
+        if (Input.GetKeyDown(KeyCode.Tab)){
+            GameServices.UI.ToggleCanvasGroup(true, FullInventoryUI, "Inventory");
             foreach (CanvasGroup Group in UnderInventoryUI){
-                GameServices.UI.ToggleUI(false, Group, "");
+                GameServices.UI.ToggleCanvasGroup(false, Group, "");
             }
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
@@ -51,40 +60,109 @@ public class InventoryScript : MonoBehaviour
             }
         }
 
-        //TEMPORARY: picks up items when clicked on
-        if (Input.GetMouseButtonDown(0)){
-            RaycastHit2D hit = Physics2D.Raycast(GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        if (PickUpAnimationCoroutine != null && GameServices.GlobalVariables.Player.rig.velocity.magnitude > 4.2f){
+            StopCoroutine(PickUpAnimationCoroutine);
+            GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", false);
+            PickUpAnimationCoroutine = null;
+        }
 
-            if (hit.collider && hit.collider.CompareTag("Item")){
-                ItemProperties ItemPro = hit.collider.GetComponent<ItemProperties>();
+        if (DistanceAwayFromClosestItem <= DistanceForPickup){
+            if (!ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(true);
+            ClickIndicator.position = ClosestItem.transform.position + new Vector3(0, 0.5f, 0);
+        }else{
+            if (ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(false);
+        }
 
-                if(ItemPro)AddItem(ItemPro);
-            }
+        //picks up items when Close Enough and Clicked E
+        if (DistanceAwayFromClosestItem <= DistanceForPickup && PickUpAnimationCoroutine == null && Input.GetKeyDown(KeyCode.E)){
+            if(ClosestItem)PickUpAnimationCoroutine = StartCoroutine(PickUpItem(ClosestItem));
         }
         
         //if you click outside of UI, Unselect the Item
-        if (GameServices.UI.IsActive(FullInventoryUI)){
+        if (GameServices.UI.IsActiveCanvasGroup(FullInventoryUI)){
             if (Input.GetMouseButtonDown(0)){
                 if (!EventSystem.current.IsPointerOverGameObject()){
-                    GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
-                    GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
-                    
-                    SelectedItem = null;
-                    foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-                        Slot.Value.InvUI.Outline.color = Color.white;
-                    }
+                    UnSelectItem();
                 }
             }
         }
 
         //Make the Item GameObjects Follow the Player instead of being stationary
         foreach(var Item in Inventory){
-            Item.Value.GameObject.transform.position = transform.position;
+            if (Item.Value.GameObject)Item.Value.GameObject.transform.position = transform.position;
+
+            if (Item.Value.ItemProperties.HasDurability && Item.Value.UISlot){
+                Item.Value.DurabilityText.text = (Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability *100).ToString("0") + "/100";
+                Item.Value.DurabilityBar.fillAmount = Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability;
+            }
         }
     }
 
+    public void CheckForClosestItem(){
+        float CurrentDistance = float.MaxValue;
+        ItemProperties CurrentItem = null;
+        foreach (ItemProperties item in GameServices.GlobalVariables.AllItems){
+            if (item.gameObject.activeSelf){
+                float DistanceAttempt = Vector2.Distance(item.transform.position, transform.position);
+                if (DistanceAttempt < CurrentDistance){
+                    CurrentDistance = DistanceAttempt;
+                    CurrentItem = item;
+                }
+            }
+        }
+        ClosestItem = CurrentItem;
+        DistanceAwayFromClosestItem = CurrentDistance;
+    }
+
+    public void UnSelectItem(){
+        GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
+        GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
+        
+        SelectedItem = null;
+        foreach(var Slot in GameServices.Equipment.Equipment.Slots){
+            Slot.Value.InvUI.Outline.color = Color.white;
+        }
+    }
+
+    public IEnumerator PickUpItem(ItemProperties ItemToPick){
+        GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", true);
+
+        yield return new WaitForSeconds(1);
+        AddItem(ItemToPick);
+
+        GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", false);
+        PickUpAnimationCoroutine = null;
+        yield return null;
+    }
+
+    public bool AlreadyHasItemWithID(int ItemID){
+        bool result = false;
+
+        foreach(var i in Inventory){
+            if (i.Value.ItemProperties.ID == ItemID){
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public Item GetItemWithID(int ItemID){
+        Item result = null;
+
+        foreach(var i in Inventory){
+            if (i.Value.ItemProperties.ID == ItemID){
+                result = i.Value;
+                break;
+            }
+        }
+
+        return result;
+    }
+
     public Item AddItem(ItemProperties properties){
-        if (!Inventory.ContainsKey(properties.ID)){
+        if (!AlreadyHasItemWithID(properties.ID) || properties.Unstackable){
             //runs if it's a new item;
 
             //create a new Item entry
@@ -101,7 +179,7 @@ public class InventoryScript : MonoBehaviour
             //edit the components
             ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
             NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
-            SlotButton.onClick.AddListener(() => SlotClick(properties.ID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
+            SlotButton.onClick.AddListener(() => SlotClick(properties.UniqueItemID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
 
             //save the data to the Item class to enter
             NewItem.Amount = properties.Amount;
@@ -113,20 +191,31 @@ public class InventoryScript : MonoBehaviour
             NewItem.UISlot = NewSlot;
             NewItem.GameObject = properties.gameObject;
 
+            if (properties.HasDurability){
+                NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject;
+                NewItem.DurabilityBar = NewSlot.transform.GetChild(2).GetChild(1).GetComponent<Image>();
+                NewItem.DurabilityText = NewSlot.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
+            }else{
+                Destroy(NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject);
+            }
+
             //deactivate the scene item GameObject;
             properties.gameObject.SetActive(false);
 
+            if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
+
             //add to the Inventory Data
-            Inventory.Add(properties.ID, NewItem);
+            Inventory.Add(properties.UniqueItemID, NewItem);
             return NewItem;
         }else{
             //runs if the item type already exists;
 
             //Destroy the scene object of the item
             Destroy(properties.gameObject);
+                
             
             //add the amount to the already existing item entry;
-            Item AlreadyExistingItem = Inventory[properties.ID];
+            Item AlreadyExistingItem = GetItemWithID(properties.ID);
             AlreadyExistingItem.Amount += properties.Amount;
 
             //update the UI;
@@ -135,10 +224,10 @@ public class InventoryScript : MonoBehaviour
             return AlreadyExistingItem;
         }
     }
-    public void SlotClick(int ItemID){
-        if (Inventory.ContainsKey(ItemID)){
+    public void SlotClick(int UniqueItemID){
+        if (Inventory.ContainsKey(UniqueItemID)){
             //assign the slot to the Selected Item Variable
-            SelectedItem = Inventory[ItemID]; 
+            SelectedItem = Inventory[UniqueItemID]; 
 
             //Reset the Equipment Outlines to White
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
@@ -154,11 +243,12 @@ public class InventoryScript : MonoBehaviour
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
             //Edit the ItemInfo Window
-            itemInfoUI.Name.text = Inventory[ItemID].ItemProperties.ItemName;
-            itemInfoUI.Description.text = Inventory[ItemID].ItemProperties.Description;
+            //itemInfoUI.Name.fontSize = Inventory[UniqueItemID].ItemProperties.ItemName.Length * 3.2;
+            itemInfoUI.Name.text = Inventory[UniqueItemID].ItemProperties.ItemName;
+            itemInfoUI.Description.text = Inventory[UniqueItemID].ItemProperties.Description;
 
             //Decide whether to show the Use Button
-            if (!Inventory[ItemID].ItemProperties.Useable){
+            if (!Inventory[UniqueItemID].ItemProperties.Useable){
                 if (itemInfoUI.UseButton.gameObject.activeSelf)
                     itemInfoUI.UseButton.gameObject.SetActive(false);
             }else{
@@ -168,7 +258,7 @@ public class InventoryScript : MonoBehaviour
         }
     }
     public void DropItem(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.ID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
            if (Item.Amount - Amount > 0){
                 //if the item amount won't end up being 0 or less
 
@@ -196,29 +286,33 @@ public class InventoryScript : MonoBehaviour
         }
     }
     public void RemoveItem(Item Item){
-        if (Inventory.ContainsKey(Item.ItemProperties.ID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
             Item ItemToDestroy = Item;
 
             //Destroy Objects;
             Destroy(ItemToDestroy.UISlot);
             Destroy(ItemToDestroy.GameObject);
+
+            if (SelectedItem.ItemProperties && SelectedItem.ItemProperties.UniqueItemID == Item.ItemProperties.UniqueItemID)
+                UnSelectItem();
             
             //Remove Item from Inventory Data
             Inventory.Remove(Item.ItemProperties.ID);
         }
     }
     public void ChangeItemAmount(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.ID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
             
-            if (Item.Amount + Amount > 0){
+            if (Inventory[Item.ItemProperties.UniqueItemID].Amount + Amount > 0){
                 //if the item amount won't end up being 0 or less
-                Item.Amount += Amount;
+                Inventory[Item.ItemProperties.UniqueItemID].Amount += Amount;
 
-                Item.UINumberText.text = "X" + Item.Amount.ToString();
+                Inventory[Item.ItemProperties.UniqueItemID].UINumberText.text = "X" + Inventory[Item.ItemProperties.ID].Amount.ToString();
             }else{
                 //if the item amount will end up being 0 or less
-                RemoveItem(Item);
+                RemoveItem(Inventory[Item.ItemProperties.UniqueItemID]);
             }
+
         }
     }
 
@@ -231,6 +325,9 @@ public class InventoryScript : MonoBehaviour
         public Button UIButton;
         public TMP_Text UINumberText;
         public GameObject UISlot;
+        public GameObject DurabilityUI;
+        public Image DurabilityBar;
+        public TMP_Text DurabilityText;
     }
     [System.Serializable]
     public class ItemInfoUI{

@@ -100,7 +100,7 @@ TextureImporter:
       name: PlayerBase_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 5
         y: 0
         width: 32
         height: 32
@@ -121,7 +121,7 @@ TextureImporter:
       name: PlayerBase_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 37
         y: 0
         width: 32
         height: 32
@@ -142,7 +142,7 @@ TextureImporter:
       name: PlayerBase_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 69
         y: 0
         width: 32
         height: 32
@@ -163,12 +163,12 @@ TextureImporter:
       name: PlayerBase_3
       rect:
         serializedVersion: 2
-        x: 99
-        y: 17
+        x: 0
+        y: 27
         width: 5
         height: 5
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,6 +176,27 @@ TextureImporter:
       bones: []
       spriteID: ca29205b850e5484cbb71a42145657c5
       internalID: 811457593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerBase_4
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc708faca6392f4419cf8ce4cf0817b9
+      internalID: 1444949640
       vertices: []
       indices: 
       edges: []
@@ -195,6 +216,7 @@ TextureImporter:
       PlayerBase_1: -1435773390
       PlayerBase_2: 1054335713
       PlayerBase_3: 811457593
+      PlayerBase_4: 1444949640
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

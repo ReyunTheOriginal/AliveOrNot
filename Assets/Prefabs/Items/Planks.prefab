@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4653478435634927081}
   - component: {fileID: 1733579771551186284}
   - component: {fileID: 7648385494647393317}
-  - component: {fileID: 5663280466221199414}
   m_Layer: 0
   m_Name: Planks
   m_TagString: Item
@@ -98,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: 8e45ed4b1fcb60947aee642e4b6a4987, type: 3}
   ItemName: Planks
   Description: Refined Wood. can be used for building and crafting many things
@@ -111,44 +111,8 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
-  DistanceFromPlayer: 0
   MaxDurability: 0
   Durability: 0
   HasDurability: 0
   Unstackable: 0
   Consumable: 0
---- !u!58 &5663280466221199414
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6338058358303534183}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875

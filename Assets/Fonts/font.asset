@@ -548,8 +548,14 @@ MonoBehaviour:
     m_Unicode: 65534
     m_GlyphIndex: 84
     m_Scale: 1
-    m_Name: font_84
-    m_HashCode: -163831648
+    m_Name: Armor
+    m_HashCode: 74187683
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 85
+    m_Scale: 1
+    m_Name: Damage
+    m_HashCode: -1671533397
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -1903,7 +1909,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 8
       m_HorizontalAdvance: 16
     m_GlyphRect:
-      m_X: 112
+      m_X: 96
       m_Y: 0
       m_Width: 16
       m_Height: 16
@@ -1911,6 +1917,22 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: -2067131978, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
+  - m_Index: 85
+    m_Metrics:
+      m_Width: 16
+      m_Height: 16
+      m_HorizontalBearingX: -8
+      m_HorizontalBearingY: 8
+      m_HorizontalAdvance: 16
+    m_GlyphRect:
+      m_X: 112
+      m_Y: 0
+      m_Width: 16
+      m_Height: 16
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 1445886110, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
 --- !u!21 &4845874937478632499

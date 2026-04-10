@@ -3,21 +3,32 @@ using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
 {
-    public GameObject Player;
-    public HealthSystem PlayerHealth;
-    public Hand PrimaryHandObject;
-    public Hand OffHandObject;
+    public PlayerData Player;
+    public HandData PrimaryHandObject;
+    public HandData OffHandObject;
     public Camera Camera;
     public Material SpriteLitDefault;
-    public List<EnemyProperties> AllEnemies = new List<EnemyProperties>();
+    public HashSet<EnemyProperties> AllEnemies = new HashSet<EnemyProperties>();
+    public HashSet<ItemProperties> AllItems = new HashSet<ItemProperties>();
 
     private void Awake() {
         GameServices.GlobalVariables = this;
     }
 
+    [System.Serializable]
+    public class PlayerData{
+        public GameObject GameObject;
+        public HealthSystem PlayerHealth;
+        public Rigidbody2D rig;
+        public EquiptmentScript Equiptment;
+        public Animator Animator;
+        public SpriteRenderer SpriteRenderer;
+        public PlayerMovement MovementScript;
+        public SpriteMask SpriteMask;
+    }
 
     [System.Serializable]
-    public class Hand{
+    public class HandData{
         public GameObject Center;
         public GameObject MuzzleFlashLocation;
         public AudioSource AudioSource;

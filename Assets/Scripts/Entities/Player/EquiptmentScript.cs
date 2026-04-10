@@ -25,6 +25,12 @@ public class EquiptmentScript : MonoBehaviour
 
                 if (Behavior)Behavior.Hold(); // if the behavior Exists, run its code
 
+                if (Properties.HasDurability)
+                    if (Properties.Durability <= 0){
+                        UnEquip(E.Value);
+                        GameServices.Inventory.RemoveItem(GameServices.Inventory.Inventory[Properties.UniqueItemID]);
+                    }
+
                 //keep the Durability UI Updated
                 if (Properties.HasDurability){
                     //Update the Text
@@ -32,16 +38,13 @@ public class EquiptmentScript : MonoBehaviour
                     E.Value.HotBarUI.DurabilityText.text = (Properties.Durability/Properties.MaxDurability *100).ToString("0") + "/100";
 
                     //Update the Bar
-                    if (Properties.Durability != 0){
-                        E.Value.InvUI.DurabilityBar.fillAmount = Properties.Durability/Properties.MaxDurability;
-                        E.Value.HotBarUI.DurabilityBar.fillAmount = Properties.Durability/Properties.MaxDurability;
-                    }else{
-                        E.Value.InvUI.DurabilityBar.fillAmount = 0;
-                        E.Value.HotBarUI.DurabilityBar.fillAmount = 0;
-                    }
+                    E.Value.InvUI.DurabilityBar.fillAmount = Properties.Durability/Properties.MaxDurability;
+                    E.Value.HotBarUI.DurabilityBar.fillAmount = Properties.Durability/Properties.MaxDurability;
                 }
             }
         }
+
+        
     }
 
     //Runs when a Slot is Clicked
@@ -51,59 +54,80 @@ public class EquiptmentScript : MonoBehaviour
             
 
             if (ESlot.Item != null && ESlot.Item.UISlot != null){
+                int ID = ESlot.Item.ItemProperties.UniqueItemID;
                 //Runs when an item is already in the slot:
+                UnEquip(ESlot);
 
-                //reset the slot icons to the defaults
-                ESlot.InvUI.Icon.sprite = ESlot.DefaultIcon;
-                ESlot.HotBarUI.Icon.sprite = ESlot.DefaultIcon;
-
-                //hide the Durability UI
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
-
-                //run the UnEquippted() Function
-                ItemBehavior Behavior = ESlot.Item.ItemProperties.ItemBehavior;
-                if (Behavior)Behavior.UnEquipped();
-
-                //show the Item Inventory Slot
-                ESlot.Item.UISlot.SetActive(true);
-
-                //reset the Equipment Slot Item
-                ESlot.Item = null;
+                if (
+                    GameServices.Inventory.SelectedItem != null && 
+                    GameServices.Inventory.SelectedItem.ItemProperties != null  &&  
+                    (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && 
+                    GameServices.Inventory.SelectedItem.ItemProperties.Equippable &&
+                    GameServices.Inventory.SelectedItem.ItemProperties.UniqueItemID != ID
+                ){
+                    Equip(ESlot, Slot);
+                }
+                
             }else{
                 //Runs when the Slot Is Empty:
-
-
-                //Check if an Object is Selected
-                if (GameServices.Inventory.SelectedItem != null && GameServices.Inventory.SelectedItem.ItemProperties != null && (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && GameServices.Inventory.SelectedItem.ItemProperties.Equippable){
-                    //set the Slot Item to the Selected Item
-                    ESlot.Item = GameServices.Inventory.SelectedItem;
-
-                    //Handle Durability UI
-                    if (ESlot.Item.ItemProperties.HasDurability){
-                        //Show Durability UI
-                        GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", true);
-                        GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", true);
-                    }else{
-                        //Hide Durability UI
-                        GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
-                        GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
-                    }
-
-                    //get Item Scripts
-                    ItemProperties Properties = ESlot.Item.ItemProperties;
-                    ItemBehavior Behavior = Properties.ItemBehavior;
-
-                    //Set Up the Visual hands Positions in the Player's Hand Slots
-                    Properties.SetUpHands();
-                    if (Behavior)Behavior.Equipped();//run the Equippted() Function
-
-                    //Set up UI
-                    ESlot.InvUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Inventory Icon
-                    ESlot.HotBarUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Hotbar Icon
-                    GameServices.Inventory.SelectedItem.UISlot.SetActive(false); //Hide the Inventory Item Slot
-                }
+                Equip(ESlot, Slot);
             }
+    }
+
+    public void UnEquip(EquipmentSlot ESlot){
+        //reset the slot icons to the defaults
+        ESlot.InvUI.Icon.sprite = ESlot.DefaultIcon;
+        ESlot.HotBarUI.Icon.sprite = ESlot.DefaultIcon;
+        
+        ESlot.InvUI.Icon.sprite = ESlot.DefaultIcon;
+        ESlot.HotBarUI.Icon.sprite = ESlot.DefaultIcon;
+
+        //hide the Durability UI
+        GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
+        GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
+
+        //run the UnEquippted() Function
+        ItemBehavior Behavior = ESlot.Item.ItemProperties.ItemBehavior;
+        ESlot.Item.ItemProperties.UnSetUpHands();
+        if (Behavior)Behavior.UnEquipped();
+
+        //show the Item Inventory Slot
+        ESlot.Item.UISlot.SetActive(true);
+
+        //reset the Equipment Slot Item
+        ESlot.Item = null;
+    }
+
+    public void Equip(EquipmentSlot ESlot, int Slot){
+        //Check if an Object is Selected
+        if (GameServices.Inventory.SelectedItem != null && GameServices.Inventory.SelectedItem.ItemProperties != null && (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && GameServices.Inventory.SelectedItem.ItemProperties.Equippable){
+            //set the Slot Item to the Selected Item
+            ESlot.Item = GameServices.Inventory.SelectedItem;
+
+            //Handle Durability UI
+            if (ESlot.Item.ItemProperties.HasDurability){
+                //Show Durability UI
+                GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", true);
+                GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", true);
+            }else{
+                //Hide Durability UI
+                GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
+                GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
+            }
+
+            //get Item Scripts
+            ItemProperties Properties = ESlot.Item.ItemProperties;
+            ItemBehavior Behavior = Properties.ItemBehavior;
+
+            //Set Up the Visual hands Positions in the Player's Hand Slots
+            Properties.SetUpHands();
+            if (Behavior)Behavior.Equipped();//run the Equippted() Function
+
+            //Set up UI
+            ESlot.InvUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Inventory Icon
+            ESlot.HotBarUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Hotbar Icon
+            GameServices.Inventory.SelectedItem.UISlot.SetActive(false); //Hide the Inventory Item Slot
+        }
     }
 
     [System.Serializable]

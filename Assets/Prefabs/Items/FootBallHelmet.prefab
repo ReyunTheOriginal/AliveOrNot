@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 789403431565899712}
   - component: {fileID: 2936904200859156947}
   - component: {fileID: 4718549146939642666}
-  - component: {fileID: 6431098171674252763}
+  - component: {fileID: 3601289686136523276}
   m_Layer: 0
   m_Name: FootBallHelmet
   m_TagString: Item
@@ -98,12 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: 0c8e4e6851618fd4aafd993494e1a3a8, type: 3}
   ItemName: Football Helmet
   Description: a strong football helmet, keeps your 0 braincells safe.
   ID: 7
   Amount: 1
-  ItemBehavior: {fileID: 0}
+  ItemBehavior: {fileID: 3601289686136523276}
   Useable: 0
   Equippable: 1
   equipSlot: 0
@@ -111,44 +112,22 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
-  DistanceFromPlayer: 0
-  MaxDurability: 145
-  Durability: 145
+  MaxDurability: 90
+  Durability: 90
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
---- !u!58 &6431098171674252763
-CircleCollider2D:
+--- !u!114 &3601289686136523276
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2918967597021370492}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f5ab4108f323641be254de1b6eebf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties: {fileID: 0}
+  ArmorValue: 50

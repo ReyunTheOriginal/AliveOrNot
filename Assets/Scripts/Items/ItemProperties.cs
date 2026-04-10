@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ItemProperties : MonoBehaviour
 {
+     public static int UniqueItemIDIncr;
+     [HideInInspector]public int UniqueItemID;
      public Sprite ItemSprite;
      public string ItemName;
      public string Description;
@@ -16,22 +18,38 @@ public class ItemProperties : MonoBehaviour
      public Vector2 LeftHandPosition;
      public bool UsesRightHand;
      public bool UsesLeftHand;
-     public float DistanceFromPlayer;
      [Space]
      public float MaxDurability;
      public float Durability;
      public bool HasDurability;
-
+     [Space]
      public bool Unstackable;
      public bool Consumable;
 
      private void Awake() {
           if (ItemBehavior)ItemBehavior.Properties = this;
+
+          UniqueItemID = UniqueItemIDIncr;
+          UniqueItemIDIncr++;
+
+          if (!Unstackable && HasDurability){
+               Debug.LogWarning("Item does not have compatible Unstackable and Durability Settings: " + ItemName);
+          }
+     }
+
+     private void Start() {
+          GameServices.GlobalVariables.AllItems.Add(this);
+     }
+
+     private void OnDestroy() {
+          GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
      public void SetUpHands(){
           if (equipSlot == EquipSlot.PrimaryHand){
                GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(true);
+
+               GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = transform.localScale;
 
                GameObject RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
                GameObject LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
@@ -56,6 +74,8 @@ public class ItemProperties : MonoBehaviour
           if (equipSlot == EquipSlot.OffHand){
                GameServices.GlobalVariables.OffHandObject.Object.SetActive(true);
 
+               GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = transform.localScale;
+
                GameObject RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
                GameObject LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
 
@@ -74,6 +94,18 @@ public class ItemProperties : MonoBehaviour
                }else{
                     LeftHand.SetActive(false);
                }
+          }
+     }
+
+     public void UnSetUpHands(){
+          if (equipSlot == EquipSlot.PrimaryHand){
+               GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(false);
+               GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = new Vector3(2,2,1);
+          }
+
+          if (equipSlot == EquipSlot.OffHand){
+               GameServices.GlobalVariables.OffHandObject.Object.SetActive(false);
+               GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = new Vector3(2,2,1);
           }
      }
 

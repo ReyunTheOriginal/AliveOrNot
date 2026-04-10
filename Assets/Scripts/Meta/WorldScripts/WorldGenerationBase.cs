@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,12 +12,17 @@ public class WorldGenerationBase : MonoBehaviour
     public Grid Grid; // the grid the chunks are children of
     public Transform DebugParent; // the object the DebugOverlays are children of
     public int ChunkSize = 16; //the size of Chunks
-    public bool Debug = false; //if it should generate Debug stuff
-     public List<Biome> Biomes; //Biomes it can Generate
+    public List<Biome> Biomes; //Biomes it can Generate
     public PerlinConfig ElevationConfig; 
     public PerlinConfig TemperatureConfig;
     public PerlinConfig HumidityConfig;
+    public DecorGeneration decorGeneration;
+
+    public Tile WaterTileAsset;
+
     [Header("Debug")]
+    public bool DebugMode = false; //if it should generate Debug stuff
+    public GameObject DebugText;
     public float ResolutionMultiplier;
 
     void Awake(){
@@ -71,6 +76,9 @@ public class WorldGenerationBase : MonoBehaviour
                         for (int i = 0; i < biomesSnapshot.Count; i++){
                             if (biomesSnapshot[i].Matches(Elevation, Temperature, Humidity)){
                                 matched = biomesSnapshot[i];
+
+                                if (biomesSnapshot[i].Block == WaterTileAsset)
+                                    Cache.HasWater = true;
                                 break;
                             }
                         }
@@ -81,7 +89,7 @@ public class WorldGenerationBase : MonoBehaviour
                         Cache.Humidity[l]    = Humidity;
                         Cache.Positions[l]   = new Vector3Int(x, y);
                         Cache.Biomes[l]      = matched;
-                        Cache.Tiles[l]     = matched.Block;
+                        Cache.Tiles[l]       = matched.Block;
                     }
                 }
                 done = true;
@@ -100,9 +108,6 @@ public class WorldGenerationBase : MonoBehaviour
             Ren.sortingLayerName = "Ground"; //add it to the Ground Render Layer
             Ren.material = GameServices.GlobalVariables.SpriteLitDefault; // game it work with lighting
 
-            // set the tiles of the chunk all at once 
-            TileMap.SetTiles(Cache.Positions, Cache.Tiles); 
-
             //apply Configured stuff to the Chunk
             NewChunk.WorldObject = NewWorldObject;
             NewChunk.ChunkPos = ChunkPos;
@@ -110,54 +115,20 @@ public class WorldGenerationBase : MonoBehaviour
             NewChunk.TilemapRenderer = Ren;
             NewChunk.Parent = this;
 
+            if(Cache.HasWater)HandleWaterTiles(NewChunk, Cache);
+
+            // set the tiles of the chunk all at once 
+            TileMap.SetTiles(Cache.Positions, Cache.Tiles); 
+
             // now fill the real chunk in
             ChunkDict[ChunkPos] = NewChunk;
             NewChunk.Deactivate(); 
 
-            //Make a Debug Overlay
-            if (Debug){
-                DebugOverlay(Cache.Elevation, Cache.Positions, Color.white, ChunkPos, "ElevationDebug");
-                DebugOverlay(Cache.Temperature, Cache.Positions, Color.red, ChunkPos, "TemperatureDebug");
-                DebugOverlay(Cache.Humidity, Cache.Positions, Color.blue, ChunkPos, "HumidityDebug");
-            }
+            //finally Decorate the Chunk
+            decorGeneration.DecorateChunk(NewChunk, Cache);
         }
         yield return null;
     }
-
-    public void DebugOverlay(float[] Perlins, Vector3Int[] Positions, Color color, Vector2Int ChunkPos, string Name = "DebugOverlay"){
-        //Create a new Texture
-        Texture2D Tex = new Texture2D(ChunkSize, ChunkSize);
-
-        //Create a new Overlay Object
-        GameObject NewOverlay = new GameObject();
-
-        //Configure it
-        NewOverlay.name = $"{Name}[{ChunkPos.x}, {ChunkPos.y}]";
-        NewOverlay.transform.position = (Vector2)ChunkPos * ChunkSize * ResolutionMultiplier;
-        NewOverlay.transform.parent = DebugParent;
-        SpriteRenderer ren = NewOverlay.AddComponent<SpriteRenderer>();
-        ren.sortingLayerName = "Overlay";
-
-        //set the pixels
-        for (int i=0;i<Perlins.Length;i++){
-            Color PlaceColor = color;
-            PlaceColor.a = Perlins[i] * 0.2f;
-
-            Tex.SetPixel(Positions[i].x,Positions[i].y,PlaceColor);
-        }
-
-        //apply it and make a sprite
-        Tex.Apply();
-        Sprite sprite = Sprite.Create(
-            Tex,
-            new Rect(0, 0, ChunkSize, ChunkSize),
-            new Vector2(0f, 0f), 
-            1f / ResolutionMultiplier                 
-        );
-        //set the sprite
-        ren.sprite = sprite;
-    }
-
 
     //calculate Perlin noise
     public float GetPerlin(Vector2Int ChunkPos, Vector2Int TilePos, PerlinConfig config, Vector2 Offset){
@@ -181,9 +152,27 @@ public class WorldGenerationBase : MonoBehaviour
         return Mathf.Clamp01(value / max);
     }
 
-    //Add Decorations to a chunk
-    public void DecorateChunk(Chunk chunk){
+    public void HandleWaterTiles(Chunk chunk, ValueCache Cache){
+        TilemapCollider2D Col = chunk.WorldObject.AddComponent<TilemapCollider2D>();
+        //Rigidbody2D rig = chunk.WorldObject.AddComponent<Rigidbody2D>();
+        //CompositeCollider2D Com = chunk.WorldObject.AddComponent<CompositeCollider2D>();
 
+        //rig.bodyType = RigidbodyType2D.Static;
+        //Col.usedByComposite = true;
+        Col.isTrigger = true;
+        Col.excludeLayers = GameUtils.LayerMaskFromNumbers(2);
+
+        chunk.WorldObject.AddComponent<WaterTiles>();
+
+        for (int i=0;i<Cache.Positions.Length;i++){
+            if (Cache.Biomes[i].Block == WaterTileAsset){
+                WaterTile Water = new WaterTile();
+
+                Water.Position = (Vector2Int)Cache.Positions[i];
+
+                chunk.WaterTiles.Add(Water);
+            }
+        }
     }
 
     [System.Serializable]
@@ -200,6 +189,7 @@ public class WorldGenerationBase : MonoBehaviour
         public bool NeverActive = false;
 
         public HashSet<GameObject> ObjectsInChunk = new HashSet<GameObject>();
+        public HashSet<WaterTile> WaterTiles = new HashSet<WaterTile>();
 
         public void Activate(){
             if (!NeverActive){
@@ -231,6 +221,11 @@ public class WorldGenerationBase : MonoBehaviour
             }
         }
     }
+    public class WaterTile{
+        public Vector2Int Position;
+        public int Depth;
+    }
+
     [System.Serializable]
     public class ValueCache{
         public Vector3Int[] Positions;
@@ -239,6 +234,7 @@ public class WorldGenerationBase : MonoBehaviour
         public float[]      Elevation;
         public float[]      Temperature;
         public float[]      Humidity;
+        public bool HasWater = false;
 
         public ValueCache(int size){
             Positions   = new Vector3Int[size];
@@ -249,6 +245,7 @@ public class WorldGenerationBase : MonoBehaviour
             Humidity    = new float[size];
         }
     }
+    
     [System.Serializable]
     public class PerlinConfig{
        public float scale;
@@ -292,5 +289,9 @@ public class WorldGenerationBase : MonoBehaviour
         [Range(0f, 1f)]
         public float Frequancy;
         public GameObject Object;
+
+        public bool Matches(float num){
+            return num <= Frequancy;
+        }
     }
 }

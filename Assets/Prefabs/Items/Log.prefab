@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1874547418704667767}
   - component: {fileID: 5576323272689285079}
   - component: {fileID: 5345931789183148622}
-  - component: {fileID: 3616383997730680392}
   m_Layer: 0
   m_Name: Log
   m_TagString: Item
@@ -98,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: 21ed5d614c405ea418e844c30a96aeae, type: 3}
   ItemName: Logs
   Description: a murdered tree. can be used for quick builds or made into planks
@@ -111,44 +111,8 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
-  DistanceFromPlayer: 0
   MaxDurability: 0
   Durability: 0
   HasDurability: 0
   Unstackable: 0
   Consumable: 0
---- !u!58 &3616383997730680392
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2849798943248196329}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875

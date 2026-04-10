@@ -1,32 +1,45 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyProperties : MonoBehaviour{
 
-    public float MaxHealth;
-    public float Health;
+    [SerializeField]private float MaxHealth;
+    [SerializeField]private float Health;
     public float Damage;
     public float RandomDamageOffsit;
 
-    public float LightAttackCooldown;
-    public float HeavyAttackCooldown;
+    [SerializeField]private float LightAttackCooldown;
+    [SerializeField]private float HeavyAttackCooldown;
 
-    public float SpecialAttackCooldown;
+    [SerializeField]private float SpecialAttackCooldown;
+
+    public float KnockBack;
+    public float StunLength;
 
     public float WalkSpeed;
 
-    public GameObject HealthBarPrefab;
+    [SerializeField]private GameObject HealthBarPrefab;
 
-    public float HealthBarHeight;
+    [SerializeField]private float HealthBarHeight;
+    [SerializeField]private List<Drop> Drops;
 
     private HealthBar healthBar = new HealthBar(); 
 
 
-    public Stat CurrentStat;
+    public Dictionary<Stat, bool> CurrentStats = new Dictionary<Stat, bool>{
+        {Stat.Chasing, false},
+        {Stat.Wandering, false},
+        {Stat.Idle, false},
+        {Stat.Attacking, false},
+        {Stat.Spawning, false},
+        {Stat.Stunned, false},
+    };
     [Header("Componenets")]
     public Rigidbody2D rig;
-    public EnemyBehavior behavior;
+    [SerializeField]private EnemyBehavior behavior;
 
     private void Awake() {
         if (behavior)behavior.Properties = this;
@@ -41,22 +54,16 @@ public class EnemyProperties : MonoBehaviour{
         healthBar.Bar = NewHealthBar.transform.GetChild(0).GetComponent<Image>();
         NewHealthBar.SetActive(false);
 
-        CurrentStat = Stat.Spawning;
     }
 
     private void Update() {
         if (behavior){
-            switch (CurrentStat){
-                case Stat.Chasing:
-                    behavior.Chasing();
-                    break;
-                case Stat.Wandering:
-                    behavior.Wandering();
-                    break;
-                case Stat.Idle:
-                    behavior.Idling();
-                    break;
-            }
+            if (CurrentStats[Stat.Chasing])
+                behavior.Chasing();
+             if (CurrentStats[Stat.Wandering])
+                behavior.Wandering();
+             if (CurrentStats[Stat.Idle])
+                behavior.Idling();
         }
 
         healthBar.Bar.fillAmount = Health/MaxHealth;
@@ -64,17 +71,29 @@ public class EnemyProperties : MonoBehaviour{
     }
 
     private void OnDestroy() {
-        Destroy(healthBar.FullUI.gameObject);
+        if (healthBar.FullUI)Destroy(healthBar.FullUI.gameObject);
     }
 
-    public void HitEnemy(float DamageDealt){
+    public void HitEnemy(float DamageDealt, Vector2 KnockBack){
         if (DamageDealt > 0){
             if (behavior) behavior.OnHit();
             ChangeHealth(-DamageDealt);
 
+            rig.AddForce(KnockBack, ForceMode2D.Impulse);
+
             if (Health <= 0){
                 GameServices.GlobalVariables.AllEnemies.Remove(this);
+                DropItems();
                 behavior.OnDeath();
+            }
+        }
+    }
+
+    private void DropItems(){
+        foreach (Drop chance in Drops){
+            float num = UnityEngine.Random.Range(0f, 1f);
+            if (chance.Matches(num)){
+                Instantiate(chance.Object, transform.position, Quaternion.identity);
             }
         }
     }
@@ -88,12 +107,24 @@ public class EnemyProperties : MonoBehaviour{
         }
     }
 
+    [System.Serializable]
+    public class Drop{
+        [Range(0f, 1f)]
+        public float Frequancy;
+        public GameObject Object;
+
+        public bool Matches(float num){
+            return num <= Frequancy;
+        }
+    }
+
     public enum Stat{
         Chasing,
         Wandering,
         Idle,
         Attacking,
         Spawning,
+        Stunned,
     }
     public enum Direction{
         Up,
@@ -101,7 +132,6 @@ public class EnemyProperties : MonoBehaviour{
         Left,
         Right
     }
-
     public class HealthBar{
         public RectTransform FullUI;
         public Image Bar;

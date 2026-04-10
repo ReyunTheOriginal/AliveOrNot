@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ForestGrass
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 176767488, guid: a719a27be3db46a4f856e2cb48f68694, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   m_Transform:
     e00: 1
     e01: 0
@@ -33,4 +33,4 @@ MonoBehaviour:
     e33: 1
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
-  m_ColliderType: 1
+  m_ColliderType: 0

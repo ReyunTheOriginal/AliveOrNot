@@ -1864,6 +1864,27 @@ TextureImporter:
       name: font_84
       rect:
         serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e409ddae407bcf04e9390b20f5f5f849
+      internalID: -2067131978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: font_85
+      rect:
+        serializedVersion: 2
         x: 112
         y: 0
         width: 16
@@ -1875,8 +1896,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 968f270cfb0f4424196c214f1ece59cc
-      internalID: -2067131978
+      spriteID: 0c75d329cfd98b54fb25d4d4581b7b4d
+      internalID: 1445886110
       vertices: []
       indices: 
       edges: []
@@ -1976,6 +1997,7 @@ TextureImporter:
       font_82: 2008398022
       font_83: -672227384
       font_84: -2067131978
+      font_85: 1445886110
       font_9: -581465486
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

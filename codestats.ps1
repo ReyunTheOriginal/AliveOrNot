@@ -57,12 +57,14 @@ $(
 "@
 
 # README path
-$readmePath = ".\README.md"
+$readmePath = ".\CodeStats.md"
+
+Clear-Content CodeStats.md
 
 if (!(Test-Path $readmePath)) {
     # Create new README if it doesn't exist
     $statsBlock | Out-File $readmePath
-    Write-Host "README.md created with stats."
+    Write-Host "CodeStats.md created with stats."
     return
 }
 
@@ -83,4 +85,6 @@ if ($readmeContent -match "## Code Stats") {
 # Write back
 $updatedContent | Out-File $readmePath
 
-Write-Host "README.md updated with latest stats."
+Write-Host "CodeStats.md updated with latest stats."
+
+Write-Host $updatedContent

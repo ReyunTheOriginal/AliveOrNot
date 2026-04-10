@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3402432031525072063}
   - component: {fileID: 5145709596745320950}
   - component: {fileID: 946463028155045486}
-  - component: {fileID: 7393778220934918630}
   m_Layer: 0
   m_Name: 9mm Pistol
   m_TagString: Item
@@ -99,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: b99fec2c6a141344ea54a035db2caa07, type: 3}
   ItemName: 9mm Pistol
   Description: a reliable handgun. can be used with 9mm ammo.
@@ -112,9 +112,8 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 0
-  DistanceFromPlayer: 0
-  MaxDurability: 75
-  Durability: 75
+  MaxDurability: 300
+  Durability: 300
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
@@ -132,49 +131,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
   Damage: 10
+  MaxHits: 1
   RandomDamageOffsit: 5
   Automatic: 1
-  Cooldown: 0.15
+  Cooldown: 0.3
   Range: 20
   KnockBack: 5
+  Recoil: 0.1
+  amountOfRays: 1
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
   BarrelEndLocation: {x: 0.25, y: 0.109375}
   GunShotAudio: {fileID: 8300000, guid: 7b08b554305bb4f4bab71acddaade48c, type: 3}
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
   DebugMode: 1
   Timer: 0
---- !u!58 &7393778220934918630
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8037333862181048599}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875

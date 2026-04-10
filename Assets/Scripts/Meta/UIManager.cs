@@ -35,12 +35,12 @@ public class UIManager : MonoBehaviour
         OpenedMenus.Clear();
     }
 
-    public void ToggleUI(bool IsAMenu, CanvasGroup group, string name){
-        bool state = !IsActive(group);
+    public void ToggleCanvasGroup(bool IsAMenu, CanvasGroup group, string name){
+        bool state = !IsActiveCanvasGroup(group);
         SetActiveCanvasGroup(IsAMenu, group, name, state);
     }
 
-    public bool IsActive(CanvasGroup Group){
+    public bool IsActiveCanvasGroup(CanvasGroup Group){
         return Group.alpha == 1 && Group.blocksRaycasts && Group.interactable;
     }
 

@@ -14,13 +14,6 @@ public class CameraMovement : MonoBehaviour
     [Header("-Component-")]
     public Camera Camera;
 
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void LateUpdate()
     {
         if (Follows && FollowTarget != null){

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4158545385602318644}
   - component: {fileID: 6385020161167488300}
   - component: {fileID: 6291741981620885760}
-  - component: {fileID: 8176656974995650596}
+  - component: {fileID: 3619434418540676715}
   m_Layer: 0
   m_Name: LeatherBoots
   m_TagString: Item
@@ -98,12 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: 9fed30e652991ca42bddcebcd2a67c2a, type: 3}
   ItemName: Leather Boots
   Description: WHAT ARE THOOOOOSE!!
   ID: 5
   Amount: 1
-  ItemBehavior: {fileID: 0}
+  ItemBehavior: {fileID: 3619434418540676715}
   Useable: 0
   Equippable: 1
   equipSlot: 2
@@ -111,44 +112,22 @@ MonoBehaviour:
   LeftHandPosition: {x: 0, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
-  DistanceFromPlayer: 0
-  MaxDurability: 115
-  Durability: 115
+  MaxDurability: 130
+  Durability: 130
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
---- !u!58 &8176656974995650596
-CircleCollider2D:
+--- !u!114 &3619434418540676715
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7619883086852221684}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1875
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f5ab4108f323641be254de1b6eebf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties: {fileID: 0}
+  ArmorValue: 40
