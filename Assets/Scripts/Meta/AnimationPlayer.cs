@@ -7,69 +7,109 @@ public class AnimationPlayer : MonoBehaviour
 {
     PlayableGraph graph;
     AnimationPlayableOutput output;
-    Animator animator;
     AnimationClipPlayable playable;
 
     public System.Func<IEnumerator> RunAfterAnimationIsOver;
 
-    void Awake()
-    {
-        animator = GetComponent<Animator>();
+    Coroutine currentAnimation;
 
+    bool isInitialized = false;
+
+    void Awake(){
+        var animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = null; // 🔥 kill the controller here
         graph = PlayableGraph.Create();
         output = AnimationPlayableOutput.Create(graph, "Animation", animator);
-
-        animator.enabled = false;
+        graph.Play();
+        isInitialized = true;
     }
 
-    public void PlayClip(AnimationClip clip)
-    {
-        animator.enabled = true;
+    void OnEnable(){
+        if (!isInitialized) return; // 🔥 skip if Awake hasn't run yet
 
-        animator.Rebind();
-        animator.Update(0);
+        if (output.IsOutputValid())
+            output.SetSourcePlayable(Playable.Null);
 
-        graph.Stop();
+        if (playable.IsValid())
+            playable.Destroy();
+
+        playable = default;
+
+        if (graph.IsValid())
+            graph.Play();
+    }
+
+    void OnDisable(){
+        if (!isInitialized) return;
+
+        if (currentAnimation != null)
+        {
+            StopCoroutine(currentAnimation);
+            currentAnimation = null;
+        }
+
+        if (output.IsOutputValid())
+            output.SetSourcePlayable(Playable.Null);
+
+        if (playable.IsValid())
+            playable.Destroy();
+
+        playable = default;
+
+        if (graph.IsValid())
+            graph.Stop();
+
+        // 🔥 Removed animator.Rebind/Update — can't call on inactive object
+        // The null controller means there's nothing to reset anyway
+    }
+
+    public void PlayClip(AnimationClip clip){
+        if (currentAnimation != null)
+            StopCoroutine(currentAnimation);
+
+        // 🔥 Destroy the old node before creating a new one
+        if (playable.IsValid())
+            playable.Destroy();
 
         playable = AnimationClipPlayable.Create(graph, clip);
         output.SetSourcePlayable(playable);
+        playable.SetTime(0);
 
-        graph.Play();
+        currentAnimation = StartCoroutine(WaitForAnimation(clip));
     }
 
-    void Update()
-    {
-        if (!graph.IsPlaying())
-            return;
 
-        if (playable.IsValid()){
-            if (playable.GetTime() >= playable.GetAnimationClip().length){
-                graph.Stop();
-                animator.enabled = false;
-                playable = default;
+    IEnumerator WaitForAnimation(AnimationClip clip) {
+        // 1. Wait until the playable has actually finished based on its own clock
+        while (playable.IsValid() && !playable.IsDone() && playable.GetTime() < clip.length) {
+            yield return null; 
+        }
 
-                if (RunAfterAnimationIsOver != null){
-                    StartCoroutine(RunAfterAnimationIsOver());
-                    RunAfterAnimationIsOver = null;
-                }
-            }
+        // 2. IMPORTANT: Force the graph to evaluate the exact final frame
+        if (playable.IsValid()) {
+            playable.SetTime(clip.length);
+            graph.Evaluate(); 
+        }
+
+        // 3. Give the engine one frame to render this final pose
+        yield return new WaitForEndOfFrame();
+
+        // Now it is safe to cleanup
+        output.SetSourcePlayable(Playable.Null);
+        
+        if (playable.IsValid())
+            playable.Destroy();
+
+        playable = default;
+        currentAnimation = null;
+
+        if (RunAfterAnimationIsOver != null) {
+            yield return StartCoroutine(RunAfterAnimationIsOver());
+            RunAfterAnimationIsOver = null;
         }
     }
 
-    void OnDestroy()
-    {
+    void OnDestroy(){
         graph.Destroy();
     }
 }
-
-//how to use:
-
-/*
-other script:
-    IEnumerator function(){
-        yield return null;
-    }
-
-    AnimationPlayer.RunAfterAnimationIsOver = function;
-
-*/

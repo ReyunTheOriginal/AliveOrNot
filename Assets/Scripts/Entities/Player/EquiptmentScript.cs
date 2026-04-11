@@ -15,6 +15,34 @@ public class EquiptmentScript : MonoBehaviour
         Equipment.InitDictionary();
     }
 
+    void LateUpdate(){
+        //go through each Equipped object and run its LateHold() Code, the code that runs every frame if equipped.
+        foreach(var E in Equipment.Slots){
+            //check if the slot actually has an item
+            if (E.Value.Item != null && E.Value.Item.UISlot){
+                ItemProperties Properties = E.Value.Item.ItemProperties; //properties script
+                ItemBehavior Behavior = E.Value.Item.ItemProperties.ItemBehavior; //behavior script that has the item's code
+
+                if (Behavior)Behavior.LateHold(); // if the behavior Exists, run its code
+
+            }
+        }
+    }
+
+    void FixedUpdate(){
+        //go through each Equipped object and run its FixedHold() Code, the code that runs every frame if equipped.
+        foreach(var E in Equipment.Slots){
+            //check if the slot actually has an item
+            if (E.Value.Item != null && E.Value.Item.UISlot){
+                ItemProperties Properties = E.Value.Item.ItemProperties; //properties script
+                ItemBehavior Behavior = E.Value.Item.ItemProperties.ItemBehavior; //behavior script that has the item's code
+
+                if (Behavior)Behavior.FixedHold(); // if the behavior Exists, run its code
+
+            }
+        }
+    }
+
     void Update(){   
         //go through each Equipped object and run its Hold() Code, the code that runs every frame if equipped. also update Durability UI
         foreach(var E in Equipment.Slots){
@@ -58,10 +86,8 @@ public class EquiptmentScript : MonoBehaviour
                 //Runs when an item is already in the slot:
                 UnEquip(ESlot);
 
-                if (
-                    GameServices.Inventory.SelectedItem != null && 
-                    GameServices.Inventory.SelectedItem.ItemProperties != null  &&  
-                    (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && 
+                if ( 
+                    (int)GameServices.Inventory.SelectedItem?.ItemProperties?.equipSlot == Slot && 
                     GameServices.Inventory.SelectedItem.ItemProperties.Equippable &&
                     GameServices.Inventory.SelectedItem.ItemProperties.UniqueItemID != ID
                 ){

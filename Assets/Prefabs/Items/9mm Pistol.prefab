@@ -117,6 +117,10 @@ MonoBehaviour:
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  Range: 0
 --- !u!114 &946463028155045486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,18 +134,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+  DamageFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.0027695
+      inSlope: -0.018153796
+      outSlope: -0.018153796
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.20104441
+    - serializedVersion: 3
+      time: 0.5447952
+      value: 0.88584113
+      inSlope: -0.7048888
+      outSlope: -0.7048888
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0025456
+      value: 0.0004969693
+      inSlope: -3.9621127
+      outSlope: -3.9621127
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.034847602
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   Damage: 10
   MaxHits: 1
   RandomDamageOffsit: 5
   Automatic: 1
   Cooldown: 0.3
-  Range: 20
   KnockBack: 5
   Recoil: 0.1
-  amountOfRays: 1
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
   BarrelEndLocation: {x: 0.25, y: 0.109375}
-  GunShotAudio: {fileID: 8300000, guid: 7b08b554305bb4f4bab71acddaade48c, type: 3}
+  Range: 25
+  amountOfRays: 1
+  AttackRadius: 0
+  GunShotAudio: {fileID: 8300000, guid: e76393aba7ca9314ebeabb5d906895b0, type: 3}
+  BasePitch: 1
+  PitchChangeRange: 0.05
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
+  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
+  BulletID: 11
+  ChamberSize: 16
+  ReloadSpeed: 0
+  BulletsInChamber: 0
   DebugMode: 1
   Timer: 0

@@ -19,6 +19,7 @@ public class InventoryScript : MonoBehaviour
     public ItemProperties ClosestItem;
     public float DistanceAwayFromClosestItem;
     public RectTransform ClickIndicator;
+    public ImmediateInfoUI ImmediateInfo;
 
     public void OnInputEdit(){
         if (int.TryParse(itemInfoUI.InputField.text, out int value)){
@@ -66,16 +67,20 @@ public class InventoryScript : MonoBehaviour
             PickUpAnimationCoroutine = null;
         }
 
-        if (DistanceAwayFromClosestItem <= DistanceForPickup){
-            if (!ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(true);
-            ClickIndicator.position = ClosestItem.transform.position + new Vector3(0, 0.5f, 0);
+        if (!GameServices.UI.AMenuIsOpened()){
+             if (DistanceAwayFromClosestItem <= DistanceForPickup){
+                if (!ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(true);
+                ClickIndicator.position = ClosestItem.transform.position + new Vector3(0, 0.5f, 0);
+            }else{
+                if (ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(false);
+            }
+
+            //picks up items when Close Enough and Clicked E
+            if (DistanceAwayFromClosestItem <= DistanceForPickup && PickUpAnimationCoroutine == null && Input.GetKeyDown(KeyCode.E)){
+                if(ClosestItem)PickUpAnimationCoroutine = StartCoroutine(PickUpItem(ClosestItem));
+            }
         }else{
             if (ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(false);
-        }
-
-        //picks up items when Close Enough and Clicked E
-        if (DistanceAwayFromClosestItem <= DistanceForPickup && PickUpAnimationCoroutine == null && Input.GetKeyDown(KeyCode.E)){
-            if(ClosestItem)PickUpAnimationCoroutine = StartCoroutine(PickUpItem(ClosestItem));
         }
         
         //if you click outside of UI, Unselect the Item
@@ -87,15 +92,49 @@ public class InventoryScript : MonoBehaviour
             }
         }
 
-        //Make the Item GameObjects Follow the Player instead of being stationary
+        bool HoveringOverAnySlots = false;
+
         foreach(var Item in Inventory){
+            //attach the inactive item to the player
             if (Item.Value.GameObject)Item.Value.GameObject.transform.position = transform.position;
 
+            //Update Durability UI
             if (Item.Value.ItemProperties.HasDurability && Item.Value.UISlot){
                 Item.Value.DurabilityText.text = (Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability *100).ToString("0") + "/100";
                 Item.Value.DurabilityBar.fillAmount = Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability;
             }
+
+            if (Item.Value.hoverDetector.isHovering){
+                HoveringOverAnySlots = true;
+
+                if (!GameServices.UI.IsActiveCanvasGroup(ImmediateInfo.WholeUI))
+                    GameServices.UI.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", true, true);
+
+                ImmediateInfo.rect.position = Input.mousePosition;
+
+                string FinalText = Item.Value.ItemProperties?.ItemName + "\n";
+
+                if (Item.Value.ItemProperties?.ArmorValue != 0) 
+                    FinalText += $"<size=150%><sprite name=\"Armor\"></size>: {Item.Value.ItemProperties.ArmorValue}\n";
+
+                if (Item.Value.ItemProperties?.Damage != 0) 
+                    FinalText += $"<size=150%><sprite name=\"Damage\"></size>: {Item.Value.ItemProperties.Damage}\n";
+
+                if (Item.Value.ItemProperties?.Range != 0) 
+                    FinalText += $"<size=150%><sprite name=\"Range\"></size>: {Item.Value.ItemProperties.Range}\n";
+                    
+                if (Item.Value.ItemProperties?.AttackSpeed != 0) 
+                    FinalText += "<size=150%><sprite name=\"AttackSpeed\"></size>: " + Item.Value.ItemProperties.AttackSpeed.ToString("F2") + "\n";
+                
+                if (Item.Value.ItemProperties?.Durability != 0) 
+                    FinalText += $"<size=150%><sprite name=\"Durability\"></size>: {Item.Value.ItemProperties.MaxDurability}\n";
+
+                ImmediateInfo.text.text = FinalText;
+            }
         }
+
+        if (!HoveringOverAnySlots)
+            GameServices.UI.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", false, true);
     }
 
     public void CheckForClosestItem(){
@@ -115,7 +154,6 @@ public class InventoryScript : MonoBehaviour
     }
 
     public void UnSelectItem(){
-        GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
         GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
         
         SelectedItem = null;
@@ -127,7 +165,7 @@ public class InventoryScript : MonoBehaviour
     public IEnumerator PickUpItem(ItemProperties ItemToPick){
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", true);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.4f);
         AddItem(ItemToPick);
 
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", false);
@@ -175,6 +213,7 @@ public class InventoryScript : MonoBehaviour
             Image ItemIcon = NewSlot.transform.GetChild(0).GetComponent<Image>();
             TMP_Text NumberText = NewSlot.transform.GetChild(1).GetComponent<TMP_Text>();
             Button SlotButton = NewSlot.GetComponent<Button>();
+            HoverDetector Hover = NewSlot.GetComponent<HoverDetector>();
 
             //edit the components
             ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
@@ -189,6 +228,7 @@ public class InventoryScript : MonoBehaviour
             NewItem.UINumberText = NumberText;
             NewItem.UIButton = SlotButton;
             NewItem.UISlot = NewSlot;
+            NewItem.hoverDetector = Hover;
             NewItem.GameObject = properties.gameObject;
 
             if (properties.HasDurability){
@@ -213,7 +253,6 @@ public class InventoryScript : MonoBehaviour
             //Destroy the scene object of the item
             Destroy(properties.gameObject);
                 
-            
             //add the amount to the already existing item entry;
             Item AlreadyExistingItem = GetItemWithID(properties.ID);
             AlreadyExistingItem.Amount += properties.Amount;
@@ -224,6 +263,7 @@ public class InventoryScript : MonoBehaviour
             return AlreadyExistingItem;
         }
     }
+
     public void SlotClick(int UniqueItemID){
         if (Inventory.ContainsKey(UniqueItemID)){
             //assign the slot to the Selected Item Variable
@@ -243,7 +283,7 @@ public class InventoryScript : MonoBehaviour
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
             //Edit the ItemInfo Window
-            //itemInfoUI.Name.fontSize = Inventory[UniqueItemID].ItemProperties.ItemName.Length * 3.2;
+            itemInfoUI.Name.fontSize = Inventory[UniqueItemID].ItemProperties.ItemName.Length / 0.31f;
             itemInfoUI.Name.text = Inventory[UniqueItemID].ItemProperties.ItemName;
             itemInfoUI.Description.text = Inventory[UniqueItemID].ItemProperties.Description;
 
@@ -252,11 +292,12 @@ public class InventoryScript : MonoBehaviour
                 if (itemInfoUI.UseButton.gameObject.activeSelf)
                     itemInfoUI.UseButton.gameObject.SetActive(false);
             }else{
-                if (itemInfoUI.UseButton.gameObject.activeSelf)
+                if (!itemInfoUI.UseButton.gameObject.activeSelf)
                     itemInfoUI.UseButton.gameObject.SetActive(true);
             }
         }
     }
+
     public void DropItem(Item Item, int Amount){
         if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
            if (Item.Amount - Amount > 0){
@@ -285,6 +326,7 @@ public class InventoryScript : MonoBehaviour
             }
         }
     }
+
     public void RemoveItem(Item Item){
         if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
             Item ItemToDestroy = Item;
@@ -293,13 +335,14 @@ public class InventoryScript : MonoBehaviour
             Destroy(ItemToDestroy.UISlot);
             Destroy(ItemToDestroy.GameObject);
 
-            if (SelectedItem.ItemProperties && SelectedItem.ItemProperties.UniqueItemID == Item.ItemProperties.UniqueItemID)
+            if (SelectedItem?.ItemProperties?.UniqueItemID == Item?.ItemProperties?.UniqueItemID)
                 UnSelectItem();
             
             //Remove Item from Inventory Data
-            Inventory.Remove(Item.ItemProperties.ID);
+            Inventory.Remove(Item.ItemProperties.UniqueItemID);
         }
     }
+
     public void ChangeItemAmount(Item Item, int Amount){
         if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
             
@@ -307,7 +350,7 @@ public class InventoryScript : MonoBehaviour
                 //if the item amount won't end up being 0 or less
                 Inventory[Item.ItemProperties.UniqueItemID].Amount += Amount;
 
-                Inventory[Item.ItemProperties.UniqueItemID].UINumberText.text = "X" + Inventory[Item.ItemProperties.ID].Amount.ToString();
+                Inventory[Item.ItemProperties.UniqueItemID].UINumberText.text = "X" + Inventory[Item.ItemProperties.UniqueItemID].Amount.ToString();
             }else{
                 //if the item amount will end up being 0 or less
                 RemoveItem(Inventory[Item.ItemProperties.UniqueItemID]);
@@ -325,6 +368,7 @@ public class InventoryScript : MonoBehaviour
         public Button UIButton;
         public TMP_Text UINumberText;
         public GameObject UISlot;
+        public HoverDetector hoverDetector;
         public GameObject DurabilityUI;
         public Image DurabilityBar;
         public TMP_Text DurabilityText;
@@ -341,5 +385,10 @@ public class InventoryScript : MonoBehaviour
         public TMP_InputField InputField;
         public int DropInt;
     }
-    
+   [System.Serializable]
+   public class ImmediateInfoUI{
+        public CanvasGroup WholeUI;
+        public RectTransform rect;
+        public TMP_Text text;
+   } 
 }

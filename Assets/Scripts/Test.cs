@@ -25,7 +25,7 @@ public class Test : MonoBehaviour
     IEnumerator Spawn(){
         yield return new WaitForSeconds(FirstDelay);
         while (true){
-            Instantiate(Enemy, GameUtils.GetRandomPointInSquareRange(GameServices.GlobalVariables.Player.GameObject.transform.position, Range), Quaternion.identity);
+            Instantiate(Enemy, GameUtils.GetRandomPointInCircleRange(GameServices.GlobalVariables.Player.GameObject.transform.position, Range, Range - 10), Quaternion.identity);
             if (!BS)yield return new WaitForSeconds(FinalDelay + 0.01f);
             if (BS) yield return null;
         }   

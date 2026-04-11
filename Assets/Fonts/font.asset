@@ -556,6 +556,24 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: Damage
     m_HashCode: -1671533397
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 86
+    m_Scale: 1
+    m_Name: Range
+    m_HashCode: 100706207
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 87
+    m_Scale: 1
+    m_Name: AttackSpeed
+    m_HashCode: 635048143
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 88
+    m_Scale: 1
+    m_Name: Durability
+    m_HashCode: -824122975
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -1933,6 +1951,54 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: 1445886110, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
+  - m_Index: 86
+    m_Metrics:
+      m_Width: 16
+      m_Height: 16
+      m_HorizontalBearingX: -8
+      m_HorizontalBearingY: 8
+      m_HorizontalAdvance: 16
+    m_GlyphRect:
+      m_X: 128
+      m_Y: 0
+      m_Width: 16
+      m_Height: 16
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -1132584127, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
+  - m_Index: 87
+    m_Metrics:
+      m_Width: 16
+      m_Height: 16
+      m_HorizontalBearingX: -8
+      m_HorizontalBearingY: 8
+      m_HorizontalAdvance: 16
+    m_GlyphRect:
+      m_X: 144
+      m_Y: 0
+      m_Width: 16
+      m_Height: 16
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 815375358, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
+  - m_Index: 88
+    m_Metrics:
+      m_Width: 16
+      m_Height: 16
+      m_HorizontalBearingX: -8
+      m_HorizontalBearingY: 8
+      m_HorizontalAdvance: 16
+    m_GlyphRect:
+      m_X: 160
+      m_Y: 0
+      m_Width: 16
+      m_Height: 16
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -733087508, guid: d9dd7448746bf2b49a94dbd2ec6ab358, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
 --- !u!21 &4845874937478632499

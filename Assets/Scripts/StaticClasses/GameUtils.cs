@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 public static class GameUtils{
     public static void MakeObjectLookAt(Transform RotatedObject, Vector2 Target, float Offsit = 0, bool Flip = true){
@@ -45,9 +43,9 @@ public static class GameUtils{
         return mask;
     }
 
-    public static List<Collider2D> SquareHitDetection(Vector2 StartPoint, Vector2 dir, float Range, int AmountOfRays, float DistanceBetweenRays, string TagToCheckFor, LayerMask Layer, bool DebugMode = false){
+    public static HashSet<Collider2D> SquareHitDetection(Vector2 StartPoint, Vector2 dir, float Range, int AmountOfRays, float DistanceBetweenRays, string TagToCheckFor, LayerMask Layer, bool DebugMode = false){
         Dictionary<int, Collider2D> HitDict = new Dictionary<int, Collider2D>();
-        List<Collider2D> List = new List<Collider2D>();
+        HashSet<Collider2D> HitList = new HashSet<Collider2D>();
 
         dir = dir.normalized;
 
@@ -75,33 +73,47 @@ public static class GameUtils{
 
         
         foreach (var hit in HitDict)
-            List.Add(hit.Value);
+            HitList.Add(hit.Value);
 
-        return List;
+        return HitList;
     }
 
-    /*public static List<Collider2D> AngledHitDetection(Vector2 StartPoint, Vector2 dir, float Range, int AmountOfRays, float CircleRadius, float AngleDifference,string TagToCheckFor, LayerMask Layer, bool DebugMode = false){
-        List<Collider2D> HitList = new List<Collider2D>();
+    public static HashSet<Collider2D> AngledHitDetection(Vector2 StartPoint, Vector2 dir, float Range, int AmountOfRays, float AngleDifference,string TagToCheckFor, LayerMask Layer, bool DebugMode = false){
+        Dictionary<int, Collider2D> HitDict = new Dictionary<int, Collider2D>();
+        HashSet<Collider2D> HitList = new HashSet<Collider2D>();
 
         dir = dir.normalized;
 
         // center the rays
-        float half = (AmountOfRays - 1) * 0.5f;
+        float half = AngleDifference * 0.5f;
 
         for (int i = 0; i < AmountOfRays; i++){
+            // 0 → 1 across all rays
+            float t = (AmountOfRays == 1) ? 0.5f : i / (float)(AmountOfRays - 1);
 
-            RaycastHit2D[] hit = Physics2D.RaycastAll(StartPoint, );
+            // angle from -half → +half
+            float angle = Mathf.Lerp(-half, half, t);
 
-            foreach (RaycastHit2D singlehit in hit){
-                if (singlehit.collider){
-                    HitList.Add(singlehit.collider);
+            // rotate direction
+            Vector2 rotatedDir = Quaternion.Euler(0, 0, angle) * dir;
+
+            RaycastHit2D[] hits = Physics2D.RaycastAll(StartPoint, rotatedDir, Range, Layer);
+
+            foreach (RaycastHit2D hit in hits){
+                if (hit.collider && hit.collider.CompareTag(TagToCheckFor)){
+                    HitDict[hit.collider.gameObject.GetInstanceID()] = hit.collider;
                 }
             }
 
+            if (DebugMode)
+                Debug.DrawRay(StartPoint, rotatedDir * Range, Color.red);
         }
 
+        foreach (var hit in HitDict)
+            HitList.Add(hit.Value);
+
         return HitList;
-    }*/
+    }
 
     public static void FollowObject(Transform subject, Transform Target, float Speed){
         Vector2 dir = DirFromAToB(subject.transform.position, Target.position);
@@ -146,14 +158,29 @@ public static class GameUtils{
         Temporary TempScript = TempObject.AddComponent<Temporary>();
         TempScript.StartTempCoroutine(func);
     }
+   
+    public static Vector2 GetRandomPointInCircleRange(Vector2 center, float maxRadius, float minRadius){
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
 
-    public static Vector2 GetRandomPointInSquareRange(Vector2 CenterPoint, float Range){
-        Vector2 result;
-        result.x = UnityEngine.Random.Range(-Range, Range);
-        result.y = UnityEngine.Random.Range(-Range, Range);
+        float minR2 = minRadius * minRadius;
+        float maxR2 = maxRadius * maxRadius;
 
-        result += CenterPoint;
+        float r = Mathf.Sqrt(UnityEngine.Random.Range(minR2, maxR2));
 
-        return result;
+        Vector2 point = new Vector2(
+            Mathf.Cos(angle),
+            Mathf.Sin(angle)
+        ) * r;
+
+        return center + point;
+    }
+
+    public static void ResetCursor(){
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+    
+    public static void SetCursor(Texture2D Texture, Vector2 HotSpot){
+        Cursor.SetCursor(Texture, HotSpot, CursorMode.Auto);
     }
 }
+   

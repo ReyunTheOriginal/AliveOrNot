@@ -7,7 +7,9 @@ public class GlobalVariables : MonoBehaviour
     public HandData PrimaryHandObject;
     public HandData OffHandObject;
     public Camera Camera;
+    public CameraScript cameraScript;
     public Material SpriteLitDefault;
+    public CursorTextures Cursors;
     public HashSet<EnemyProperties> AllEnemies = new HashSet<EnemyProperties>();
     public HashSet<ItemProperties> AllItems = new HashSet<ItemProperties>();
 
@@ -38,5 +40,11 @@ public class GlobalVariables : MonoBehaviour
         public GameObject RightHand;
         public GameObject LeftHand;
         public SpriteRenderer ObjectRenderer;
+    }
+
+    [System.Serializable]
+    public class CursorTextures{
+        public Texture2D Default;
+        public Texture2D Gun;
     }
 }

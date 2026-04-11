@@ -23,5 +23,13 @@ public class ItemBehavior : MonoBehaviour
     public virtual void Hold(){
 
     }
+    //happens every frame when Equipped in LateUpdate
+    public virtual void LateHold(){
+
+    }
+    //happens every frame when Equipped in FixedUpdate
+    public virtual void FixedHold(){
+
+    }
 }
 

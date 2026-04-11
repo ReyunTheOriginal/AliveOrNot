@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2316339873245280896}
   - component: {fileID: 6371965871208628173}
   m_Layer: 0
-  m_Name: Shotgun MuzzleFlash
+  m_Name: RifleFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4836,7 +4836,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 65e44dc9321d81342b76ff2ef9a8fd89, type: 2}
+  - {fileID: 2100000, guid: 98f25f07b38747344b41af7935a40edd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4906,7 +4906,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.716
   m_Color: {r: 1, g: 0.9510783, b: 0.0047169924, a: 1}
-  m_Intensity: 15
+  m_Intensity: 11.8
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: ddc07734b7f9b19800000000879649761f2b3ed3

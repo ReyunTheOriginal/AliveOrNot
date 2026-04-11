@@ -11,10 +11,10 @@ public class UIManager : MonoBehaviour
         GameServices.UI = this;
     }
 
-    public void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true){
+    public void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true, bool Ghost = false){
         Group.alpha = state? 1: 0;
-        Group.interactable = state;
-        Group.blocksRaycasts = state;
+        if(!Ghost)Group.interactable = state;
+        if(!Ghost)Group.blocksRaycasts = state;
 
         if (IsAMenu){
             if (!state){
@@ -40,7 +40,9 @@ public class UIManager : MonoBehaviour
         SetActiveCanvasGroup(IsAMenu, group, name, state);
     }
 
-    public bool IsActiveCanvasGroup(CanvasGroup Group){
+    public bool IsActiveCanvasGroup(CanvasGroup Group, bool Ghost = false){
+        if (Ghost) return Group.alpha == 1;
+
         return Group.alpha == 1 && Group.blocksRaycasts && Group.interactable;
     }
 

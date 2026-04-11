@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 155179134013382490}
   - component: {fileID: 5931640676318670333}
   m_Layer: 0
-  m_Name: 9mm MuzzleFlash
+  m_Name: PistolFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4906,7 +4906,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.716
   m_Color: {r: 1, g: 0.9510783, b: 0.0047169924, a: 1}
-  m_Intensity: 12.34
+  m_Intensity: 9.3
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: ddc07734b7f9b19800000000879649761f2b3ed3

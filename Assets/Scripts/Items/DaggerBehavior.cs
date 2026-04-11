@@ -23,8 +23,19 @@ public class DaggerBehavior : ItemBehavior
     public bool Hitting = false;
     public Vector2 HitDir;
 
+    private void Start() {
+        Properties.Damage = Damage;
+        Properties.Range = Range;
+        Properties.AttackSpeed = 1.0f / Cooldown;
+    }
+
+    private void OnEnable() {
+        if (Properties)Properties.Damage = Damage;
+        if (Properties)Properties.Range = Range;
+        if (Properties)Properties.AttackSpeed = 1.0f / Cooldown;
+    }
+
     public override void Equipped(){
-        GameServices.GlobalVariables.OffHandObject.Collider.enabled = false;
         GameServices.GlobalVariables.OffHandObject.ObjectRenderer.enabled = false;
         GameServices.GlobalVariables.OffHandObject.LeftHand.SetActive(false);
     }
@@ -33,13 +44,15 @@ public class DaggerBehavior : ItemBehavior
         GameServices.GlobalVariables.OffHandObject.ObjectRenderer.enabled = true;
     }
 
+    public override void LateHold(){
+        if (!GameServices.UI.AMenuIsOpened())
+            if (!Hitting)
+                GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.OffHandObject.Center.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
+    }
+
     public override void Hold(){
         if (!GameServices.UI.AMenuIsOpened()){
             Timer += Time.deltaTime;
-
-            if (!Hitting){
-                GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.OffHandObject.Center.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
-            }
 
             if (Timer >= Cooldown && Input.GetMouseButtonDown(1)){
                 PlayAudio();
@@ -52,7 +65,7 @@ public class DaggerBehavior : ItemBehavior
             }
 
             if (Hitting){
-                List<Collider2D> HitColliders = GameUtils.SquareHitDetection(GameServices.GlobalVariables.PrimaryHandObject.Center.transform.position, 
+                HashSet<Collider2D> HitColliders = GameUtils.SquareHitDetection(GameServices.GlobalVariables.PrimaryHandObject.Center.transform.position, 
                     HitDir, 
                     Range, 
                     5, 

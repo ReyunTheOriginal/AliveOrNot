@@ -25,6 +25,10 @@ public class ItemProperties : MonoBehaviour
      [Space]
      public bool Unstackable;
      public bool Consumable;
+     [HideInInspector] public float Damage = 0;
+     [HideInInspector] public float ArmorValue = 0;
+     [HideInInspector] public float AttackSpeed = 0;
+     [HideInInspector] public float Range = 0;
 
      private void Awake() {
           if (ItemBehavior)ItemBehavior.Properties = this;
@@ -59,15 +63,17 @@ public class ItemProperties : MonoBehaviour
                HandRen.sprite = ItemSprite;
                
                if (UsesRightHand){
+                    if (!RightHand.activeSelf)RightHand.SetActive(true);
                     RightHand.transform.localPosition = RightHandPosition;
                }else{
-                    RightHand.SetActive(false);
+                    if (RightHand.activeSelf)RightHand.SetActive(false);
                }
 
                if (UsesLeftHand){
+                    if (!LeftHand.activeSelf)LeftHand.SetActive(true);
                     LeftHand.transform.localPosition = LeftHandPosition;
                }else{
-                    LeftHand.SetActive(false);
+                    if (RightHand.activeSelf)LeftHand.SetActive(false);
                }
           }
 
@@ -84,12 +90,14 @@ public class ItemProperties : MonoBehaviour
                HandRen.sprite = ItemSprite;
                
                if (UsesRightHand){
+                    if (!RightHand.activeSelf)RightHand.SetActive(true);
                     RightHand.transform.localPosition = RightHandPosition;
                }else{
                     RightHand.SetActive(false);
                }
 
                if (UsesLeftHand){
+                    if (!LeftHand.activeSelf)LeftHand.SetActive(true);
                     LeftHand.transform.localPosition = LeftHandPosition;
                }else{
                     LeftHand.SetActive(false);

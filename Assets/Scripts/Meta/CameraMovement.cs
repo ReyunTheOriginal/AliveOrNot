@@ -1,13 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
-public class CameraMovement : MonoBehaviour
+public class CameraScript : MonoBehaviour
 {
     [Header("-Settings-")]
     public GameObject FollowTarget;
     public float Size = 5;
     public float SmoothFollowSpeed = 2;
+    public PixelPerfectCamera pixelCam;
+    [SerializeField] int minPixelSize = 90;   // more pixels = zoomed out
+    [SerializeField] int maxPixelSize = 270;  // fewer pixels = zoomed in
+    [SerializeField] int zoomStep = 30;  // must be divisible into your base res
     [Header("Toggles")]
     public bool Follows = true;
     public bool SmoothFollow = true;
@@ -27,6 +30,15 @@ public class CameraMovement : MonoBehaviour
             Camera.orthographicSize = Size;
         }else{
             Camera.orthographicSize = 0.5f;
+        }
+
+        if (!GameServices.UI.AMenuIsOpened()){
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+            if (scroll < 0f)
+                pixelCam.assetsPPU = Mathf.Max(minPixelSize, pixelCam.assetsPPU - zoomStep);
+            else if (scroll > 0f)
+                pixelCam.assetsPPU = Mathf.Min(maxPixelSize, pixelCam.assetsPPU + zoomStep);
         }
     }
     
