@@ -152,13 +152,21 @@ public static class GameUtils{
     } 
 
     //Use With a Lambda like this for Parameters: "() => MyFunction(type Parameter)"
-    public static void StartIndependentCoroutine(System.Func<IEnumerator> func){
+    public static IndependentCoroutine StartIndependentCoroutine(System.Func<IEnumerator> func){
         GameObject TempObject = new GameObject();
         TempObject.name = "Temporary Coroutine Object";
         Temporary TempScript = TempObject.AddComponent<Temporary>();
-        TempScript.StartTempCoroutine(func);
+        return TempScript.StartTempCoroutine(func);
     }
    
+    public static void PlayIndependentAudio(AudioClip Clip, Vector2 Position){
+        GameObject TempObject = new GameObject();
+        TempObject.transform.position = Position;
+        TempObject.name = "Temporary Coroutine Object";
+        Temporary TempScript = TempObject.AddComponent<Temporary>();
+        TempScript.StartTempAudio(Clip);
+    }
+
     public static Vector2 GetRandomPointInCircleRange(Vector2 center, float maxRadius, float minRadius){
         float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
 
@@ -175,12 +183,51 @@ public static class GameUtils{
         return center + point;
     }
 
+    public static Vector2 AddRandomAngleToDir(Vector2 baseDir, float minAngle, float maxAngle){
+        float angle = Random.Range(minAngle, maxAngle);
+        float rad = angle * Mathf.Deg2Rad;
+        
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        
+        return new Vector2(
+            baseDir.x * cos - baseDir.y * sin,
+            baseDir.x * sin + baseDir.y * cos
+        );
+    }
+    
+    public static Vector2 ClampVector2(Vector2 subject, float minMag, float maxMag){
+        float mag = subject.magnitude;
+        if (mag == 0f) return Vector2.zero;
+        
+        float clamped = Mathf.Clamp(mag, minMag, maxMag);
+        return subject.normalized * clamped;
+    }
+    
+    public static Vector2 QuickWorldMousePosition(){
+        return GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition);
+    }
     public static void ResetCursor(){
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
     
     public static void SetCursor(Texture2D Texture, Vector2 HotSpot){
         Cursor.SetCursor(Texture, HotSpot, CursorMode.Auto);
+    }
+
+    public class IndependentCoroutine{
+        public Coroutine Coroutine;
+        public Temporary Owner;
+        public void Stop(){
+            if (Owner != null && Coroutine != null){
+                Owner.StopCoroutine(Coroutine);
+                Coroutine = null;
+                Object.Destroy(Owner.gameObject);
+            }
+        }
+    }
+    public static void RunIndependent(this IEnumerator coroutine){
+        StartIndependentCoroutine(() => coroutine);
     }
 }
    

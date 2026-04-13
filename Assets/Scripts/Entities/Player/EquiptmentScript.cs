@@ -23,7 +23,15 @@ public class EquiptmentScript : MonoBehaviour
                 ItemProperties Properties = E.Value.Item.ItemProperties; //properties script
                 ItemBehavior Behavior = E.Value.Item.ItemProperties.ItemBehavior; //behavior script that has the item's code
 
-                if (Behavior)Behavior.LateHold(); // if the behavior Exists, run its code
+               //if there is an item in the BothHands slot don't run the other hands code
+                if (Behavior){
+                    if (E.Key == ItemProperties.EquipSlot.PrimaryHand || E.Key == ItemProperties.EquipSlot.OffHand){
+                        if (!HasAnItem(ItemProperties.EquipSlot.BothHands))
+                            Behavior.LateHold();//run its code
+                    }else{
+                        Behavior.LateHold();//run its code
+                    }
+                }
 
             }
         }
@@ -37,7 +45,15 @@ public class EquiptmentScript : MonoBehaviour
                 ItemProperties Properties = E.Value.Item.ItemProperties; //properties script
                 ItemBehavior Behavior = E.Value.Item.ItemProperties.ItemBehavior; //behavior script that has the item's code
 
-                if (Behavior)Behavior.FixedHold(); // if the behavior Exists, run its code
+                //if there is an item in the BothHands slot don't run the other hands code
+                if (Behavior){
+                    if (E.Key == ItemProperties.EquipSlot.PrimaryHand || E.Key == ItemProperties.EquipSlot.OffHand){
+                        if (!HasAnItem(ItemProperties.EquipSlot.BothHands))
+                            Behavior.FixedHold();//run its code
+                    }else{
+                        Behavior.FixedHold();//run its code
+                    }
+                }
 
             }
         }
@@ -47,23 +63,31 @@ public class EquiptmentScript : MonoBehaviour
         //go through each Equipped object and run its Hold() Code, the code that runs every frame if equipped. also update Durability UI
         foreach(var E in Equipment.Slots){
             //check if the slot actually has an item
-            if (E.Value.Item != null && E.Value.Item.UISlot){
+            if (HasAnItem(E.Key)){
                 ItemProperties Properties = E.Value.Item.ItemProperties; //properties script
                 ItemBehavior Behavior = E.Value.Item.ItemProperties.ItemBehavior; //behavior script that has the item's code
 
-                if (Behavior)Behavior.Hold(); // if the behavior Exists, run its code
+                //if there is an item in the BothHands slot don't run the other hands code
+                if (Behavior){
+                    if (E.Key == ItemProperties.EquipSlot.PrimaryHand || E.Key == ItemProperties.EquipSlot.OffHand){
+                        if (!HasAnItem(ItemProperties.EquipSlot.BothHands))
+                            Behavior.Hold();//run its code
+                    }else{
+                        Behavior.Hold();//run its code
+                    }
+                }
 
                 if (Properties.HasDurability)
                     if (Properties.Durability <= 0){
-                        UnEquip(E.Value);
+                        UnEquip(E.Value, (int)E.Key);
                         GameServices.Inventory.RemoveItem(GameServices.Inventory.Inventory[Properties.UniqueItemID]);
                     }
 
                 //keep the Durability UI Updated
                 if (Properties.HasDurability){
                     //Update the Text
-                    E.Value.InvUI.DurabilityText.text = (Properties.Durability/Properties.MaxDurability *100).ToString("0") + "/100";
-                    E.Value.HotBarUI.DurabilityText.text = (Properties.Durability/Properties.MaxDurability *100).ToString("0") + "/100";
+                    E.Value.InvUI.DurabilityText.text = (Properties.Durability/Properties.MaxDurability *100).ToString("F1") + "/100";
+                    E.Value.HotBarUI.DurabilityText.text = (Properties.Durability/Properties.MaxDurability *100).ToString("F1") + "/100";
 
                     //Update the Bar
                     E.Value.InvUI.DurabilityBar.fillAmount = Properties.Durability/Properties.MaxDurability;
@@ -81,26 +105,48 @@ public class EquiptmentScript : MonoBehaviour
             EquipmentSlot ESlot = Equipment.Slots[(ItemProperties.EquipSlot)Slot];
             
 
-            if (ESlot.Item != null && ESlot.Item.UISlot != null){
+            if (HasAnItem((ItemProperties.EquipSlot)Slot)){
                 int ID = ESlot.Item.ItemProperties.UniqueItemID;
+
+                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)) || !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && (ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands){
+                    GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.StopAnimation();
+                }else if ((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.OffHand){
+                    GameServices.GlobalVariables.OffHandObject.AnimationPlayer.StopAnimation();
+                }
+                
                 //Runs when an item is already in the slot:
-                UnEquip(ESlot);
+                UnEquip(ESlot, Slot);
+
+                var selected = GameServices.Inventory.SelectedItem;
 
                 if ( 
-                    (int)GameServices.Inventory.SelectedItem?.ItemProperties?.equipSlot == Slot && 
-                    GameServices.Inventory.SelectedItem.ItemProperties.Equippable &&
-                    GameServices.Inventory.SelectedItem.ItemProperties.UniqueItemID != ID
+                    selected != null &&
+                    selected.ItemProperties != null &&
+                    (int)selected.ItemProperties.equipSlot == Slot &&
+                    selected.ItemProperties.Equippable &&
+                    selected.ItemProperties.UniqueItemID != ID
                 ){
                     Equip(ESlot, Slot);
                 }
                 
             }else{
+                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItem(ItemProperties.EquipSlot.BothHands)) || !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && !GameServices.Equipment.HasAnItem(ItemProperties.EquipSlot.PrimaryHand)){
+                    GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.StopAnimation();
+                }else if ((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.OffHand){
+                    GameServices.GlobalVariables.OffHandObject.AnimationPlayer.StopAnimation();
+                }
+                
                 //Runs when the Slot Is Empty:
                 Equip(ESlot, Slot);
             }
     }
 
-    public void UnEquip(EquipmentSlot ESlot){
+    public bool HasAnItem(ItemProperties.EquipSlot Slot){
+        EquipmentSlot ESlot = Equipment.Slots[Slot];
+        return ESlot?.Item?.UISlot != null && ESlot.Item?.ItemProperties;
+    }
+
+    public void UnEquip(EquipmentSlot ESlot, int Slot){
         //reset the slot icons to the defaults
         ESlot.InvUI.Icon.sprite = ESlot.DefaultIcon;
         ESlot.HotBarUI.Icon.sprite = ESlot.DefaultIcon;
@@ -117,6 +163,14 @@ public class EquiptmentScript : MonoBehaviour
         ESlot.Item.ItemProperties.UnSetUpHands();
         if (Behavior)Behavior.UnEquipped();
 
+        if (Slot == (int)ItemProperties.EquipSlot.BothHands){
+            if (HasAnItem(ItemProperties.EquipSlot.PrimaryHand)){
+                Equipment.Slots[ItemProperties.EquipSlot.PrimaryHand].Item.ItemProperties.SetUpHands();
+            }else if (HasAnItem(ItemProperties.EquipSlot.OffHand)){
+                Equipment.Slots[ItemProperties.EquipSlot.OffHand].Item.ItemProperties.SetUpHands();
+            }
+        }
+
         //show the Item Inventory Slot
         ESlot.Item.UISlot.SetActive(true);
 
@@ -127,6 +181,14 @@ public class EquiptmentScript : MonoBehaviour
     public void Equip(EquipmentSlot ESlot, int Slot){
         //Check if an Object is Selected
         if (GameServices.Inventory.SelectedItem != null && GameServices.Inventory.SelectedItem.ItemProperties != null && (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && GameServices.Inventory.SelectedItem.ItemProperties.Equippable){
+            //get Item Scripts
+            ItemProperties Properties = GameServices.Inventory.SelectedItem.ItemProperties;
+            ItemBehavior Behavior = Properties.ItemBehavior;
+
+            //Set Up the Visual hands Positions in the Player's Hand Slots
+            Properties.SetUpHands();
+            if (Behavior)Behavior.Equipped();//run the Equippted() Function
+            
             //set the Slot Item to the Selected Item
             ESlot.Item = GameServices.Inventory.SelectedItem;
 
@@ -140,14 +202,6 @@ public class EquiptmentScript : MonoBehaviour
                 GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
                 GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
             }
-
-            //get Item Scripts
-            ItemProperties Properties = ESlot.Item.ItemProperties;
-            ItemBehavior Behavior = Properties.ItemBehavior;
-
-            //Set Up the Visual hands Positions in the Player's Hand Slots
-            Properties.SetUpHands();
-            if (Behavior)Behavior.Equipped();//run the Equippted() Function
 
             //Set up UI
             ESlot.InvUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Inventory Icon
@@ -176,10 +230,11 @@ public class EquiptmentScript : MonoBehaviour
     [System.Serializable]
     public class EquipmentSlot{
         public InventoryScript.Item Item; //Item In Slot
-        public Sprite DefaultIcon; 
-        public ItemProperties.EquipSlot Slot; //the slot the Item Can be Up In
+        public Sprite DefaultIcon; //Default Icon For that Slot
+        public ItemProperties.EquipSlot Slot; //the slot the Item Can be Put In
         public EquipmentEditableUI InvUI; //UI in the Inventory
         public EquipmentEditableUI HotBarUI; //UI Outside of the Inventrory
+        public Color DefaultColor = Color.white;
     }
     [System.Serializable]
     public class EquipmentEditableUI{

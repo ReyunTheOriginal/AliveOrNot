@@ -57,7 +57,7 @@ public class InventoryScript : MonoBehaviour
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-                Slot.Value.InvUI.Outline.color = Color.white;
+                Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
             }
         }
 
@@ -120,8 +120,8 @@ public class InventoryScript : MonoBehaviour
                 if (Item.Value.ItemProperties?.Damage != 0) 
                     FinalText += $"<size=150%><sprite name=\"Damage\"></size>: {Item.Value.ItemProperties.Damage}\n";
 
-                if (Item.Value.ItemProperties?.Range != 0) 
-                    FinalText += $"<size=150%><sprite name=\"Range\"></size>: {Item.Value.ItemProperties.Range}\n";
+                if (Item.Value.ItemProperties?.Accuracy != 0) 
+                    FinalText += $"<size=150%><sprite name=\"Accuracy\"></size>: {Item.Value.ItemProperties.Accuracy}\n";
                     
                 if (Item.Value.ItemProperties?.AttackSpeed != 0) 
                     FinalText += "<size=150%><sprite name=\"AttackSpeed\"></size>: " + Item.Value.ItemProperties.AttackSpeed.ToString("F2") + "\n";
@@ -158,7 +158,7 @@ public class InventoryScript : MonoBehaviour
         
         SelectedItem = null;
         foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-            Slot.Value.InvUI.Outline.color = Color.white;
+            Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
         }
     }
 
@@ -197,6 +197,14 @@ public class InventoryScript : MonoBehaviour
         }
 
         return result;
+    }
+
+    public int GetItemAmountWithID(int ItemID){
+        Item item = GetItemWithID(ItemID);
+        if (item != null)
+            return item.Amount;
+        
+        return 0;
     }
 
     public Item AddItem(ItemProperties properties){
@@ -271,7 +279,7 @@ public class InventoryScript : MonoBehaviour
 
             //Reset the Equipment Outlines to White
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-                Slot.Value.InvUI.Outline.color = Color.white;
+                Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
             }
 
             //HighLight the Slot that the selected Item can be Equipt in

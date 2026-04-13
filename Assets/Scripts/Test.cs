@@ -19,7 +19,7 @@ public class Test : MonoBehaviour
 
     private void Update() {
         time += Time.deltaTime;
-        FinalDelay = (BaseDelay / (time * 0.1f * SpeedIncreaseSpeed)) - (FirstDelay * 0.1f * SpeedIncreaseSpeed);
+        FinalDelay = Mathf.Clamp((BaseDelay / (time * 0.1f * SpeedIncreaseSpeed)) - (FirstDelay * 0.1f * SpeedIncreaseSpeed), 0, 60);
     }
 
     IEnumerator Spawn(){

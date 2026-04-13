@@ -6,9 +6,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Stats")]
     public float WalkSpeed;
     public float RunSpeed;
-
-    [Header("")]
-    
     [Header("Components")]
     public Rigidbody2D rig;
     public Animator animator;
@@ -23,21 +20,15 @@ public class PlayerMovement : MonoBehaviour
         {State.InUI, false},
         {State.Rolling, false},
         {State.Idle, false},
-        {State.Stunned, false},
+        {State.Dead, false},
         {State.InAnimation, false},
         {State.InShallowWater, false},
         {State.InBoat, false},
 
     };
+    public Dictionary<Effects, float> CurrentEffects = new Dictionary<Effects, float>();
     public Direction CurrentDirection;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
+    void Update(){
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
@@ -59,11 +50,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         DirectionalSpeed = input;
-        if (input.magnitude > 1f){
+        if (input.magnitude > 1f)
             DirectionalSpeed = input.normalized;
-        }
 
-        FootParticles.SetActive(CurrentStates[State.Running]);
+        if (FootParticles.activeSelf != CurrentStates[State.Running])
+            FootParticles.SetActive(CurrentStates[State.Running]);
 
         SetUpStates();
 
@@ -73,20 +64,20 @@ public class PlayerMovement : MonoBehaviour
 
             switch (CurrentDirection){
                 case Direction.Up:
-                    animator.SetInteger("WalkDiraction", 0);
+                    animator.SetInteger("WalkingDirection", 0);
                     FootParticles.transform.rotation = Quaternion.Euler(90,-90,0);
                     break;
                 case Direction.Down:
-                    animator.SetInteger("WalkDiraction", 1);
+                    animator.SetInteger("WalkingDirection", 1);
                     FootParticles.transform.rotation = Quaternion.Euler(-90,90,0);
                     break;
                 case Direction.Left:
-                    animator.SetInteger("WalkDiraction", 2);
+                    animator.SetInteger("WalkingDirection", 2);
                     FootParticles.transform.rotation = Quaternion.Euler(-30,90,0);
                     GameServices.GlobalVariables.Player.SpriteRenderer.transform.rotation = Quaternion.Euler(0,180,0);
                     break;
                 default:
-                    animator.SetInteger("WalkDiraction", 3);
+                    animator.SetInteger("WalkingDirection", 3);
                     FootParticles.transform.rotation = Quaternion.Euler(-30,-90,0);
                     GameServices.GlobalVariables.Player.SpriteRenderer.transform.rotation = Quaternion.Euler(0,0,0);
                     break;
@@ -104,16 +95,33 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {   
-        if (!GameUtils.OverASpeedInDirection(rig.velocity, DirectionalSpeed, Speed)){
+        if (!GameUtils.OverASpeedInDirection(rig.velocity, DirectionalSpeed, Speed))
             rig.velocity += DirectionalSpeed * Speed;
-        }
     }
 
     private void SetUpStates(){
         CurrentStates[State.InUI] = GameServices.UI.AMenuIsOpened();
-        CurrentStates[State.Walking] = input != Vector2.zero && !CurrentStates[State.Stunned];
-        CurrentStates[State.Idle] = !CurrentStates[State.Walking];
+        CurrentStates[State.Walking] = input != Vector2.zero;
+        CurrentStates[State.Idle] = !CurrentStates[State.Walking] && !CurrentEffects.ContainsKey(Effects.Stunned);
         CurrentStates[State.Running] = Input.GetKey(KeyCode.LeftShift);
+
+        HashSet<Effects> EffectsToDelete = new HashSet<Effects>();
+
+        // Get a temporary list of keys to iterate safely
+        List<Effects> keys = new List<Effects>(CurrentEffects.Keys);
+
+        foreach (var key in keys) {
+            // Modify the value
+            CurrentEffects[key] -= Time.deltaTime;
+
+            // Check if it should be deleted
+            if (CurrentEffects[key] <= 0) {
+                EffectsToDelete.Add(key);
+            }
+        }
+
+        foreach(Effects key in EffectsToDelete)
+            CurrentEffects.Remove(key);
     }
 
     public enum State{
@@ -122,10 +130,14 @@ public class PlayerMovement : MonoBehaviour
         InUI,
         Rolling,
         Idle,
-        Stunned,
         InAnimation,
         InShallowWater,
         InBoat,
+        Dead
+    }
+
+    public enum Effects{
+        Stunned,
     }
     public enum Direction{
         Up,

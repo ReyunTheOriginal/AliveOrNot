@@ -103,7 +103,7 @@ MonoBehaviour:
   ItemName: Box of Shotgun Shells
   Description: use to get a bunch of Shotgun Shells
   ID: 16
-  Amount: 30
+  Amount: 3
   ItemBehavior: {fileID: 5682975815021178692}
   Useable: 1
   Equippable: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Range: 0
+  Accuracy: 0
 --- !u!114 &5682975815021178692
 MonoBehaviour:
   m_ObjectHideFlags: 0

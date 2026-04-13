@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8735329611669649398}
   - component: {fileID: 7011517330005295484}
   - component: {fileID: 5180272834801611583}
+  - component: {fileID: 1772481524453250970}
   - component: {fileID: 4841240488167989892}
   m_Layer: 0
   m_Name: Dagger
@@ -111,12 +112,33 @@ MonoBehaviour:
   RightHandPosition: {x: 0, y: 0}
   LeftHandPosition: {x: 0, y: 0.00000002980232}
   UsesRightHand: 0
-  UsesLeftHand: 1
+  UsesLeftHand: 0
   MaxDurability: 260
   Durability: 260
   HasDurability: 1
   Unstackable: 1
   Consumable: 0
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  Accuracy: 0
+--- !u!114 &1772481524453250970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166095832711921992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2181744f3811c5d46b93d94743a413f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 20
+  RandomDamageOffsit: 5
+  KillType: 2
+  Cooldown: 0.3
+  KnockBack: 5
 --- !u!114 &4841240488167989892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,13 +152,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
-  Damage: 10
-  RandomDamageOffsit: 5
+  WeaponProperties: {fileID: 1772481524453250970}
   Automatic: 0
-  Cooldown: 0.35
   Range: 2.3
-  KnockBack: 10
   StunLength: 0.3
+  Recoil: 1.2
   SlashAudio: {fileID: 8300000, guid: c899901e66041d74ebece7e7ef51394f, type: 3}
   SlashAnimation: {fileID: 7400000, guid: 49e41902f03fc8e45be42b6174ca2d67, type: 2}
   DebugMode: 1

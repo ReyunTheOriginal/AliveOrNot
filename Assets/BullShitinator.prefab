@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &776984057086269318
+--- !u!1 &8741739640449090640
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7261273455262377813}
-  - component: {fileID: 2041718863465625750}
-  - component: {fileID: 7588826442340087425}
-  - component: {fileID: 1441864399078736790}
+  - component: {fileID: 883080411438152553}
+  - component: {fileID: 7629638228396604195}
+  - component: {fileID: 1599335498396922293}
+  - component: {fileID: 7261473713035577478}
+  - component: {fileID: 7071738241803979486}
   m_Layer: 0
-  m_Name: BullShittinator
+  m_Name: BullShitinator
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7261273455262377813
+--- !u!4 &883080411438152553
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776984057086269318}
+  m_GameObject: {fileID: 8741739640449090640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.7765, y: -3.224722, z: 0}
+  m_LocalPosition: {x: -28.605413, y: -3.8390157, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2041718863465625750
+--- !u!212 &7629638228396604195
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776984057086269318}
+  m_GameObject: {fileID: 8741739640449090640}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -86,13 +87,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7588826442340087425
+--- !u!114 &1599335498396922293
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776984057086269318}
+  m_GameObject: {fileID: 8741739640449090640}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
@@ -100,58 +101,124 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UniqueItemID: 0
   ItemSprite: {fileID: 21300000, guid: 1cf0735ab5e992a49aa74d89078ca131, type: 3}
-  ItemName: BullShittinator
-  Description: try it and find out!
-  ID: 69420
+  ItemName: Lupara
+  Description: the perfect tool for a quick zombie smoothy
+  ID: 8
   Amount: 1
-  ItemBehavior: {fileID: 1441864399078736790}
+  ItemBehavior: {fileID: 7071738241803979486}
   Useable: 0
   Equippable: 1
-  equipSlot: 3
+  equipSlot: 5
   RightHandPosition: {x: -0.2968751, y: -0.04687497}
   LeftHandPosition: {x: 0.046875, y: -0.015625}
   UsesRightHand: 1
   UsesLeftHand: 1
-  MaxDurability: 350
-  Durability: 350
-  HasDurability: 0
+  MaxDurability: 1e+20
+  Durability: 1e+28
+  HasDurability: 1
   Unstackable: 1
   Consumable: 0
---- !u!114 &1441864399078736790
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  Accuracy: 0
+--- !u!114 &7261473713035577478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776984057086269318}
+  m_GameObject: {fileID: 8741739640449090640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2181744f3811c5d46b93d94743a413f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 9999999
+  RandomDamageOffsit: 0
+  KillType: 0
+  WeaponType: 3
+  Cooldown: 0
+  KnockBack: 999
+--- !u!114 &7071738241803979486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8741739640449090640}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c85405d04f7dadd4ab94ad1e2459b5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+  WeaponProperties: {fileID: 7261473713035577478}
   DamageFalloff:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.3805872
+      value: 0.46046916
+      inSlope: -1.5811923
+      outSlope: -1.5811923
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15701646
+      outWeight: 0.2375352
+    - serializedVersion: 3
+      time: 0.43103135
+      value: 0.224607
+      inSlope: -1.0484776
+      outSlope: -1.0484776
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.12120743
+    - serializedVersion: 3
+      time: 0.99998575
+      value: 0.004717989
+      inSlope: 0.15492211
+      outSlope: 0.15492211
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.6609156
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Damage: 999
-  MaxHits: 99999
-  RandomDamageOffsit: 0
-  Automatic: 1
-  Cooldown: 0
-  KnockBack: 400
-  Recoil: 20
+  MaxHits: 5
+  FireMode: 0
+  Recoil: 51
+  StunLength: 87.59
   MuzzleFlash: {fileID: 1723987602390721538, guid: 83a8d0a29f6a458419d4c8e13dd7a99c, type: 3}
   BarrelEndLocation: {x: 0.4124994, y: 0.09687498}
-  Range: 200
-  amountOfRays: 12
-  AttackRadius: 0
-  GunShotAudio: {fileID: 8300000, guid: 7b08b554305bb4f4bab71acddaade48c, type: 3}
-  BasePitch: 0
-  PitchChangeRange: 0
+  Range: 1328.6
+  amountOfRays: 720
+  AttackRadius: 360
+  Accuracy: 1
+  GunShotAudio: {fileID: 8300000, guid: b135016f42dc9e9498360684fb351049, type: 3}
+  BasePitch: 1
+  PitchChangeRange: 0.15
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
+  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
+  ReloadAnimation: {fileID: 7400000, guid: 793300a365b359e43a1b7c00e59b5145, type: 2}
+  BulletID: 13
+  ChamberSize: 28655
+  BurstCoolDown: 0
+  ShotsPerBurst: 0
+  CurrentBurstShots: 0
+  Reloading: 0
+  BulletsInChamber: 0
   DebugMode: 1
-  Shooting: 0
   Timer: 0
+  BurstTimer: 0

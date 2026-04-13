@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class DaggerBehavior : ItemBehavior
 {
+    public WeaponPropertiesHolder WeaponProperties;
     [Header("Settings")]
-    public float Damage;
-    public float RandomDamageOffsit;
     public bool Automatic;
-    public float Cooldown;
     public float Range;
-    public float KnockBack;
     public float StunLength;
+    public float Recoil;
 
     public AudioClip SlashAudio;
     public AnimationClip SlashAnimation;
@@ -24,15 +22,13 @@ public class DaggerBehavior : ItemBehavior
     public Vector2 HitDir;
 
     private void Start() {
-        Properties.Damage = Damage;
-        Properties.Range = Range;
-        Properties.AttackSpeed = 1.0f / Cooldown;
+        Properties.Damage = WeaponProperties.Damage;
+        Properties.AttackSpeed = 1.0f / WeaponProperties.Cooldown;
     }
 
     private void OnEnable() {
-        if (Properties)Properties.Damage = Damage;
-        if (Properties)Properties.Range = Range;
-        if (Properties)Properties.AttackSpeed = 1.0f / Cooldown;
+        if (Properties)Properties.Damage = WeaponProperties.Damage;
+        if (Properties)Properties.AttackSpeed = 1.0f / WeaponProperties.Cooldown;
     }
 
     public override void Equipped(){
@@ -54,10 +50,13 @@ public class DaggerBehavior : ItemBehavior
         if (!GameServices.UI.AMenuIsOpened()){
             Timer += Time.deltaTime;
 
-            if (Timer >= Cooldown && Input.GetMouseButtonDown(1)){
+            if (Timer >= WeaponProperties.Cooldown && Input.GetMouseButtonDown(1)){
                 PlayAudio();
                 HitCheck();
                 Timer = 0;
+
+                Vector2 dir = GameUtils.DirFromAToB(GameServices.GlobalVariables.OffHandObject.Center.transform.position, GameUtils.QuickWorldMousePosition());
+                GameServices.GlobalVariables.Player.rig.AddForce(Recoil * -dir, ForceMode2D.Impulse);
 
                 GameServices.GlobalVariables.OffHandObject.AnimationPlayer.RunAfterAnimationIsOver = AfterHit;
                 GameServices.GlobalVariables.OffHandObject.AnimationPlayer.PlayClip(SlashAnimation);
@@ -79,10 +78,9 @@ public class DaggerBehavior : ItemBehavior
                     if (enemyProperties && !HitEnemies.Contains(enemyProperties)){
                         HitEnemies.Add(enemyProperties);
                         
-                        float DamageOffsit = UnityEngine.Random.Range(-RandomDamageOffsit, RandomDamageOffsit);
-                        enemyProperties.HitEnemy(Damage + DamageOffsit, KnockBack * HitDir);
-                        enemyProperties.CurrentStats[EnemyProperties.Stat.Stunned] = true;
-                        GameUtils.StartIndependentCoroutine(() => DelayStun(enemyProperties));
+                        float DamageOffsit = UnityEngine.Random.Range(-WeaponProperties.RandomDamageOffsit, WeaponProperties.RandomDamageOffsit);
+                        enemyProperties.HitEnemy(WeaponProperties.Damage + DamageOffsit, WeaponProperties.KnockBack * HitDir, WeaponProperties);
+                        enemyProperties.CurrentEffects[EnemyProperties.Effects.Stunned] = StunLength;
                         Properties.Durability -= 1;
                     }
                 }
@@ -93,11 +91,6 @@ public class DaggerBehavior : ItemBehavior
     IEnumerator AfterHit(){
         Hitting = false;
         yield return null;
-    }
-
-    IEnumerator DelayStun(EnemyProperties Prop){
-        yield return new WaitForSeconds(StunLength);
-        Prop.CurrentStats[EnemyProperties.Stat.Stunned] = false;
     }
 
     private void HitCheck(){

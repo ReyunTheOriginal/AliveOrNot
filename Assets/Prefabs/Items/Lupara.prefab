@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2011356788949568183}
   - component: {fileID: 6659041193508121473}
   - component: {fileID: 7399423943410637772}
+  - component: {fileID: 4484004333305063904}
   - component: {fileID: 8660202736199624358}
   m_Layer: 0
   m_Name: Lupara
@@ -107,7 +108,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 8660202736199624358}
   Useable: 0
   Equippable: 1
-  equipSlot: 3
+  equipSlot: 5
   RightHandPosition: {x: -0.2968751, y: -0.04687497}
   LeftHandPosition: {x: 0.046875, y: -0.015625}
   UsesRightHand: 1
@@ -120,7 +121,25 @@ MonoBehaviour:
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Range: 0
+  Accuracy: 0
+--- !u!114 &4484004333305063904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682245839499569793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2181744f3811c5d46b93d94743a413f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 50
+  RandomDamageOffsit: 0
+  KillType: 0
+  WeaponType: 3
+  Cooldown: 0.1
+  KnockBack: 25
 --- !u!114 &8660202736199624358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+  WeaponProperties: {fileID: 4484004333305063904}
   DamageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -176,26 +196,29 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Damage: 55
   MaxHits: 5
-  RandomDamageOffsit: 2
-  Automatic: 0
-  Cooldown: 0.1
-  KnockBack: 40
+  FireMode: 2
   Recoil: 15
+  StunLength: 1.2
   MuzzleFlash: {fileID: 1723987602390721538, guid: 83a8d0a29f6a458419d4c8e13dd7a99c, type: 3}
   BarrelEndLocation: {x: 0.4124994, y: 0.09687498}
   Range: 15
   amountOfRays: 16
   AttackRadius: 40
+  Accuracy: 0.9
   GunShotAudio: {fileID: 8300000, guid: b135016f42dc9e9498360684fb351049, type: 3}
   BasePitch: 1
   PitchChangeRange: 0.15
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
   EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
+  ReloadAnimation: {fileID: 7400000, guid: 793300a365b359e43a1b7c00e59b5145, type: 2}
   BulletID: 13
   ChamberSize: 2
-  ReloadSpeed: 0
+  BurstCoolDown: 0
+  ShotsPerBurst: 0
+  CurrentBurstShots: 0
+  Reloading: 0
   BulletsInChamber: 0
   DebugMode: 1
   Timer: 0
+  BurstTimer: 0

@@ -103,7 +103,7 @@ MonoBehaviour:
   ItemName: Box of 9mm Ammo
   Description: use to get a bunch of 9mm Ammo
   ID: 14
-  Amount: 30
+  Amount: 3
   ItemBehavior: {fileID: 8403686633304497302}
   Useable: 1
   Equippable: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Range: 0
+  Accuracy: 0
 --- !u!114 &8403686633304497302
 MonoBehaviour:
   m_ObjectHideFlags: 0

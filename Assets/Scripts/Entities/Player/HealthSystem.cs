@@ -64,7 +64,7 @@ public class HealthSystem : MonoBehaviour{
             HealthBar.DelayedBar.fillAmount = Mathf.Lerp(
                 HealthBar.DelayedBar.fillAmount,
                 HealthBar.Bar.fillAmount,
-                (Time.deltaTime * HealthBar.lerpSpeed)
+                Time.deltaTime * HealthBar.lerpSpeed
             );
         }
 
@@ -73,11 +73,10 @@ public class HealthSystem : MonoBehaviour{
     }
 
     IEnumerator DamageEffects(float timer){
-        GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Stunned] = true;
+        GameServices.GlobalVariables.Player.MovementScript.CurrentEffects[PlayerMovement.Effects.Stunned] = timer;
         GameServices.GlobalVariables.Player.Animator.enabled = false;
         GameServices.GlobalVariables.Player.SpriteRenderer.sprite = StunSprite;
         yield return new WaitForSeconds(timer);
-        GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Stunned] = false;
         GameServices.GlobalVariables.Player.Animator.enabled = true;
     }
 

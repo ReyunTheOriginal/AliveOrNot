@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
@@ -12,6 +13,7 @@ public class GlobalVariables : MonoBehaviour
     public CursorTextures Cursors;
     public HashSet<EnemyProperties> AllEnemies = new HashSet<EnemyProperties>();
     public HashSet<ItemProperties> AllItems = new HashSet<ItemProperties>();
+    public AmmoData AmmoUI;
 
     private void Awake() {
         GameServices.GlobalVariables = this;
@@ -27,6 +29,13 @@ public class GlobalVariables : MonoBehaviour
         public SpriteRenderer SpriteRenderer;
         public PlayerMovement MovementScript;
         public SpriteMask SpriteMask;
+    }
+
+    [System.Serializable]
+    public class AmmoData{
+        public CanvasGroup WholeUI;
+        public RectTransform Rect;
+        public TMP_Text Text;
     }
 
     [System.Serializable]

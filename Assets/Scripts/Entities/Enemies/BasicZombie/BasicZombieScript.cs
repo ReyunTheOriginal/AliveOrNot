@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicZombieScript : EnemyBehavior
@@ -7,21 +5,13 @@ public class BasicZombieScript : EnemyBehavior
     public GameObject RightEyeCenter;
     public GameObject LeftEyeCenter;
     
-    void Start()
-    {
+
+    void Update(){
         
-    }
+        Properties.CurrentStates[EnemyProperties.State.Chasing] = true;
 
-    void Update()
-    {
-        GameUtils.MakeObjectLookAt(RightEyeCenter.transform, GameServices.GlobalVariables.Player.GameObject.transform.position);
-        GameUtils.MakeObjectLookAt(LeftEyeCenter.transform, GameServices.GlobalVariables.Player.GameObject.transform.position);
-
-        
-        Properties.CurrentStats[EnemyProperties.Stat.Chasing] = true;
-
-        if (Properties.CurrentStats[EnemyProperties.Stat.Chasing] && !Properties.CurrentStats[EnemyProperties.Stat.Stunned]){
-            GameUtils.FollowObjectWithRig(Properties.rig, GameServices.GlobalVariables.Player.GameObject.transform, Properties.WalkSpeed);
+        if (Properties.CurrentStates[EnemyProperties.State.Chasing] && !Properties.CurrentEffects.ContainsKey(EnemyProperties.Effects.Stunned)){
+            EnemyAction.FollowPlayer(Properties.rig, Properties.WalkSpeed);
         }
     }
 

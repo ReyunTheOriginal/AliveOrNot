@@ -78,6 +78,32 @@ public class AnimationPlayer : MonoBehaviour
         currentAnimation = StartCoroutine(WaitForAnimation(clip));
     }
 
+    public void StopAnimation(){
+        // Stop the running coroutine
+        if (currentAnimation != null){
+            StopCoroutine(currentAnimation);
+            currentAnimation = null;
+        }
+
+        // Disconnect animation from animator
+        if (output.IsOutputValid()){
+            output.SetSourcePlayable(Playable.Null);
+        }
+
+        // Destroy playable safely
+        if (playable.IsValid()){
+            playable.Destroy();
+        }
+
+        playable = default;
+
+        // Optional callback
+        if (RunAfterAnimationIsOver != null){
+            StartCoroutine(RunAfterAnimationIsOver());
+            RunAfterAnimationIsOver = null;
+        }
+    }
+
 
     IEnumerator WaitForAnimation(AnimationClip clip) {
         // 1. Wait until the playable has actually finished based on its own clock
