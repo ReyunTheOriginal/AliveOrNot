@@ -43,6 +43,9 @@ TagManager:
   - name: Ground
     uniqueID: 880263389
     locked: 0
+  - name: GroundProp
+    uniqueID: 620969755
+    locked: 0
   - name: Item
     uniqueID: 2561800631
     locked: 0

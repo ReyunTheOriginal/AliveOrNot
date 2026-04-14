@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour{
@@ -10,15 +11,15 @@ public class HealthSystem : MonoBehaviour{
     public float Armor;
     public Sprite StunSprite;
     public HealthBarUI HealthBar;
+    public float RegenerationSpeed = 0.1f;
 
     [Header("Debug")]
     public float Timer;
     public Coroutine DelayCoroutine;
 
     void Update(){
-        if (HealthBar.DelayedBar.fillAmount == HealthBar.Bar.fillAmount){
-            Timer = 0;
-        }
+        //reset the delaybar Timer
+        if (HealthBar.DelayedBar.fillAmount == HealthBar.Bar.fillAmount)Timer = 0;
 
         if (HealthBar.DelayedBar.fillAmount > HealthBar.Bar.fillAmount){
             Timer += Time.deltaTime;
@@ -34,6 +35,19 @@ public class HealthSystem : MonoBehaviour{
         float healthPercent = Health/MaxHealth;
         HealthBar.Bar.fillAmount = healthPercent;
         HealthBar.Icon.fillAmount = healthPercent;
+
+        if (GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Dead]){
+            if (Input.GetKeyDown(KeyCode.Space)){
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                Time.timeScale = 1;
+            }
+        }else{
+            RegenerateHealth();
+        }
+    }
+
+    public void RegenerateHealth(){
+        Health += Time.deltaTime * RegenerationSpeed;
     }
 
     public void TakeDamage(float Damage, Vector2 KnockBack, float StunLength){
@@ -44,6 +58,12 @@ public class HealthSystem : MonoBehaviour{
 
         GameServices.GlobalVariables.Player.SpriteRenderer.transform.rotation = Quaternion.Euler(0,KnockBack.x > 0? 180 : 0,0);
 
+        if (Health <= 0){
+            GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Dead] = true;
+            Time.timeScale = 0;
+        }
+
+        //Reduce the Durability of all armor worn at the time of the hit
         if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
             if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties)
                 GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties.Durability--;

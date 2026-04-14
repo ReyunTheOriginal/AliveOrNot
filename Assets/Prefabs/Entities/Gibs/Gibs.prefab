@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9188282319755572671}
   - component: {fileID: 2368052887741187631}
   - component: {fileID: 7669650213178652487}
-  - component: {fileID: 3388852209432031340}
   m_Layer: 0
   m_Name: Torso #2
   m_TagString: Untagged
@@ -73,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: -524210740, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -114,19 +113,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &3388852209432031340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172242762422644143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 7669650213178652487}
 --- !u!1 &1521839229950472550
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,14 +777,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -935,7 +921,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -4923,9 +4909,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -5622,14 +5608,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -5766,7 +5752,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -9754,9 +9740,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -10491,14 +10477,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -10635,7 +10621,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -14623,9 +14609,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14669,7 +14655,6 @@ GameObject:
   - component: {fileID: 1918706144578894518}
   - component: {fileID: 702712089877108518}
   - component: {fileID: 3362240822975620383}
-  - component: {fileID: 2737853447844607735}
   m_Layer: 0
   m_Name: Torso #4
   m_TagString: Untagged
@@ -14731,8 +14716,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: -958417505, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14772,19 +14757,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2737853447844607735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5046851733373261882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 3362240822975620383}
 --- !u!1 &5337280954585615263
 GameObject:
   m_ObjectHideFlags: 0
@@ -14796,7 +14768,6 @@ GameObject:
   - component: {fileID: 7562314266214244993}
   - component: {fileID: 6440923890288324327}
   - component: {fileID: 7250748911148267023}
-  - component: {fileID: 4042344945693195708}
   m_Layer: 0
   m_Name: Leg #1
   m_TagString: Untagged
@@ -14858,8 +14829,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 983448987, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14899,19 +14870,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4042344945693195708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5337280954585615263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 7250748911148267023}
 --- !u!1 &6241091908470593507
 GameObject:
   m_ObjectHideFlags: 0
@@ -14923,7 +14881,6 @@ GameObject:
   - component: {fileID: 6922884324642733890}
   - component: {fileID: 1143848652667670813}
   - component: {fileID: 8308887380432040200}
-  - component: {fileID: 4645330607776169444}
   m_Layer: 0
   m_Name: Leg #2
   m_TagString: Untagged
@@ -14985,8 +14942,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 1240998890, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -15026,19 +14983,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4645330607776169444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6241091908470593507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 8308887380432040200}
 --- !u!1 &6366512198772501421
 GameObject:
   m_ObjectHideFlags: 0
@@ -15703,14 +15647,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -15847,7 +15791,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -19835,9 +19779,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -20534,14 +20478,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -20678,7 +20622,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -24666,9 +24610,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -24712,7 +24656,6 @@ GameObject:
   - component: {fileID: 1284664378410690487}
   - component: {fileID: 9205835167560698211}
   - component: {fileID: 6845207973451480533}
-  - component: {fileID: 154705444198434618}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -24774,8 +24717,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 1334786005, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -24815,19 +24758,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &154705444198434618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7300341690441114864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 6845207973451480533}
 --- !u!1 &7346956590906448274
 GameObject:
   m_ObjectHideFlags: 0
@@ -24839,7 +24769,6 @@ GameObject:
   - component: {fileID: 3912610852510404911}
   - component: {fileID: 6959586606249513900}
   - component: {fileID: 5484839553699365318}
-  - component: {fileID: 6650288463779367704}
   m_Layer: 0
   m_Name: Torso #1
   m_TagString: Untagged
@@ -24901,8 +24830,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: -169369700, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -24942,19 +24871,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6650288463779367704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7346956590906448274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 5484839553699365318}
 --- !u!1 &7729543279831525535
 GameObject:
   m_ObjectHideFlags: 0
@@ -25619,14 +25535,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -25763,7 +25679,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -29751,9 +29667,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -29797,7 +29713,6 @@ GameObject:
   - component: {fileID: 7778835665614847848}
   - component: {fileID: 9041721349424907256}
   - component: {fileID: 8268828349760389469}
-  - component: {fileID: 2534617803954303040}
   m_Layer: 0
   m_Name: Torso #3
   m_TagString: Untagged
@@ -29859,8 +29774,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 671843799, guid: 2f61bfa4b2d380e4fad23c9d1c3d56f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -29900,19 +29815,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2534617803954303040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8047574473119025487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebbd01cf007684a49a4257b06d93bfde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rig: {fileID: 8268828349760389469}
 --- !u!1 &8361656437266724138
 GameObject:
   m_ObjectHideFlags: 0
@@ -30577,14 +30479,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 90, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -115}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -30721,7 +30623,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 45
       mode: 0
       spread: 0
       speed:
@@ -34709,9 +34611,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 620969755
+  m_SortingLayer: -2
+  m_SortingOrder: -2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0

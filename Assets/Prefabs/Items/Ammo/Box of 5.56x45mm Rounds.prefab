@@ -101,7 +101,8 @@ MonoBehaviour:
   UniqueItemID: 0
   ItemSprite: {fileID: -1439624713, guid: 03d5222bb69ade14895a07152360c92e, type: 3}
   ItemName: Box of 5.56x45mm Ammo
-  Description: use to get a bunch of 5.56x45mm Ammo
+  Description: Open to get a bunch of 5.56x45mm Ammo
+  UseLabel: Open
   ID: 15
   Amount: 3
   ItemBehavior: {fileID: 3287888939006153154}

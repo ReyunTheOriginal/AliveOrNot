@@ -7,7 +7,6 @@ public class BulletGun : ItemBehavior
     public WeaponPropertiesHolder WeaponProperties;
     [Header("Settings")]
     public AnimationCurve DamageFalloff;
-    public int MaxHits;
     public FireModes FireMode;
     public float Recoil;
     public float StunLength;
@@ -174,6 +173,7 @@ public class BulletGun : ItemBehavior
             BulletsInChamber += toLoad;
         }
         
+        CurrentBurstShots = 0;
         Reloading = false;
         ReloadCoroutine = null;
         yield return null;
@@ -221,14 +221,14 @@ public class BulletGun : ItemBehavior
 
         List<Collider2D> sorted = new List<Collider2D>(hits);
 
-        if (MaxHits > 1)
+        if (WeaponProperties.MaxHits > 1)
             sorted.Sort((a, b) =>{
                 float da = ((Vector2)a.ClosestPoint(pos) - pos).sqrMagnitude;
                 float db = ((Vector2)b.ClosestPoint(pos) - pos).sqrMagnitude;
                 return da.CompareTo(db);
             });
 
-       if (MaxHits == 0){
+       if (WeaponProperties.MaxHits == 0){
             foreach(Collider2D col in sorted){
                 Hit(col, dir); //Register the Attack
             }
@@ -237,7 +237,7 @@ public class BulletGun : ItemBehavior
             foreach(Collider2D col in sorted){
                 Hit(col, dir); //Register the Attack
                 i++;
-                if (i >= MaxHits)break;
+                if (i >= WeaponProperties.MaxHits)break;
             }
        }
 
@@ -248,6 +248,7 @@ public class BulletGun : ItemBehavior
         ParticleSystem ps = flash.GetComponent<ParticleSystem>();
         var main = ps.main;
         main.startRotation = -rotate;
+
         if (GunShotAnimation)GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.PlayClip(GunShotAnimation);
         GameServices.GlobalVariables.Player.rig.AddForce(-dir * Recoil, ForceMode2D.Impulse);
         if (Properties.HasDurability)Properties.Durability -= 1;

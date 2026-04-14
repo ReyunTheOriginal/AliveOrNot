@@ -7,6 +7,7 @@ public class ItemProperties : MonoBehaviour
      public Sprite ItemSprite;
      public string ItemName;
      public string Description;
+     public string UseLabel = "Use";
      public int ID;
      public int Amount = 1;
      public ItemBehavior ItemBehavior;
@@ -51,15 +52,15 @@ public class ItemProperties : MonoBehaviour
 
      public void SetUpHands(){
 
-          foreach(Transform upperChild in GameServices.GlobalVariables.OffHandObject.Object.transform){
-               foreach (Transform Prop in upperChild){
-                    if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
-               }
-          }
+          
 
-          foreach(Transform upperChild in GameServices.GlobalVariables.PrimaryHandObject.Object.transform){
-               foreach (Transform Prop in upperChild){
-                    if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
+          
+
+          if (equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItem(EquipSlot.BothHands)){
+               foreach(Transform upperChild in GameServices.GlobalVariables.PrimaryHandObject.Object.transform){
+                    foreach (Transform Prop in upperChild){
+                         if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
+                    }
                }
           }
           
@@ -125,6 +126,12 @@ public class ItemProperties : MonoBehaviour
           }
      
           if (equipSlot == EquipSlot.BothHands){
+               foreach(Transform upperChild in GameServices.GlobalVariables.OffHandObject.Object.transform){
+                    foreach (Transform Prop in upperChild){
+                         if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
+                    }
+               }
+
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].DefaultColor = Color.black;
                
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].HotBarUI.Outline.color = Color.black;

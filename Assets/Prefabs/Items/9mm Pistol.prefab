@@ -136,10 +136,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 15
   RandomDamageOffsit: 10
-  KillType: 2
+  CanGib: 0
   WeaponType: 3
   Cooldown: 0.6
   KnockBack: 15
+  MaxHits: 1
 --- !u!114 &946463028155045486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +188,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxHits: 1
   FireMode: 0
   Recoil: 0.1
   StunLength: 0.3

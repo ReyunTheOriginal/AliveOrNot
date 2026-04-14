@@ -8,7 +8,7 @@ public class GameSounds : MonoBehaviour
 
     public AudioClip GibsExplosionSound;
     public AudioClip BulletImpactSound;
-    public AudioClip DecapitationSound;
+    public AudioClip ZombieDeathSound;
     public AudioClip BladeImpactSound;
     public AudioClip BluntImpactSound;
 

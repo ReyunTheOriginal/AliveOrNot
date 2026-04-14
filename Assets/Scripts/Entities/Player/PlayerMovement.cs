@@ -58,9 +58,10 @@ public class PlayerMovement : MonoBehaviour
 
         SetUpStates();
 
-        if (CurrentStates[State.Walking] == true && !CurrentStates[State.InUI]){
+        if (CurrentStates[State.Walking] == true && !CurrentStates[State.InUI] && !CurrentStates[State.Dead]){
             Speed = CurrentStates[State.Running]? RunSpeed : WalkSpeed;
             if (CurrentStates[State.InShallowWater]) Speed -= CurrentStates[State.Running]? 1 : 1.5f;
+            animator.speed = CurrentStates[State.Running]? RunSpeed/WalkSpeed : 1;
 
             switch (CurrentDirection){
                 case Direction.Up:
@@ -87,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
         }else{
             Speed = 0;
+            animator.speed = 1f;
             animator.SetBool("Walking", false);
         }
 

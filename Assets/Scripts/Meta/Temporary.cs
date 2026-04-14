@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Temporary : MonoBehaviour
@@ -24,14 +23,24 @@ public class Temporary : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void StartTempAudio(AudioClip clip){
+    public void StartTempAudio(AudioClip clip, float VolumeFallOff, float MaxDistanceToHear){
         AudioSource source = gameObject.AddComponent<AudioSource>();
-        StartCoroutine(StartTemoAudioCor(source, clip));
+        StartCoroutine(StartTemoAudioCor(source, clip, VolumeFallOff, MaxDistanceToHear));
     }
-    IEnumerator StartTemoAudioCor(AudioSource source, AudioClip clip){
-        source.PlayOneShot(clip);
+    IEnumerator StartTemoAudioCor(AudioSource source, AudioClip clip, float VolumeFallOff, float MaxDistanceToHear){
+        float distance = Vector2.Distance(transform.position, GameServices.GlobalVariables.Camera.transform.position);
+    
+        // 0 at maxDistance, 1 at center
+        float t = Mathf.Clamp01(1f - (distance / MaxDistanceToHear));
+        
+        // apply falloff curve — higher volumeFallOff = quiets faster with distance
+        float volume = Mathf.Pow(t, VolumeFallOff);
+
+        source.clip = clip;
+        source.volume = volume;
+        source.Play();
+
         yield return new WaitUntil(() => !source.isPlaying);
-        // cleanup
         Destroy(gameObject);
     }
 }

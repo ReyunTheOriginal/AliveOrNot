@@ -159,12 +159,12 @@ public static class GameUtils{
         return TempScript.StartTempCoroutine(func);
     }
    
-    public static void PlayIndependentAudio(AudioClip Clip, Vector2 Position){
+    public static void PlayAudio(AudioClip Clip, Vector2 Position, float VolumeFallOff, float MaxDistanceToHear){
         GameObject TempObject = new GameObject();
         TempObject.transform.position = Position;
         TempObject.name = "Temporary Coroutine Object";
         Temporary TempScript = TempObject.AddComponent<Temporary>();
-        TempScript.StartTempAudio(Clip);
+        TempScript.StartTempAudio(Clip, VolumeFallOff, MaxDistanceToHear);
     }
 
     public static Vector2 GetRandomPointInCircleRange(Vector2 center, float maxRadius, float minRadius){
@@ -207,6 +207,7 @@ public static class GameUtils{
     public static Vector2 QuickWorldMousePosition(){
         return GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition);
     }
+
     public static void ResetCursor(){
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }

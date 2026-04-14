@@ -116,7 +116,6 @@ GameObject:
   - component: {fileID: -6640778349695167188}
   - component: {fileID: 59188811905971032}
   - component: {fileID: 6393800952233574166}
-  - component: {fileID: 3679457685613780818}
   - component: {fileID: 4048229837323071607}
   m_Layer: 8
   m_Name: BasicZombie
@@ -228,8 +227,6 @@ MonoBehaviour:
   Properties: {fileID: 0}
   WeaponKilledBy: {fileID: 0}
   GibsLifeTime: 10
-  RightEyeCenter: {fileID: 0}
-  LeftEyeCenter: {fileID: 0}
 --- !u!114 &-6640778349695167188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,20 +287,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b3dd72c2f240f448c26ceec2e76380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 3679457685613780818}
-  animator: {fileID: 4048229837323071607}
-  spriteRenderer: {fileID: 9080222270858068061}
-  MaxHealth: 80
-  Health: 80
-  Damage: 10
-  RandomDamageOffsit: 5
-  LightAttackCooldown: 1.6
-  HeavyAttackCooldown: 2.8
-  SpecialAttackCooldown: 3.4
-  KnockBack: 25
-  StunLength: 0.5
+  MaxHealth: 100
+  Health: 100
   WalkSpeed: 60
+  CurrentDirection: 0
+  BloodBurst: {fileID: 1534289318125768801, guid: 23303819341c853448657d0962388eab, type: 3}
+  GibsDamage: -50
   Gibs: {fileID: 2989226797992114525, guid: 1ead8e49f9c89634c8386c546f2832d6, type: 3}
+  Corpse: {fileID: 1437462350042973929, guid: 6199e852b85ea8842b66b4f3e298af38, type: 3}
+  CorpseLifeTime: 15
   Drops:
   - Frequancy: 0.2
     Object: {fileID: 4448874912205400380, guid: c5a15c9288432bd4ead2b976684feb2e, type: 3}
@@ -317,105 +309,23 @@ MonoBehaviour:
     Object: {fileID: 8037333862181048599, guid: b9d77435c0ff02e4faefa09df753d462, type: 3}
   - Frequancy: 0.023
     Object: {fileID: 4682245839499569793, guid: d498cfc3685da4841af4aa3507318489, type: 3}
-  CurrentDirection: 0
+  LightAttackDamage: 15
+  LightAttackRandomDamageOffsit: 5
+  LightAttackRange: 2
+  LightAttackCooldown: 1.6
+  LightAttackKnockBack: 15
+  LightAttackStunLength: 0.3
+  LightAttackRayAmount: 5
+  HeavyAttackCooldown: 2.8
+  SpecialAttackCooldown: 3.4
   rig: {fileID: 4440526391049521916}
   behavior: {fileID: 830443202794021237}
---- !u!82 &3679457685613780818
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8946135273592330025}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  animator: {fileID: 4048229837323071607}
+  spriteRenderer: {fileID: 9080222270858068061}
+  DebugMode: 1
+  LightAttackTimer: 0
+  HeavyAttackTimer: 0
+  SpecialAttackTimer: 0
 --- !u!95 &4048229837323071607
 Animator:
   serializedVersion: 5

@@ -294,6 +294,7 @@ public class InventoryScript : MonoBehaviour
             itemInfoUI.Name.fontSize = Inventory[UniqueItemID].ItemProperties.ItemName.Length / 0.31f;
             itemInfoUI.Name.text = Inventory[UniqueItemID].ItemProperties.ItemName;
             itemInfoUI.Description.text = Inventory[UniqueItemID].ItemProperties.Description;
+            itemInfoUI.UseButtonText.text = Inventory[UniqueItemID].ItemProperties.UseLabel;
 
             //Decide whether to show the Use Button
             if (!Inventory[UniqueItemID].ItemProperties.Useable){
@@ -388,6 +389,7 @@ public class InventoryScript : MonoBehaviour
         public TMP_Text Name;
         public TMP_Text Description;
         public Button UseButton;
+        public TMP_Text UseButtonText;
         public Button DropButton;
         public Button ConfirmDropButton;
         public TMP_InputField InputField;

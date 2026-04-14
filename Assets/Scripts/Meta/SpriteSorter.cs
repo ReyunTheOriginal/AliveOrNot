@@ -9,6 +9,8 @@ public class SpriteSorter : MonoBehaviour
     [SerializeField] private SpriteRenderer SpriteRenderer;
     [SerializeField] private TilemapRenderer TileRenderer;
     [SerializeField] private int OrderOffsit;
+    private Vector3 lastPos;
+
 
     private void Awake() {
         CurrentAntiZFighting = AntiZFighting;
@@ -25,7 +27,14 @@ public class SpriteSorter : MonoBehaviour
 
     void Update()
     {
-        int order = (int)(-(transform.position.y + Offsit) * 100) + OrderOffsit;// + CurrentAntiZFighting;
+        if (transform.position != lastPos){
+            UpdateSorting();
+            lastPos = transform.position;
+        }
+    }
+
+    private void UpdateSorting(){
+        int order = Mathf.RoundToInt(-(transform.position.y + Offsit) * 1000) + OrderOffsit;
 
         if (SpriteRenderer)SpriteRenderer.sortingOrder = order;
         if (TileRenderer)TileRenderer.sortingOrder = order;

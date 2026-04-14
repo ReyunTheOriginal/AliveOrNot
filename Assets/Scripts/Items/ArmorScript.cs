@@ -10,7 +10,7 @@ public class ArmorScript : ItemBehavior{
     }
 
     private void OnEnable() {
-        Properties.ArmorValue = ArmorValue;
+        if (Properties)Properties.ArmorValue = ArmorValue;
     }
     
     public override void Equipped(){

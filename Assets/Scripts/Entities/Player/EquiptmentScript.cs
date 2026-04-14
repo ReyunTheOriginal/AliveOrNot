@@ -108,7 +108,7 @@ public class EquiptmentScript : MonoBehaviour
             if (HasAnItem((ItemProperties.EquipSlot)Slot)){
                 int ID = ESlot.Item.ItemProperties.UniqueItemID;
 
-                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)) || !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && (ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands){
+                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)) || (!((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && (ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)){
                     GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.StopAnimation();
                 }else if ((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.OffHand){
                     GameServices.GlobalVariables.OffHandObject.AnimationPlayer.StopAnimation();
@@ -129,13 +129,7 @@ public class EquiptmentScript : MonoBehaviour
                     Equip(ESlot, Slot);
                 }
                 
-            }else{
-                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItem(ItemProperties.EquipSlot.BothHands)) || !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && !GameServices.Equipment.HasAnItem(ItemProperties.EquipSlot.PrimaryHand)){
-                    GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.StopAnimation();
-                }else if ((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.OffHand){
-                    GameServices.GlobalVariables.OffHandObject.AnimationPlayer.StopAnimation();
-                }
-                
+            }else{ 
                 //Runs when the Slot Is Empty:
                 Equip(ESlot, Slot);
             }

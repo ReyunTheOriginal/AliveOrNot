@@ -134,12 +134,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2181744f3811c5d46b93d94743a413f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 50
+  Damage: 80
   RandomDamageOffsit: 0
-  KillType: 0
+  CanGib: 1
   WeaponType: 3
   Cooldown: 0.1
   KnockBack: 25
+  MaxHits: 4
 --- !u!114 &8660202736199624358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +197,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxHits: 5
   FireMode: 2
   Recoil: 15
   StunLength: 1.2

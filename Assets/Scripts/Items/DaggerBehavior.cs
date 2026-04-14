@@ -54,6 +54,7 @@ public class DaggerBehavior : ItemBehavior
                 PlayAudio();
                 HitCheck();
                 Timer = 0;
+                HitEnemies.Clear();
 
                 Vector2 dir = GameUtils.DirFromAToB(GameServices.GlobalVariables.OffHandObject.Center.transform.position, GameUtils.QuickWorldMousePosition());
                 GameServices.GlobalVariables.Player.rig.AddForce(Recoil * -dir, ForceMode2D.Impulse);
@@ -63,8 +64,10 @@ public class DaggerBehavior : ItemBehavior
                 
             }
 
+            Vector2 pos = GameServices.GlobalVariables.PrimaryHandObject.Object.transform.position;
+
             if (Hitting){
-                HashSet<Collider2D> HitColliders = GameUtils.SquareHitDetection(GameServices.GlobalVariables.PrimaryHandObject.Center.transform.position, 
+                HashSet<Collider2D> hits = GameUtils.SquareHitDetection(GameServices.GlobalVariables.PrimaryHandObject.Center.transform.position, 
                     HitDir, 
                     Range, 
                     5, 
@@ -73,18 +76,44 @@ public class DaggerBehavior : ItemBehavior
                     GameUtils.LayerMaskFromNumbers(-4), true
                 );
 
-                foreach (Collider2D Col in HitColliders){
-                    EnemyProperties enemyProperties = Col.gameObject.GetComponent<EnemyProperties>();
-                    if (enemyProperties && !HitEnemies.Contains(enemyProperties)){
-                        HitEnemies.Add(enemyProperties);
-                        
-                        float DamageOffsit = UnityEngine.Random.Range(-WeaponProperties.RandomDamageOffsit, WeaponProperties.RandomDamageOffsit);
-                        enemyProperties.HitEnemy(WeaponProperties.Damage + DamageOffsit, WeaponProperties.KnockBack * HitDir, WeaponProperties);
-                        enemyProperties.CurrentEffects[EnemyProperties.Effects.Stunned] = StunLength;
-                        Properties.Durability -= 1;
+                List<Collider2D> sorted = new List<Collider2D>(hits);
+
+                if (WeaponProperties.MaxHits > 1)
+                    sorted.Sort((a, b) =>{
+                        float da = ((Vector2)a.ClosestPoint(pos) - pos).sqrMagnitude;
+                        float db = ((Vector2)b.ClosestPoint(pos) - pos).sqrMagnitude;
+                        return da.CompareTo(db);
+                    });
+
+                if (WeaponProperties.MaxHits == 0){
+                    foreach(Collider2D col in sorted){
+                        Hit(col, HitDir); //Register the Attack
+                    }
+                }else{
+                    int i = 0;
+                    foreach(Collider2D col in sorted){
+                        Hit(col, HitDir); //Register the Attack
+                        i++;
+                        if (i >= WeaponProperties.MaxHits){
+                            Hitting = false;
+                            break;
+                        }
                     }
                 }
+
             }
+        }
+    }
+
+    public void Hit(Collider2D EnemyCol, Vector2 KnockBackDir){
+        EnemyProperties enemyProperties = EnemyCol.gameObject.GetComponent<EnemyProperties>();
+        if (enemyProperties && !HitEnemies.Contains(enemyProperties)){
+            HitEnemies.Add(enemyProperties);
+            
+            float DamageOffsit = UnityEngine.Random.Range(-WeaponProperties.RandomDamageOffsit, WeaponProperties.RandomDamageOffsit);
+            enemyProperties.HitEnemy(WeaponProperties.Damage + DamageOffsit, WeaponProperties.KnockBack * KnockBackDir, WeaponProperties);
+            enemyProperties.CurrentEffects[EnemyProperties.Effects.Stunned] = StunLength;
+            Properties.Durability -= 1;
         }
     }
 
