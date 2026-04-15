@@ -96,7 +96,8 @@ public class InventoryScript : MonoBehaviour
 
         foreach(var Item in Inventory){
             //attach the inactive item to the player
-            if (Item.Value.GameObject)Item.Value.GameObject.transform.position = transform.position;
+            if (Item.Value.GameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.UniqueItemID))
+                Item.Value.GameObject.transform.position = transform.position;
 
             //Update Durability UI
             if (Item.Value.ItemProperties.HasDurability && Item.Value.UISlot){

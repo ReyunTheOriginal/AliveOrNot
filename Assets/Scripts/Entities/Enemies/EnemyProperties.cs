@@ -99,12 +99,8 @@ public class EnemyProperties : MonoBehaviour{
     [System.Serializable]
     public class Drop{
         [Range(0f, 1f)]
-        public float Frequancy;
+        public float Weight;
         public GameObject Object;
-
-        public bool Matches(float num){
-            return num <= Frequancy;
-        }
     }
     public enum State{
         Chasing,

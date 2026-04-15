@@ -25,6 +25,8 @@ public class EnemyBehavior : MonoBehaviour{
 
           if (Properties.LightAttackTimer >= Properties.LightAttackCooldown && Vector2.Distance(GameServices.GlobalVariables.Player.GameObject.transform.position, transform.position) <= Properties.LightAttackRange){
                StartCoroutine(LightAttack());
+               Properties.SpecialAttackTimer = 0;
+               Properties.HeavyAttackTimer = 0;
                Properties.LightAttackTimer = 0;
           }
           
@@ -99,14 +101,23 @@ public class EnemyBehavior : MonoBehaviour{
     }
 
      public void DropItems(){
-        foreach (EnemyProperties.Drop chance in Properties.Drops){
-            float num = UnityEngine.Random.Range(0f, 1f);
-            if (chance.Matches(num)){
-                Instantiate(chance.Object, transform.position, Quaternion.identity);
-            }
-        }
-    }
+        float totalWeight = 0f;
+          foreach (var drop in Properties.Drops)
+               totalWeight += drop.Weight;
 
+          float roll = Random.Range(0f, totalWeight);
+          float cumulative = 0f;
+
+          foreach (var drop in Properties.Drops)
+          {
+               cumulative += drop.Weight;
+               if (roll < cumulative)
+               {
+                    Instantiate(drop.Object, transform.position, Quaternion.identity);
+                    return; // only one item drops
+               }
+          }
+    }
 
      //LightAttack, happens constantly, deals base Damage
      public virtual IEnumerator LightAttack(){
@@ -117,7 +128,7 @@ public class EnemyBehavior : MonoBehaviour{
 
           Vector2 dir = GameUtils.DirFromAToB(transform.position,GameServices.GlobalVariables.Player.GameObject.transform.position);
           
-          HashSet<Collider2D> hits = GameUtils.SquareHitDetection(transform.position, dir, Properties.LightAttackRange * 0.9f, Properties.LightAttackRayAmount, 0.4f, "Player", GameUtils.LayerMaskFromNumbers(), Properties.DebugMode);
+          HashSet<Collider2D> hits = GameUtils.SquareHitDetection(transform.position, dir, Properties.LightAttackRange * 1.1f, Properties.LightAttackRayAmount, 0.4f, "Player", GameUtils.LayerMaskFromNumbers(), Properties.DebugMode);
 
           if (hits.Count > 0)
                GameServices.GlobalVariables.Player.PlayerHealth.TakeDamage(Properties.LightAttackDamage, Properties.LightAttackKnockBack * dir, Properties.LightAttackStunLength );

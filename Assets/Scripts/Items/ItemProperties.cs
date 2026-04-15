@@ -46,17 +46,21 @@ public class ItemProperties : MonoBehaviour
           GameServices.GlobalVariables.AllItems.Add(this);
      }
 
+     private void OnEnable() {
+          if (GameServices.GlobalVariables)GameServices.GlobalVariables.AllItems.Remove(this);
+     }
+
+     private void OnDisable() {
+          GameServices.GlobalVariables.AllItems.Remove(this);
+     }
+
      private void OnDestroy() {
           GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
      public void SetUpHands(){
 
-          
-
-          
-
-          if (equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItem(EquipSlot.BothHands)){
+          if (equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
                foreach(Transform upperChild in GameServices.GlobalVariables.PrimaryHandObject.Object.transform){
                     foreach (Transform Prop in upperChild){
                          if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
@@ -64,7 +68,7 @@ public class ItemProperties : MonoBehaviour
                }
           }
           
-          if ((equipSlot == EquipSlot.PrimaryHand || equipSlot == EquipSlot.BothHands) && !GameServices.Equipment.HasAnItem(EquipSlot.BothHands)){
+          if ((equipSlot == EquipSlot.PrimaryHand || equipSlot == EquipSlot.BothHands) && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
                GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(true);
 
                GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = transform.localScale;
@@ -97,7 +101,7 @@ public class ItemProperties : MonoBehaviour
                }
           }
 
-          if (equipSlot == EquipSlot.OffHand && !GameServices.Equipment.HasAnItem(EquipSlot.BothHands)){
+          if (equipSlot == EquipSlot.OffHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
                GameServices.GlobalVariables.OffHandObject.Object.SetActive(true);
 
                GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = transform.localScale;
@@ -145,7 +149,7 @@ public class ItemProperties : MonoBehaviour
      }
 
      public void UnSetUpHands(){
-          if ((equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItem(EquipSlot.BothHands)) || (equipSlot == EquipSlot.BothHands && !GameServices.Equipment.HasAnItem(EquipSlot.PrimaryHand))){
+          if ((equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)) || (equipSlot == EquipSlot.BothHands && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand))){
                GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(false);
                GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = new Vector3(2,2,1);
           }
@@ -155,7 +159,7 @@ public class ItemProperties : MonoBehaviour
                GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = new Vector3(2,2,1);
           }
 
-          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItem(EquipSlot.PrimaryHand)){
+          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand)){
                GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(true);
 
                GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.transform.localScale;
@@ -184,7 +188,7 @@ public class ItemProperties : MonoBehaviour
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.ItemBehavior?.Equipped();
           }
 
-          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItem(EquipSlot.OffHand)){
+          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand)){
                GameServices.GlobalVariables.OffHandObject.Object.SetActive(true);
 
                GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.transform.localScale;

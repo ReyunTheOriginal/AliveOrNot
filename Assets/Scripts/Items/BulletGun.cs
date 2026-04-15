@@ -67,8 +67,6 @@ public class BulletGun : ItemBehavior
         GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.localPosition = BarrelEndLocation;
         //added this so you don't have to wait for the cooldown to use the gun for the first time after equipping it
         Timer = WeaponProperties.Cooldown;
-
-        GameUtils.SetCursor(GameServices.GlobalVariables.Cursors.Gun, new Vector2(GameServices.GlobalVariables.Cursors.Gun.width /2, GameServices.GlobalVariables.Cursors.Gun.height/2 ));
     }
 
     public override void UnEquipped(){

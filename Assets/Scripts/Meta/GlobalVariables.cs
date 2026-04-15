@@ -54,6 +54,6 @@ public class GlobalVariables : MonoBehaviour
     [System.Serializable]
     public class CursorTextures{
         public Texture2D Default;
-        public Texture2D Gun;
+        //public Texture2D Gun;
     }
 }

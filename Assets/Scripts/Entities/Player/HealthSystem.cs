@@ -12,21 +12,25 @@ public class HealthSystem : MonoBehaviour{
     public Sprite StunSprite;
     public HealthBarUI HealthBar;
     public float RegenerationSpeed = 0.1f;
+    public float IFramesLength = 0.1f;
 
     [Header("Debug")]
-    public float Timer;
+    public float HealthBarDelayTimer = 0;
+    public float IFrameTimer = 0;
     public Coroutine DelayCoroutine;
 
     void Update(){
+        IFrameTimer += Time.deltaTime;
+
         //reset the delaybar Timer
-        if (HealthBar.DelayedBar.fillAmount == HealthBar.Bar.fillAmount)Timer = 0;
+        if (HealthBar.DelayedBar.fillAmount == HealthBar.Bar.fillAmount)HealthBarDelayTimer = 0;
 
         if (HealthBar.DelayedBar.fillAmount > HealthBar.Bar.fillAmount){
-            Timer += Time.deltaTime;
+            HealthBarDelayTimer += Time.deltaTime;
 
-            if (Timer >= BackBarDelay && DelayCoroutine == null){
+            if (HealthBarDelayTimer >= BackBarDelay && DelayCoroutine == null){
                 DelayCoroutine = StartCoroutine(ShortenDelayedBar());
-                Timer = 0;
+                HealthBarDelayTimer = 0;
             }
         }else{
             HealthBar.DelayedBar.fillAmount = HealthBar.Bar.fillAmount;
@@ -51,30 +55,33 @@ public class HealthSystem : MonoBehaviour{
     }
 
     public void TakeDamage(float Damage, Vector2 KnockBack, float StunLength){
-        float FinalDamage = Damage * (100 / (100 + Armor));
-        Health -= FinalDamage;
-        GameServices.GlobalVariables.Player.rig.AddForce(KnockBack, ForceMode2D.Impulse);
-        StartCoroutine(DamageEffects(StunLength));
+        if (IFrameTimer >= IFramesLength){
+            IFrameTimer = 0;
+            float FinalDamage = Damage * (100 / (100 + Armor));
+            Health -= FinalDamage;
+            GameServices.GlobalVariables.Player.rig.AddForce(KnockBack, ForceMode2D.Impulse);
+            StartCoroutine(DamageEffects(StunLength));
 
-        GameServices.GlobalVariables.Player.SpriteRenderer.transform.rotation = Quaternion.Euler(0,KnockBack.x > 0? 180 : 0,0);
+            GameServices.GlobalVariables.Player.SpriteRenderer.transform.rotation = Quaternion.Euler(0,KnockBack.x > 0? 180 : 0,0);
 
-        if (Health <= 0){
-            GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Dead] = true;
-            Time.timeScale = 0;
+            if (Health <= 0){
+                GameServices.GlobalVariables.Player.MovementScript.CurrentStates[PlayerMovement.State.Dead] = true;
+                Time.timeScale = 0;
+            }
+
+            //Reduce the Durability of all armor worn at the time of the hit
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
+                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties)
+                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties.Durability--;
+
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item != null)
+                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties)
+                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties.Durability--;
+
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item != null)
+                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties)
+                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties.Durability--;
         }
-
-        //Reduce the Durability of all armor worn at the time of the hit
-        if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties)
-                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties.Durability--;
-
-        if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item != null)
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties)
-                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties.Durability--;
-
-        if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item != null)
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties)
-                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties.Durability--;
     }
     
     IEnumerator ShortenDelayedBar(){

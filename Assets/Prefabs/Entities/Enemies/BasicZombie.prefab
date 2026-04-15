@@ -297,25 +297,25 @@ MonoBehaviour:
   Corpse: {fileID: 1437462350042973929, guid: 6199e852b85ea8842b66b4f3e298af38, type: 3}
   CorpseLifeTime: 15
   Drops:
-  - Frequancy: 0.2
+  - Weight: 0.2
     Object: {fileID: 4448874912205400380, guid: c5a15c9288432bd4ead2b976684feb2e, type: 3}
-  - Frequancy: 0.1
+  - Weight: 0.289
     Object: {fileID: 7619883086852221684, guid: 1196524d7426ff4479c13642237f67cb, type: 3}
-  - Frequancy: 0.068
+  - Weight: 0.203
     Object: {fileID: 2918967597021370492, guid: 139aea311b15fe740805cc534b3fdf6a, type: 3}
-  - Frequancy: 0.046
+  - Weight: 0.295
     Object: {fileID: 2166095832711921992, guid: 77f302c358701d246b741231031ccb81, type: 3}
-  - Frequancy: 0.038
+  - Weight: 0.072
     Object: {fileID: 8037333862181048599, guid: b9d77435c0ff02e4faefa09df753d462, type: 3}
-  - Frequancy: 0.023
+  - Weight: 0.049
     Object: {fileID: 4682245839499569793, guid: d498cfc3685da4841af4aa3507318489, type: 3}
   LightAttackDamage: 15
   LightAttackRandomDamageOffsit: 5
   LightAttackRange: 2
-  LightAttackCooldown: 1.6
+  LightAttackCooldown: 1.2
   LightAttackKnockBack: 15
   LightAttackStunLength: 0.3
-  LightAttackRayAmount: 5
+  LightAttackRayAmount: 3
   HeavyAttackCooldown: 2.8
   SpecialAttackCooldown: 3.4
   rig: {fileID: 4440526391049521916}
