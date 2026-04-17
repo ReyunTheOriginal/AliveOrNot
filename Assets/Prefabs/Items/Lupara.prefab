@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4445943144556464001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6857734585597588267}
+  m_Layer: 7
+  m_Name: MuzzleFlashLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6857734585597588267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445943144556464001}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.39918774, y: 0.093585655, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2011356788949568183}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4682245839499569793
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,6 +44,8 @@ GameObject:
   - component: {fileID: 7399423943410637772}
   - component: {fileID: 4484004333305063904}
   - component: {fileID: 8660202736199624358}
+  - component: {fileID: -3602373164368249548}
+  - component: {fileID: -800585360880444589}
   m_Layer: 0
   m_Name: Lupara
   m_TagString: Item
@@ -32,7 +65,8 @@ Transform:
   m_LocalPosition: {x: -28.945, y: 0.177, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6857734585597588267}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6659041193508121473
@@ -99,29 +133,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: 1cf0735ab5e992a49aa74d89078ca131, type: 3}
+  ItemInstanceID: 0
   ItemName: Lupara
-  Description: the perfect tool for a quick zombie smoothy
-  ID: 8
+  ID: 9
   Amount: 1
+  Description: the perfect tool for a quick zombie smoothy
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: 1cf0735ab5e992a49aa74d89078ca131, type: 3}
+  CustomUIPrefab: {fileID: 8503787839133816949, guid: 85f5a9c7a1147284c980bc749da3c0eb, type: 3}
+  CustomUICanvasGroup: {fileID: 0}
   ItemBehavior: {fileID: 8660202736199624358}
-  Useable: 0
-  Equippable: 1
-  equipSlot: 5
-  RightHandPosition: {x: -0.2968751, y: -0.04687497}
-  LeftHandPosition: {x: 0.046875, y: -0.015625}
+  ItemRenderer: {fileID: 6659041193508121473}
+  AnimationPlayer: {fileID: -3602373164368249548}
+  LocalPosition: {x: 0.5, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 1
+  RightHandPosition: {x: -0.2968751, y: -0.04687497}
+  LeftHandPosition: {x: 0.046875, y: -0.015625}
   MaxDurability: 350
   Durability: 350
   HasDurability: 1
+  Useable: 0
   Unstackable: 1
   Consumable: 0
+  Equippable: 1
+  equipSlot: 5
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Accuracy: 0
+  KnockBack: 0
 --- !u!114 &4484004333305063904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +181,7 @@ MonoBehaviour:
   Cooldown: 0.1
   KnockBack: 25
   MaxHits: 4
+  Properties: {fileID: 7399423943410637772}
 --- !u!114 &8660202736199624358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +242,11 @@ MonoBehaviour:
   Recoil: 15
   StunLength: 1.2
   MuzzleFlash: {fileID: 1723987602390721538, guid: 83a8d0a29f6a458419d4c8e13dd7a99c, type: 3}
-  BarrelEndLocation: {x: 0.4124994, y: 0.09687498}
+  BarrelEndLocation: {fileID: 6857734585597588267}
+  AmmoUI:
+    WholeUI: {fileID: 0}
+    Rect: {fileID: 0}
+    Text: {fileID: 0}
   Range: 15
   amountOfRays: 16
   AttackRadius: 40
@@ -210,10 +255,10 @@ MonoBehaviour:
   BasePitch: 1
   PitchChangeRange: 0.15
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
-  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   ReloadAnimation: {fileID: 7400000, guid: 793300a365b359e43a1b7c00e59b5145, type: 2}
-  BulletID: 13
+  BulletID: 17
   ChamberSize: 2
+  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   BurstCoolDown: 0
   ShotsPerBurst: 0
   CurrentBurstShots: 0
@@ -222,3 +267,36 @@ MonoBehaviour:
   DebugMode: 1
   Timer: 0
   BurstTimer: 0
+--- !u!114 &-3602373164368249548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682245839499569793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &-800585360880444589
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682245839499569793}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

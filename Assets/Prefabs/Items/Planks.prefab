@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4653478435634927081}
   - component: {fileID: 1733579771551186284}
   - component: {fileID: 7648385494647393317}
+  - component: {fileID: 3918943666861671782}
+  - component: {fileID: 3958159361294680586}
   m_Layer: 0
   m_Name: Planks
   m_TagString: Item
@@ -97,22 +99,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: 8e45ed4b1fcb60947aee642e4b6a4987, type: 3}
+  ItemInstanceID: 0
   ItemName: Planks
-  Description: Refined Wood. can be used for building and crafting many things
-  ID: 0
+  ID: 11
   Amount: 1
+  Description: Refined Wood. can be used for building and crafting many things
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: 8e45ed4b1fcb60947aee642e4b6a4987, type: 3}
+  CustomUI: {fileID: 0}
   ItemBehavior: {fileID: 0}
-  Useable: 0
-  Equippable: 0
-  equipSlot: 0
-  RightHandPosition: {x: 0, y: 0}
-  LeftHandPosition: {x: 0, y: 0}
+  ItemRenderer: {fileID: 1733579771551186284}
+  AnimationPlayer: {fileID: 3918943666861671782}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0}
   MaxDurability: 0
   Durability: 0
   HasDurability: 0
+  Useable: 0
   Unstackable: 0
   Consumable: 0
+  Equippable: 0
+  equipSlot: 0
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  KnockBack: 0
+--- !u!114 &3918943666861671782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338058358303534183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &3958159361294680586
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338058358303534183}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

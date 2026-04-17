@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1874547418704667767}
   - component: {fileID: 5576323272689285079}
   - component: {fileID: 5345931789183148622}
+  - component: {fileID: -2919140876171719125}
+  - component: {fileID: -8821015243754979414}
   m_Layer: 0
   m_Name: Log
   m_TagString: Item
@@ -97,22 +99,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: 21ed5d614c405ea418e844c30a96aeae, type: 3}
+  ItemInstanceID: 0
   ItemName: Logs
-  Description: a murdered tree. can be used for quick builds or made into planks
-  ID: 1
+  ID: 8
   Amount: 1
+  Description: a murdered tree. can be used for quick builds or made into planks
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: 21ed5d614c405ea418e844c30a96aeae, type: 3}
+  CustomUI: {fileID: 0}
   ItemBehavior: {fileID: 0}
-  Useable: 0
-  Equippable: 0
-  equipSlot: 0
-  RightHandPosition: {x: 0, y: 0}
-  LeftHandPosition: {x: 0, y: 0}
+  ItemRenderer: {fileID: 5576323272689285079}
+  AnimationPlayer: {fileID: -2919140876171719125}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0}
   MaxDurability: 0
   Durability: 0
   HasDurability: 0
+  Useable: 0
   Unstackable: 0
   Consumable: 0
+  Equippable: 0
+  equipSlot: 0
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  KnockBack: 0
+--- !u!114 &-2919140876171719125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2849798943248196329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &-8821015243754979414
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2849798943248196329}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

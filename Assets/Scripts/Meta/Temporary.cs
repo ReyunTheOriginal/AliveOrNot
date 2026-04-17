@@ -23,11 +23,11 @@ public class Temporary : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void StartTempAudio(AudioClip clip, float VolumeFallOff, float MaxDistanceToHear){
+    public void StartTempAudio(AudioClip clip, float VolumeFallOff, float MaxDistanceToHear, float Pitch){
         AudioSource source = gameObject.AddComponent<AudioSource>();
-        StartCoroutine(StartTemoAudioCor(source, clip, VolumeFallOff, MaxDistanceToHear));
+        StartCoroutine(StartTemoAudioCor(source, clip, VolumeFallOff, MaxDistanceToHear, Pitch));
     }
-    IEnumerator StartTemoAudioCor(AudioSource source, AudioClip clip, float VolumeFallOff, float MaxDistanceToHear){
+    IEnumerator StartTemoAudioCor(AudioSource source, AudioClip clip, float VolumeFallOff, float MaxDistanceToHear, float Pitch){
         float distance = Vector2.Distance(transform.position, GameServices.GlobalVariables.Camera.transform.position);
     
         // 0 at maxDistance, 1 at center
@@ -38,6 +38,7 @@ public class Temporary : MonoBehaviour
 
         source.clip = clip;
         source.volume = volume;
+        source.pitch = Pitch;
         source.Play();
 
         yield return new WaitUntil(() => !source.isPlaying);

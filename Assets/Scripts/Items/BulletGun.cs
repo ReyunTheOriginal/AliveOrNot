@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BulletGun : ItemBehavior
 {
@@ -11,35 +12,36 @@ public class BulletGun : ItemBehavior
     public float Recoil;
     public float StunLength;
     public GameObject MuzzleFlash;
-    public Vector2 BarrelEndLocation;
-    [Space]
+    public Transform BarrelEndLocation;
+[Header("UI")]
+    public AmmoDataUI AmmoUI;
+[Header("Raycast Settings")]
     public float Range;
     public int amountOfRays;
     public float AttackRadius;
     [Range(0,1)]
     public float Accuracy;
-    [Space]
+[Header("Audio And Animation Settings")]
     public AudioClip GunShotAudio;
     public float BasePitch;
     public float PitchChangeRange;
     public AnimationClip GunShotAnimation;
-    public AudioClip EmptyChamberClick;
-    [Space]
+[Header("Reloading Settings")]
     public AnimationClip ReloadAnimation;
     public int BulletID;
     public int ChamberSize;
-    [Space]
+    public AudioClip EmptyChamberClick;
+[Header("Burst Settings")]
     public float BurstCoolDown;
     public int ShotsPerBurst;
-    [Space]
-    public GameUtils.IndependentCoroutine ReloadCoroutine;
-    [Header("Debug")]
+[Header("Debug")]
     public int CurrentBurstShots;
     public bool Reloading;
     public int BulletsInChamber;
     public bool DebugMode;
     public float Timer;
     public float BurstTimer;
+    public GameUtils.IndependentCoroutine ReloadCoroutine;
 
 
     public enum FireModes{
@@ -48,43 +50,31 @@ public class BulletGun : ItemBehavior
         SingleShot
     }
 
-    private void Start() {
-        Properties.Damage = WeaponProperties.Damage;
-        Properties.Accuracy = Accuracy;
-        Properties.AttackSpeed = 1.0f / WeaponProperties.Cooldown;
-    }
-
-    private void OnEnable() {
-        if (Properties)Properties.Damage = WeaponProperties.Damage;
-        if (Properties)Properties.Accuracy = Accuracy;
-        if (Properties)Properties.AttackSpeed = 1.0f / WeaponProperties.Cooldown;
-    }
-
     public override void Equipped(){
         Reloading = false;
-
-        //when the gun is equipped it will assign the end of the barrel position to the primary hand's MuzzeFlashLocation Object
-        GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.localPosition = BarrelEndLocation;
         //added this so you don't have to wait for the cooldown to use the gun for the first time after equipping it
         Timer = WeaponProperties.Cooldown;
+
+        AmmoUI.WholeUI = Properties.CustomUICanvasGroup;
+        AmmoUI.Text = Properties.CustomUICanvasGroup.transform.GetChild(0).GetComponent<TMP_Text>();
     }
 
     public override void UnEquipped(){
         GameUtils.ResetCursor();
-        GameServices.UI.SetActiveCanvasGroup(false, GameServices.GlobalVariables.AmmoUI.WholeUI, "Ammo", false, true);
+        GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", false, true);
         if (ReloadCoroutine != null)ReloadCoroutine.Stop(); 
     }
 
     public override void LateHold(){
         if (!GameServices.UI.AMenuIsOpened() && !Reloading)
             //make the primary hand face the mouse for aiming
-            GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.PrimaryHandObject.Center.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
+            GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
 
     }
 
     public override void Hold(){
-        GameServices.UI.SetActiveCanvasGroup(false, GameServices.GlobalVariables.AmmoUI.WholeUI, "Ammo", true, true);
-        GameServices.GlobalVariables.AmmoUI.Text.text = $"{BulletsInChamber}/{GameServices.Inventory.GetItemAmountWithID(BulletID)}";
+        GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", true, true);
+        AmmoUI.Text.text = $"{BulletsInChamber}/{GameServices.Inventory.GetItemAmountWithID(BulletID)}";
 
         if (!GameServices.UI.AMenuIsOpened()){
             //increase the timer for the cooldown
@@ -96,7 +86,7 @@ public class BulletGun : ItemBehavior
                 Reloading = true;
 
                 ReloadCoroutine = GameUtils.StartIndependentCoroutine(() => Reload());
-                GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.PlayClip(ReloadAnimation);
+                Properties.AnimationPlayer.PlayClip(ReloadAnimation);
             }
 
             if (!Reloading){
@@ -110,7 +100,7 @@ public class BulletGun : ItemBehavior
                                 Timer = 0; //reset Timer
                             }else{
                                 //play the EmptyChamber Click Audio Clip
-                                GameServices.GlobalVariables.PrimaryHandObject.AudioSource.PlayOneShot(EmptyChamberClick);
+                                GameUtils.PlayAudio(EmptyChamberClick, GameServices.GlobalVariables.Player.GameObject.transform.position, 0, 99);
                                 Timer = 0; //reset Timer
                             }
                         }
@@ -123,7 +113,7 @@ public class BulletGun : ItemBehavior
                             Timer = 0; //reset Timer
                         }else{
                             //play the EmptyChamber Click Audio Clip
-                            GameServices.GlobalVariables.PrimaryHandObject.AudioSource.PlayOneShot(EmptyChamberClick);
+                            GameUtils.PlayAudio(EmptyChamberClick, GameServices.GlobalVariables.Player.GameObject.transform.position, 0, 99);
                             Timer = 0; //reset Timer
                         }
                     }
@@ -144,7 +134,7 @@ public class BulletGun : ItemBehavior
                            }
                         }else{
                             //play the EmptyChamber Click Audio Clip
-                            GameServices.GlobalVariables.PrimaryHandObject.AudioSource.PlayOneShot(EmptyChamberClick);
+                            GameUtils.PlayAudio(EmptyChamberClick, GameServices.GlobalVariables.Player.GameObject.transform.position, 0, 99);
                             Timer = 0; //reset Timer
                         }
                     }
@@ -178,13 +168,13 @@ public class BulletGun : ItemBehavior
     }
 
     public void PlayAudio(){
-        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.pitch = BasePitch;
+        float Pitch = BasePitch;
         //randomly change the pitch of the audio slightly
         float RanPitch = UnityEngine.Random.Range(-PitchChangeRange, PitchChangeRange);
-        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.pitch += RanPitch;
+        Pitch += RanPitch;
 
         //finally play the audio clip
-        GameServices.GlobalVariables.PrimaryHandObject.AudioSource.PlayOneShot(GunShotAudio);
+        GameUtils.PlayAudio(GunShotAudio, GameServices.GlobalVariables.Player.GameObject.transform.position, 0, 99, Pitch);
     }
 
     public void Shoot(){
@@ -195,7 +185,7 @@ public class BulletGun : ItemBehavior
         Vector2 MousePos = Camera.main.ScreenToWorldPoint(MouseRawPos); //convert it to world position
 
         //get the direction from the barrel position to the mouse world position;
-        Vector2 dir = GameUtils.DirFromAToB(GameServices.GlobalVariables.PrimaryHandObject.Center.transform.position, MousePos);
+        Vector2 dir = GameUtils.DirFromAToB(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform.position, MousePos);
 
         // accuracy: 0 → bad, 1 → perfect
         float maxAngle = Mathf.Lerp(30f, 0f, Accuracy); // tweak 30f as you like
@@ -214,7 +204,7 @@ public class BulletGun : ItemBehavior
         float rotate = Mathf.Atan2(dir.y,dir.x);
 
         //Create a Raycast from the end of the barrel to the mouse's direction that's the length of {Range}
-        Vector2 pos = GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.position;
+        Vector2 pos = BarrelEndLocation.position;
         HashSet<Collider2D> hits = GameUtils. AngledHitDetection(pos, finalDir, Range, amountOfRays, AttackRadius, "Enemy", GameUtils.LayerMaskFromNumbers(-4), true);
 
         List<Collider2D> sorted = new List<Collider2D>(hits);
@@ -240,14 +230,14 @@ public class BulletGun : ItemBehavior
        }
 
         //Create a MuzzleFlash
-        GameObject flash = Instantiate(MuzzleFlash, GameServices.GlobalVariables.PrimaryHandObject.MuzzleFlashLocation.transform.position, Quaternion.Euler(0,0,rotate * Mathf.Rad2Deg - 90));
+        GameObject flash = Instantiate(MuzzleFlash, BarrelEndLocation.position, Quaternion.Euler(0,0,rotate * Mathf.Rad2Deg - 90));
 
         //Rotate the MuzzleFlash to face the Mouse
         ParticleSystem ps = flash.GetComponent<ParticleSystem>();
         var main = ps.main;
         main.startRotation = -rotate;
 
-        if (GunShotAnimation)GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.PlayClip(GunShotAnimation);
+        if (GunShotAnimation)Properties.AnimationPlayer.PlayClip(GunShotAnimation);
         GameServices.GlobalVariables.Player.rig.AddForce(-dir * Recoil, ForceMode2D.Impulse);
         if (Properties.HasDurability)Properties.Durability -= 1;
     }
@@ -271,5 +261,12 @@ public class BulletGun : ItemBehavior
                 Properties.HitEnemy(dam * multiplier, KnockBackDir * WeaponProperties.KnockBack, WeaponProperties);
             }
         }
+    }
+
+    [System.Serializable]
+    public class AmmoDataUI{
+        public CanvasGroup WholeUI;
+        public RectTransform Rect;
+        public TMP_Text Text;
     }
 }

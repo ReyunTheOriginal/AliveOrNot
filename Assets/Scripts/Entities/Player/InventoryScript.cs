@@ -25,6 +25,10 @@ public class InventoryScript : MonoBehaviour
         if (int.TryParse(itemInfoUI.InputField.text, out int value)){
             itemInfoUI.DropInt = value;
         }
+        if (itemInfoUI.DropInt == 0){
+            itemInfoUI.InputField.text = "1";
+            itemInfoUI.DropInt = 1;
+        }
     }
     public void ConfirmDrop(){
         DropItem(SelectedItem, itemInfoUI.DropInt);
@@ -96,7 +100,7 @@ public class InventoryScript : MonoBehaviour
 
         foreach(var Item in Inventory){
             //attach the inactive item to the player
-            if (Item.Value.GameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.UniqueItemID))
+            if (Item.Value.GameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.ItemInstanceID))
                 Item.Value.GameObject.transform.position = transform.position;
 
             //Update Durability UI
@@ -116,19 +120,19 @@ public class InventoryScript : MonoBehaviour
                 string FinalText = Item.Value.ItemProperties?.ItemName + "\n";
 
                 if (Item.Value.ItemProperties?.ArmorValue != 0) 
-                    FinalText += $"<size=150%><sprite name=\"Armor\"></size>: {Item.Value.ItemProperties.ArmorValue}\n";
+                    FinalText += $"<size=180%><sprite name=\"Armor\"></size>: {Item.Value.ItemProperties.ArmorValue}\n";
 
                 if (Item.Value.ItemProperties?.Damage != 0) 
-                    FinalText += $"<size=150%><sprite name=\"Damage\"></size>: {Item.Value.ItemProperties.Damage}\n";
+                    FinalText += $"<size=180%><sprite name=\"Damage\"></size>: {Item.Value.ItemProperties.Damage}\n";
 
-                if (Item.Value.ItemProperties?.Accuracy != 0) 
-                    FinalText += $"<size=150%><sprite name=\"Accuracy\"></size>: {Item.Value.ItemProperties.Accuracy}\n";
+                if (Item.Value.ItemProperties?.KnockBack != 0) 
+                    FinalText += $"<size=180%><sprite name=\"KnockBack\"></size>: {Item.Value.ItemProperties.KnockBack}\n";
                     
                 if (Item.Value.ItemProperties?.AttackSpeed != 0) 
-                    FinalText += "<size=150%><sprite name=\"AttackSpeed\"></size>: " + Item.Value.ItemProperties.AttackSpeed.ToString("F2") + "\n";
+                    FinalText += "<size=180%><sprite name=\"AttackSpeed\"></size>: " + Item.Value.ItemProperties.AttackSpeed.ToString("F2") + "\n";
                 
                 if (Item.Value.ItemProperties?.Durability != 0) 
-                    FinalText += $"<size=150%><sprite name=\"Durability\"></size>: {Item.Value.ItemProperties.MaxDurability}\n";
+                    FinalText += $"<size=180%><sprite name=\"Durability\"></size>: {Item.Value.ItemProperties.MaxDurability}\n";
 
                 ImmediateInfo.text.text = FinalText;
             }
@@ -227,7 +231,7 @@ public class InventoryScript : MonoBehaviour
             //edit the components
             ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
             NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
-            SlotButton.onClick.AddListener(() => SlotClick(properties.UniqueItemID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
+            SlotButton.onClick.AddListener(() => SlotClick(properties.ItemInstanceID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
 
             //save the data to the Item class to enter
             NewItem.Amount = properties.Amount;
@@ -254,7 +258,7 @@ public class InventoryScript : MonoBehaviour
             if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
 
             //add to the Inventory Data
-            Inventory.Add(properties.UniqueItemID, NewItem);
+            Inventory.Add(properties.ItemInstanceID, NewItem);
             return NewItem;
         }else{
             //runs if the item type already exists;
@@ -273,10 +277,15 @@ public class InventoryScript : MonoBehaviour
         }
     }
 
-    public void SlotClick(int UniqueItemID){
-        if (Inventory.ContainsKey(UniqueItemID)){
+    public void SlotClick(int ItemInstanceID){
+        if (Inventory.ContainsKey(ItemInstanceID)){
+            if (itemInfoUI.DropInt == 0){
+                itemInfoUI.InputField.text = "1";
+                itemInfoUI.DropInt = 1;
+            }
+
             //assign the slot to the Selected Item Variable
-            SelectedItem = Inventory[UniqueItemID]; 
+            SelectedItem = Inventory[ItemInstanceID]; 
 
             //Reset the Equipment Outlines to White
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
@@ -292,13 +301,13 @@ public class InventoryScript : MonoBehaviour
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
             //Edit the ItemInfo Window
-            itemInfoUI.Name.fontSize = Inventory[UniqueItemID].ItemProperties.ItemName.Length / 0.31f;
-            itemInfoUI.Name.text = Inventory[UniqueItemID].ItemProperties.ItemName;
-            itemInfoUI.Description.text = Inventory[UniqueItemID].ItemProperties.Description;
-            itemInfoUI.UseButtonText.text = Inventory[UniqueItemID].ItemProperties.UseLabel;
+            itemInfoUI.Name.fontSize = Inventory[ItemInstanceID].ItemProperties.ItemName.Length / 0.31f;
+            itemInfoUI.Name.text = Inventory[ItemInstanceID].ItemProperties.ItemName;
+            itemInfoUI.Description.text = Inventory[ItemInstanceID].ItemProperties.Description;
+            itemInfoUI.UseButtonText.text = Inventory[ItemInstanceID].ItemProperties.UseLabel;
 
             //Decide whether to show the Use Button
-            if (!Inventory[UniqueItemID].ItemProperties.Useable){
+            if (!Inventory[ItemInstanceID].ItemProperties.Useable){
                 if (itemInfoUI.UseButton.gameObject.activeSelf)
                     itemInfoUI.UseButton.gameObject.SetActive(false);
             }else{
@@ -309,12 +318,13 @@ public class InventoryScript : MonoBehaviour
     }
 
     public void DropItem(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
            if (Item.Amount - Amount > 0){
                 //if the item amount won't end up being 0 or less
 
                 GameObject NewItemDropped = Instantiate(Item.GameObject);
                 NewItemDropped.transform.position = transform.position;
+                NewItemDropped.transform.rotation = Quaternion.Euler(0,0,0);
                 NewItemDropped.SetActive(true);
 
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
@@ -327,6 +337,7 @@ public class InventoryScript : MonoBehaviour
 
                 GameObject NewItemDropped = Instantiate(Item.GameObject);
                 NewItemDropped.transform.position = transform.position;
+                NewItemDropped.transform.rotation = Quaternion.Euler(0,0,0);
                 NewItemDropped.SetActive(true);
 
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
@@ -338,32 +349,32 @@ public class InventoryScript : MonoBehaviour
     }
 
     public void RemoveItem(Item Item){
-        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
             Item ItemToDestroy = Item;
 
             //Destroy Objects;
             Destroy(ItemToDestroy.UISlot);
             Destroy(ItemToDestroy.GameObject);
 
-            if (SelectedItem?.ItemProperties?.UniqueItemID == Item?.ItemProperties?.UniqueItemID)
+            if (SelectedItem?.ItemProperties?.ItemInstanceID == Item?.ItemProperties?.ItemInstanceID)
                 UnSelectItem();
             
             //Remove Item from Inventory Data
-            Inventory.Remove(Item.ItemProperties.UniqueItemID);
+            Inventory.Remove(Item.ItemProperties.ItemInstanceID);
         }
     }
 
     public void ChangeItemAmount(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.UniqueItemID)){
+        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
             
-            if (Inventory[Item.ItemProperties.UniqueItemID].Amount + Amount > 0){
+            if (Inventory[Item.ItemProperties.ItemInstanceID].Amount + Amount > 0){
                 //if the item amount won't end up being 0 or less
-                Inventory[Item.ItemProperties.UniqueItemID].Amount += Amount;
+                Inventory[Item.ItemProperties.ItemInstanceID].Amount += Amount;
 
-                Inventory[Item.ItemProperties.UniqueItemID].UINumberText.text = "X" + Inventory[Item.ItemProperties.UniqueItemID].Amount.ToString();
+                Inventory[Item.ItemProperties.ItemInstanceID].UINumberText.text = "X" + Inventory[Item.ItemProperties.ItemInstanceID].Amount.ToString();
             }else{
                 //if the item amount will end up being 0 or less
-                RemoveItem(Inventory[Item.ItemProperties.UniqueItemID]);
+                RemoveItem(Inventory[Item.ItemProperties.ItemInstanceID]);
             }
 
         }

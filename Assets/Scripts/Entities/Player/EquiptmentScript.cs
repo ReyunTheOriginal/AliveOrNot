@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class EquiptmentScript : MonoBehaviour
 {
     public EquipmentData Equipment;
+    public AudioClip EquipSoundEffect;
 
     void Awake(){
         //make the script visible in GameServices
@@ -80,7 +81,7 @@ public class EquiptmentScript : MonoBehaviour
                 if (Properties.HasDurability)
                     if (Properties.Durability <= 0){
                         UnEquip(E.Value, (int)E.Key);
-                        GameServices.Inventory.RemoveItem(GameServices.Inventory.Inventory[Properties.UniqueItemID]);
+                        GameServices.Inventory.RemoveItem(GameServices.Inventory.Inventory[Properties.ItemInstanceID]);
                     }
 
                 //keep the Durability UI Updated
@@ -105,13 +106,7 @@ public class EquiptmentScript : MonoBehaviour
             EquipmentSlot ESlot = Equipment.Slots[(ItemProperties.EquipSlot)Slot];
             
             if (HasAnItemInSlot((ItemProperties.EquipSlot)Slot)){
-                int ID = ESlot.Item.ItemProperties.UniqueItemID;
-
-                if (((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand && !((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)) || (!((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.PrimaryHand) && (ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.BothHands)){
-                    GameServices.GlobalVariables.PrimaryHandObject.AnimationPlayer.StopAnimation();
-                }else if ((ItemProperties.EquipSlot)Slot == ItemProperties.EquipSlot.OffHand){
-                    GameServices.GlobalVariables.OffHandObject.AnimationPlayer.StopAnimation();
-                }
+                int ID = ESlot.Item.ItemProperties.ItemInstanceID;
                 
                 //Runs when an item is already in the slot:
                 UnEquip(ESlot, Slot);
@@ -123,7 +118,7 @@ public class EquiptmentScript : MonoBehaviour
                     selected.ItemProperties != null &&
                     (int)selected.ItemProperties.equipSlot == Slot &&
                     selected.ItemProperties.Equippable &&
-                    selected.ItemProperties.UniqueItemID != ID
+                    selected.ItemProperties.ItemInstanceID != ID
                 ){
                     Equip(ESlot, Slot);
                 }
@@ -136,12 +131,12 @@ public class EquiptmentScript : MonoBehaviour
 
     public bool HasAnItemInSlot(ItemProperties.EquipSlot Slot){
         EquipmentSlot ESlot = Equipment.Slots[Slot];
-        return ESlot?.Item?.UISlot != null && ESlot.Item?.ItemProperties;
+        return ESlot?.Item?.UISlot != null && ESlot.Item?.ItemProperties && ESlot.Item?.GameObject;
     }
 
     public bool HasItemEquipped(int UniqueID){
         foreach (var slot in Equipment.Slots){
-            if (slot.Value.Item != null && slot.Value.Item.ItemProperties != null && slot.Value.Item.ItemProperties.UniqueItemID == UniqueID){
+            if (slot.Value.Item != null && slot.Value.Item.ItemProperties != null && slot.Value.Item.ItemProperties.ItemInstanceID == UniqueID){
                 return true;
             }
         }
@@ -161,11 +156,24 @@ public class EquiptmentScript : MonoBehaviour
         GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
 
         //run the UnEquippted() Function
-        ItemBehavior Behavior = ESlot.Item.ItemProperties.ItemBehavior;
-        ESlot.Item.ItemProperties.UnSetUpHands();
+        ItemProperties Properties = ESlot.Item.ItemProperties;
+        ItemBehavior Behavior = Properties.ItemBehavior;
+
+        Properties.UnSetUpHands();
         if (Behavior)Behavior.UnEquipped();
 
-        if (Slot == (int)ItemProperties.EquipSlot.BothHands){
+        if (ESlot.Item.GameObject.activeSelf)ESlot.Item.GameObject.SetActive(false);
+        Properties.enabled = true;
+        GameServices.Inventory.SelectedItem.ItemProperties.ItemRenderer.sortingLayerName = "Item";
+
+
+        //show the Item Inventory Slot
+        ESlot.Item.UISlot.SetActive(true);
+
+        //reset the Equipment Slot Item
+        ESlot.Item = null;
+
+         if (Slot == (int)ItemProperties.EquipSlot.BothHands){
             if (HasAnItemInSlot(ItemProperties.EquipSlot.PrimaryHand)){
                 Equipment.Slots[ItemProperties.EquipSlot.PrimaryHand].Item.ItemProperties.SetUpHands();
             }else if (HasAnItemInSlot(ItemProperties.EquipSlot.OffHand)){
@@ -173,31 +181,37 @@ public class EquiptmentScript : MonoBehaviour
             }
         }
 
-        if (ESlot.Item.GameObject.activeSelf)ESlot.Item.GameObject.SetActive(false);
-        ESlot.Item.ItemProperties.enabled = true;
-
-        //show the Item Inventory Slot
-        ESlot.Item.UISlot.SetActive(true);
-
-        //reset the Equipment Slot Item
-        ESlot.Item = null;
+        Properties.transform.localRotation = Quaternion.Euler(0,0,0);
     }
 
     public void Equip(EquipmentSlot ESlot, int Slot){
         //Check if an Object is Selected
         if (GameServices.Inventory.SelectedItem != null && GameServices.Inventory.SelectedItem.ItemProperties != null && (int)GameServices.Inventory.SelectedItem.ItemProperties.equipSlot == Slot && GameServices.Inventory.SelectedItem.ItemProperties.Equippable){
+            GameUtils.PlayAudio(EquipSoundEffect, transform.position);
+            
             //Reactivate the Object so you can put it in the player's hand
-            GameServices.Inventory.SelectedItem.GameObject.SetActive(true);
-            ESlot.Item.ItemProperties.enabled = false;//disable the ItemProperties Script to Prevent Picking Up Again
+            if (!GameServices.Inventory.SelectedItem.GameObject.activeSelf)GameServices.Inventory.SelectedItem.GameObject.SetActive(true);
+            GameServices.Inventory.SelectedItem.ItemProperties.enabled = false;//disable the ItemProperties Script to Prevent Picking Up Again
+            GameServices.Inventory.SelectedItem.ItemProperties.ItemRenderer.sortingLayerName = "Player";
 
             //get Item Scripts
             ItemProperties Properties = GameServices.Inventory.SelectedItem.ItemProperties;
             ItemBehavior Behavior = Properties.ItemBehavior;
+            
+            if (Slot == (int)ItemProperties.EquipSlot.BothHands){
+                if (HasAnItemInSlot(ItemProperties.EquipSlot.PrimaryHand)){
+                    ItemProperties Prop = Equipment.Slots[ItemProperties.EquipSlot.PrimaryHand].Item.ItemProperties;
+                    if (Prop?.CustomUICanvasGroup) Destroy(Prop.CustomUICanvasGroup.gameObject);
+                }else if (HasAnItemInSlot(ItemProperties.EquipSlot.OffHand)){
+                    ItemProperties Prop = Equipment.Slots[ItemProperties.EquipSlot.OffHand].Item.ItemProperties;
+                    if (Prop?.CustomUICanvasGroup) Destroy(Prop.CustomUICanvasGroup.gameObject);
+                }
+            }
 
             //Set Up the Visual hands Positions in the Player's Hand Slots
             Properties.SetUpHands();
             if (Behavior)Behavior.Equipped();//run the Equippted() Function
-            
+
             //set the Slot Item to the Selected Item
             ESlot.Item = GameServices.Inventory.SelectedItem;
 
@@ -211,6 +225,8 @@ public class EquiptmentScript : MonoBehaviour
                 GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
                 GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
             }
+
+            Properties.transform.localRotation = Quaternion.Euler(0,0,0);
 
             //Set up UI
             ESlot.InvUI.Icon.sprite = ESlot.Item.ItemProperties.ItemSprite; //set the Inventory Icon

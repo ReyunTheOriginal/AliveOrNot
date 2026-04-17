@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7514133430020569910}
   - component: {fileID: 3977895805837105854}
   - component: {fileID: 2348633775096162273}
+  - component: {fileID: -3482611386240326158}
+  - component: {fileID: -3734729357744989892}
   m_Layer: 0
   m_Name: LeatherJacket
   m_TagString: Item
@@ -98,25 +100,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: 32d63a186d838834faf7d59e19d324b1, type: 3}
+  ItemInstanceID: 0
   ItemName: Leather Jacket
-  Description: A tough leather jacket, protective against injuries.
-  ID: 4
+  ID: 7
   Amount: 1
+  Description: A tough leather jacket, protective against injuries.
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: 32d63a186d838834faf7d59e19d324b1, type: 3}
+  CustomUI: {fileID: 0}
   ItemBehavior: {fileID: 2348633775096162273}
-  Useable: 0
-  Equippable: 1
-  equipSlot: 1
-  RightHandPosition: {x: 0, y: 0}
-  LeftHandPosition: {x: 0, y: 0}
+  ItemRenderer: {fileID: 7514133430020569910}
+  AnimationPlayer: {fileID: -3482611386240326158}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0}
   MaxDurability: 220
   Durability: 220
   HasDurability: 1
+  Useable: 0
   Unstackable: 1
   Consumable: 0
+  Equippable: 1
+  equipSlot: 1
+  Damage: 0
+  ArmorValue: 0
+  AttackSpeed: 0
+  KnockBack: 0
 --- !u!114 &2348633775096162273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,3 +142,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
   ArmorValue: 55
+--- !u!114 &-3482611386240326158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4448874912205400380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &-3734729357744989892
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4448874912205400380}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

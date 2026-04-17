@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 5180272834801611583}
   - component: {fileID: 1772481524453250970}
   - component: {fileID: 4841240488167989892}
+  - component: {fileID: -7622822707297766374}
+  - component: {fileID: 184813738963703149}
   m_Layer: 0
   m_Name: Dagger
   m_TagString: Item
@@ -99,30 +101,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: d670f08603acb934b9b02870d590fc9f, type: 3}
+  ItemInstanceID: 0
   ItemName: Dagger
+  ID: 3
+  Amount: 1
   Description: small stabby stabby
   UseLabel: Use
-  ID: 6
-  Amount: 1
+  ItemSprite: {fileID: 21300000, guid: d670f08603acb934b9b02870d590fc9f, type: 3}
+  CustomUI: {fileID: 0}
   ItemBehavior: {fileID: 4841240488167989892}
-  Useable: 0
-  Equippable: 1
-  equipSlot: 4
-  RightHandPosition: {x: 0, y: 0}
-  LeftHandPosition: {x: 0, y: 0.00000002980232}
+  ItemRenderer: {fileID: 7011517330005295484}
+  AnimationPlayer: {fileID: -7622822707297766374}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 1
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0.00000002980232}
   MaxDurability: 260
   Durability: 260
   HasDurability: 1
+  Useable: 0
   Unstackable: 1
   Consumable: 0
+  Equippable: 1
+  equipSlot: 4
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Accuracy: 0
+  KnockBack: 0
 --- !u!114 &1772481524453250970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +148,7 @@ MonoBehaviour:
   Cooldown: 0.3
   KnockBack: 5
   MaxHits: 1
+  Properties: {fileID: 5180272834801611583}
 --- !u!114 &4841240488167989892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,3 +173,36 @@ MonoBehaviour:
   Timer: 0
   Hitting: 0
   HitDir: {x: 0, y: 0}
+--- !u!114 &-7622822707297766374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166095832711921992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &184813738963703149
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166095832711921992}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

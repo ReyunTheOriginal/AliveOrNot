@@ -15,6 +15,7 @@ public class AnimationPlayer : MonoBehaviour
 
     bool isInitialized = false;
 
+
     void Awake(){
         var animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = null; // 🔥 kill the controller here

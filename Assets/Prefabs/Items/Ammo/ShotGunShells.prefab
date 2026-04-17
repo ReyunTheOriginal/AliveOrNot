@@ -101,21 +101,24 @@ MonoBehaviour:
   ItemSprite: {fileID: -1030966554, guid: 03d5222bb69ade14895a07152360c92e, type: 3}
   ItemName: Shotgun Shells
   Description: used with Shotguns
-  ID: 13
+  UseLabel: Use
+  ID: 17
   Amount: 999999999
   ItemBehavior: {fileID: 0}
-  Useable: 0
-  Equippable: 0
-  equipSlot: 0
-  RightHandPosition: {x: 0, y: 0}
-  LeftHandPosition: {x: 0, y: 0}
+  AnimationPlayer: {fileID: 0}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
+  RightHandPosition: {x: 0, y: 0}
+  LeftHandPosition: {x: 0, y: 0}
   MaxDurability: 0
   Durability: 0
   HasDurability: 0
+  Useable: 0
   Unstackable: 0
   Consumable: 0
+  Equippable: 0
+  equipSlot: 0
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0

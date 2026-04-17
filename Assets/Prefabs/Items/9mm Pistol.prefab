@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7196502444836383459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6352621236689547291}
+  m_Layer: 7
+  m_Name: MuzzleFlashLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6352621236689547291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196502444836383459}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29313278, y: 0.10524058, z: 0}
+  m_LocalScale: {x: 0.375, y: 0.375, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8122963467742501351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8037333862181048599
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,6 +44,8 @@ GameObject:
   - component: {fileID: 5145709596745320950}
   - component: {fileID: 7044518602951373925}
   - component: {fileID: 946463028155045486}
+  - component: {fileID: 1069673678754709898}
+  - component: {fileID: 4025250944990722709}
   m_Layer: 0
   m_Name: 9mm Pistol
   m_TagString: Item
@@ -32,7 +65,8 @@ Transform:
   m_LocalPosition: {x: -8.25, y: -1.5625, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6352621236689547291}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3402432031525072063
@@ -99,29 +133,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: b99fec2c6a141344ea54a035db2caa07, type: 3}
   ItemName: 9mm Pistol
-  Description: a reliable handgun. can be used with 9mm ammo.
-  ID: 2
+  ID: 1
   Amount: 1
+  Description: a reliable handgun. can be used with 9mm ammo.
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: b99fec2c6a141344ea54a035db2caa07, type: 3}
+  CustomUIPrefab: {fileID: 8503787839133816949, guid: 85f5a9c7a1147284c980bc749da3c0eb, type: 3}
   ItemBehavior: {fileID: 946463028155045486}
-  Useable: 0
-  Equippable: 1
-  equipSlot: 3
-  RightHandPosition: {x: 0.015625, y: 0.00000002980232}
-  LeftHandPosition: {x: 0, y: 0}
+  ItemRenderer: {fileID: 3402432031525072063}
+  AnimationPlayer: {fileID: 1069673678754709898}
+  LocalPosition: {x: 0.5, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 0
+  RightHandPosition: {x: 0.015625, y: 0.00000002980232}
+  LeftHandPosition: {x: 0, y: 0}
   MaxDurability: 300
   Durability: 300
   HasDurability: 1
+  Useable: 0
   Unstackable: 1
   Consumable: 0
+  Equippable: 1
+  equipSlot: 3
+  ItemInstanceID: 0
+  CustomUICanvasGroup: {fileID: 0}
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Accuracy: 0
+  KnockBack: 0
 --- !u!114 &7044518602951373925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,13 +174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2181744f3811c5d46b93d94743a413f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 15
+  Damage: 25
   RandomDamageOffsit: 10
   CanGib: 0
   WeaponType: 3
   Cooldown: 0.6
   KnockBack: 15
   MaxHits: 1
+  Properties: {fileID: 5145709596745320950}
 --- !u!114 &946463028155045486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +233,11 @@ MonoBehaviour:
   Recoil: 0.1
   StunLength: 0.3
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
-  BarrelEndLocation: {x: 0.25, y: 0.109375}
+  BarrelEndLocation: {fileID: 6352621236689547291}
+  AmmoUI:
+    WholeUI: {fileID: 0}
+    Rect: {fileID: 0}
+    Text: {fileID: 0}
   Range: 25
   amountOfRays: 1
   AttackRadius: 0
@@ -201,10 +246,10 @@ MonoBehaviour:
   BasePitch: 1
   PitchChangeRange: 0.05
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
-  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   ReloadAnimation: {fileID: 7400000, guid: ef3656e7fba9c9a43b42077854dfa178, type: 2}
-  BulletID: 11
+  BulletID: 13
   ChamberSize: 16
+  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   BurstCoolDown: 0
   ShotsPerBurst: 0
   CurrentBurstShots: 0
@@ -213,3 +258,36 @@ MonoBehaviour:
   DebugMode: 1
   Timer: 0
   BurstTimer: 0
+--- !u!114 &1069673678754709898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8037333862181048599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &4025250944990722709
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8037333862181048599}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

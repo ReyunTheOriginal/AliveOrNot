@@ -12,18 +12,22 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true, bool Ghost = false){
-        Group.alpha = state? 1: 0;
-        if(!Ghost)Group.interactable = state;
-        if(!Ghost)Group.blocksRaycasts = state;
+        if (Group){
+            Group.alpha = state? 1: 0;
+            if(!Ghost)Group.interactable = state;
+            if(!Ghost)Group.blocksRaycasts = state;
 
-        if (IsAMenu){
-            if (!state){
-                if (OpenedMenus.ContainsKey(MenuName))
-                    OpenedMenus.Remove(MenuName);
-            }else{
-                if (!OpenedMenus.ContainsKey(MenuName))
-                    OpenedMenus.Add(MenuName, Group);
+            if (IsAMenu){
+                if (!state){
+                    if (OpenedMenus.ContainsKey(MenuName))
+                        OpenedMenus.Remove(MenuName);
+                }else{
+                    if (!OpenedMenus.ContainsKey(MenuName))
+                        OpenedMenus.Add(MenuName, Group);
+                }
             }
+        }else{
+            Debug.Log("Null CanvasGroup");
         }
     }
 

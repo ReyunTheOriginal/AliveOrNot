@@ -1,86 +1,189 @@
 using UnityEngine;
 
+
+#if UNITY_EDITOR
+using UnityEditor;
+
+[CustomEditor(typeof(ItemProperties))]
+public class ItemPropertiesEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        ItemProperties item = (ItemProperties)target;
+
+        if (GUILayout.Button("Generate Unique ID")){
+          int newID = EditorPrefs.GetInt("ItemIDCounter", 1);
+          item.ID = newID;
+          EditorPrefs.SetInt("ItemIDCounter", newID + 1);
+
+          EditorUtility.SetDirty(item);
+          AssetDatabase.SaveAssets();
+          Debug.Log($"Assigned ID {item.ID} to {item.name}");
+     }
+
+        DrawDefaultInspector();
+    }
+}
+#endif
+
 public class ItemProperties : MonoBehaviour
 {
-     public static int UniqueItemIDIncr;
-     [HideInInspector]public int UniqueItemID;
-     public Sprite ItemSprite;
+     public static int ItemInstanceIDIncr;
+///////////////////////////////////////////////////////////
      public string ItemName;
-     public string Description;
-     public string UseLabel = "Use";
      public int ID;
      public int Amount = 1;
+[Header("UI")]
+     public string Description;
+     public string UseLabel = "Use";
+     public Sprite ItemSprite;
+     public GameObject CustomUIPrefab;
+[Header("Components")]
      public ItemBehavior ItemBehavior;
-     public bool Useable;
-     public bool Equippable;
-     public EquipSlot equipSlot;
-     [Space]
-     public Vector2 RightHandPosition;
-     public Vector2 LeftHandPosition;
+     public SpriteRenderer ItemRenderer;
+     public AnimationPlayer AnimationPlayer;
+[Header("Hands")]
+     public Vector2 LocalPosition = new Vector2(1f, 0);
      public bool UsesRightHand;
      public bool UsesLeftHand;
-     [Space]
+     public Vector2 RightHandPosition;
+     public Vector2 LeftHandPosition;
+[Header("Durability")]
      public float MaxDurability;
      public float Durability;
      public bool HasDurability;
-     [Space]
+[Header("Special Effects")]
+     public bool Useable;
      public bool Unstackable;
      public bool Consumable;
+     public bool Equippable;
+     public EquipSlot equipSlot;
+
+     [HideInInspector]public int ItemInstanceID;
+     [HideInInspector]public CanvasGroup CustomUICanvasGroup;
      [HideInInspector] public float Damage = 0;
      [HideInInspector] public float ArmorValue = 0;
      [HideInInspector] public float AttackSpeed = 0;
-     [HideInInspector] public float Accuracy = 0;
+     [HideInInspector] public float KnockBack = 0;
+
+     private void OnValidate() {
+          if (!AnimationPlayer)AnimationPlayer = GetComponent<AnimationPlayer>();
+          if (!ItemRenderer)ItemRenderer = GetComponent<SpriteRenderer>();
+     }
 
      private void Awake() {
           if (ItemBehavior)ItemBehavior.Properties = this;
 
-          UniqueItemID = UniqueItemIDIncr;
-          UniqueItemIDIncr++;
+          ItemInstanceID = ItemInstanceIDIncr;
+          ItemInstanceIDIncr++;
 
-          if (!Unstackable && HasDurability){
+          if (!Unstackable && HasDurability)
                Debug.LogWarning("Item does not have compatible Unstackable and Durability Settings: " + ItemName);
-          }
      }
 
      private void Start() {
-          GameServices.GlobalVariables.AllItems.Add(this);
+          if (!GameServices.GlobalVariables.AllItems.Contains(this))
+               GameServices.GlobalVariables.AllItems.Add(this);
      }
 
      private void OnEnable() {
-          if (GameServices.GlobalVariables)GameServices.GlobalVariables.AllItems.Remove(this);
+
+          if (GameServices.GlobalVariables)
+               if (GameServices.GlobalVariables.AllItems.Contains(this))
+                         GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
      private void OnDisable() {
-          GameServices.GlobalVariables.AllItems.Remove(this);
+          if (GameServices.GlobalVariables.AllItems.Contains(this))
+               GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
      private void OnDestroy() {
-          GameServices.GlobalVariables.AllItems.Remove(this);
+          if (GameServices.GlobalVariables.AllItems.Contains(this))
+               GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
      public void SetUpHands(){
 
-          if (equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
-               foreach(Transform upperChild in GameServices.GlobalVariables.PrimaryHandObject.Object.transform){
-                    foreach (Transform Prop in upperChild){
-                         if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
+          if(CustomUIPrefab)
+               CustomUICanvasGroup = Instantiate(CustomUIPrefab, GameServices.GlobalVariables.CustomItemUICanvasGroup.transform).GetComponent<CanvasGroup>();
+          
+          if (equipSlot == EquipSlot.PrimaryHand){
+               transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+
+               if (!GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
+                    gameObject.SetActive(true);
+
+                    GameObject RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
+                    GameObject LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
+
+                    RightHand.transform.SetParent(transform);
+                    LeftHand.transform.SetParent(transform);
+                    
+                    //setting Up Hands
+                    if (UsesRightHand){
+                         if (!RightHand.activeSelf)RightHand.SetActive(true);
+                         RightHand.transform.localPosition = RightHandPosition;
+                    }else{
+                         if (RightHand.activeSelf)RightHand.SetActive(false);
                     }
+
+                    if (UsesLeftHand){
+                         if (!LeftHand.activeSelf)LeftHand.SetActive(true);
+                         LeftHand.transform.localPosition = LeftHandPosition;
+                    }else{
+                         if (RightHand.activeSelf)LeftHand.SetActive(false);
+                    }
+                    ///////
+               }else{ 
+                    gameObject.SetActive(false);
                }
           }
-          
-          if ((equipSlot == EquipSlot.PrimaryHand || equipSlot == EquipSlot.BothHands) && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
-               GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(true);
 
-               GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = transform.localScale;
+          if (equipSlot == EquipSlot.OffHand){
+               transform.SetParent(GameServices.GlobalVariables.OffHandObject.CenterObject.transform);
+
+               if (!GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
+                    gameObject.SetActive(true);
+
+                    GameObject RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
+                    GameObject LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
+
+                    RightHand.transform.SetParent(transform);
+                    LeftHand.transform.SetParent(transform);
+                    
+                    //setting Up Hands
+                    if (UsesRightHand){
+                         if (!RightHand.activeSelf)RightHand.SetActive(true);
+                         RightHand.transform.localPosition = RightHandPosition;
+                    }else{
+                         RightHand.SetActive(false);
+                    }
+
+                    if (UsesLeftHand){
+                         if (!LeftHand.activeSelf)LeftHand.SetActive(true);
+                         LeftHand.transform.localPosition = LeftHandPosition;
+                    }else{
+                         LeftHand.SetActive(false);
+                    }
+                    ///////
+               }else{
+                    gameObject.SetActive(false);
+               }
+          }
+     
+          if (equipSlot == EquipSlot.BothHands){
+               gameObject.SetActive(true);
+
+               transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
 
                GameObject RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
                GameObject LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
 
-               SpriteRenderer HandRen = GameServices.GlobalVariables.PrimaryHandObject.ObjectRenderer;
-
-               HandRen.sprite = ItemSprite;
-
+               RightHand.transform.SetParent(transform);
+               LeftHand.transform.SetParent(transform);
                
+               //setting Up Hands
                if (UsesRightHand){
                     if (!RightHand.activeSelf)RightHand.SetActive(true);
                     RightHand.transform.localPosition = RightHandPosition;
@@ -94,47 +197,13 @@ public class ItemProperties : MonoBehaviour
                }else{
                     if (RightHand.activeSelf)LeftHand.SetActive(false);
                }
+               ///////
 
-               if (equipSlot == EquipSlot.BothHands){
-                    GameServices.GlobalVariables.OffHandObject.Object.SetActive(false);
-                    GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = new Vector3(2,2,1);
-               }
-          }
+               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand))
+                    GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.GameObject?.SetActive(false);
 
-          if (equipSlot == EquipSlot.OffHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)){
-               GameServices.GlobalVariables.OffHandObject.Object.SetActive(true);
-
-               GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = transform.localScale;
-
-               GameObject RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
-               GameObject LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
-
-               SpriteRenderer HandRen = GameServices.GlobalVariables.OffHandObject.ObjectRenderer;
-
-               HandRen.sprite = ItemSprite;
-
-               
-               if (UsesRightHand){
-                    if (!RightHand.activeSelf)RightHand.SetActive(true);
-                    RightHand.transform.localPosition = RightHandPosition;
-               }else{
-                    RightHand.SetActive(false);
-               }
-
-               if (UsesLeftHand){
-                    if (!LeftHand.activeSelf)LeftHand.SetActive(true);
-                    LeftHand.transform.localPosition = LeftHandPosition;
-               }else{
-                    LeftHand.SetActive(false);
-               }
-          }
-     
-          if (equipSlot == EquipSlot.BothHands){
-               foreach(Transform upperChild in GameServices.GlobalVariables.OffHandObject.Object.transform){
-                    foreach (Transform Prop in upperChild){
-                         if (Prop.gameObject.activeSelf) Prop.gameObject.SetActive(false);
-                    }
-               }
+               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand))
+                    GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.GameObject?.SetActive(false);
 
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].DefaultColor = Color.black;
                
@@ -146,78 +215,49 @@ public class ItemProperties : MonoBehaviour
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].HotBarUI.Outline.color = Color.black;
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].InvUI.Outline.color = Color.black;
           }
+
+          transform.localPosition = LocalPosition;
      }
 
      public void UnSetUpHands(){
-          if ((equipSlot == EquipSlot.PrimaryHand && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.BothHands)) || (equipSlot == EquipSlot.BothHands && !GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand))){
-               GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(false);
-               GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = new Vector3(2,2,1);
+          transform.parent = null;
+
+          if (CustomUICanvasGroup)
+            Destroy(CustomUICanvasGroup.gameObject);
+
+          if (equipSlot == EquipSlot.PrimaryHand){
+               GameObject RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
+               GameObject LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
+
+               RightHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+               LeftHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+          
+               if (RightHand.activeSelf)RightHand.SetActive(false);
+               if (LeftHand.activeSelf)LeftHand.SetActive(false);
           }
 
           if (equipSlot == EquipSlot.OffHand){
-               GameServices.GlobalVariables.OffHandObject.Object.SetActive(false);
-               GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = new Vector3(2,2,1);
+               GameObject RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
+               GameObject LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
+
+               RightHand.transform.SetParent(GameServices.GlobalVariables.OffHandObject.CenterObject.transform);
+               LeftHand.transform.SetParent(GameServices.GlobalVariables.OffHandObject.CenterObject.transform);
+          
+               if (RightHand.activeSelf)RightHand.SetActive(false);
+               if (LeftHand.activeSelf)LeftHand.SetActive(false);
           }
-
-          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand)){
-               GameServices.GlobalVariables.PrimaryHandObject.Object.SetActive(true);
-
-               GameServices.GlobalVariables.PrimaryHandObject.Object.transform.localScale = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.transform.localScale;
+          
+          if (equipSlot == EquipSlot.BothHands){
 
                GameObject RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
                GameObject LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
 
-               SpriteRenderer HandRen = GameServices.GlobalVariables.PrimaryHandObject.ObjectRenderer;
+               RightHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+               LeftHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
 
-               HandRen.sprite = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.ItemSprite;
-               
-               if (GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.UsesRightHand){
-                    if (!RightHand.activeSelf)RightHand.SetActive(true);
-                    RightHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.RightHandPosition;
-               }else{
-                    if (RightHand.activeSelf)RightHand.SetActive(false);
-               }
+               if (RightHand.activeSelf)RightHand.SetActive(false);
+               if (LeftHand.activeSelf)LeftHand.SetActive(false);
 
-               if (GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.UsesLeftHand){
-                    if (!LeftHand.activeSelf)LeftHand.SetActive(true);
-                    LeftHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.LeftHandPosition;
-               }else{
-                    if (RightHand.activeSelf)LeftHand.SetActive(false);
-               }
-
-               GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.ItemBehavior?.Equipped();
-          }
-
-          if (equipSlot == EquipSlot.BothHands && GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand)){
-               GameServices.GlobalVariables.OffHandObject.Object.SetActive(true);
-
-               GameServices.GlobalVariables.OffHandObject.Object.transform.localScale = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.transform.localScale;
-
-               GameObject RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
-               GameObject LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
-
-               SpriteRenderer HandRen = GameServices.GlobalVariables.OffHandObject.ObjectRenderer;
-
-               HandRen.sprite = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.ItemSprite;
-               
-               if (GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.UsesRightHand){
-                    if (!RightHand.activeSelf)RightHand.SetActive(true);
-                    RightHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.RightHandPosition;
-               }else{
-                    RightHand.SetActive(false);
-               }
-
-               if (GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.UsesLeftHand){
-                    if (!LeftHand.activeSelf)LeftHand.SetActive(true);
-                    LeftHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.LeftHandPosition;
-               }else{
-                    LeftHand.SetActive(false);
-               }
-
-               GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.ItemBehavior?.Equipped();
-          }
-          
-          if (equipSlot == EquipSlot.BothHands){
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].DefaultColor = Color.white;
                
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].HotBarUI.Outline.color = Color.white;
@@ -227,6 +267,59 @@ public class ItemProperties : MonoBehaviour
 
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].HotBarUI.Outline.color = Color.white;
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].InvUI.Outline.color = Color.white;
+
+               if(GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand)){
+                    RightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
+                    LeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
+
+                    RightHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+                    LeftHand.transform.SetParent(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform);
+
+                    GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.GameObject.SetActive(true);
+                    
+                    if (GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.UsesRightHand){
+                         if (!RightHand.activeSelf)RightHand.SetActive(true);
+                         RightHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.RightHandPosition;
+                    }else{
+                         if (RightHand.activeSelf)RightHand.SetActive(false);
+                    }
+
+                    if (GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.UsesLeftHand){
+                         if (!LeftHand.activeSelf)LeftHand.SetActive(true);
+                         LeftHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.LeftHandPosition;
+                    }else{
+                         if (RightHand.activeSelf)LeftHand.SetActive(false);
+                    }
+
+                    //GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].Item.ItemProperties.ItemBehavior?.Equipped();
+               }
+
+
+               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand)){
+                    RightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
+                    LeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
+
+                    RightHand.transform.SetParent(GameServices.GlobalVariables.OffHandObject.CenterObject.transform);
+                    LeftHand.transform.SetParent(GameServices.GlobalVariables.OffHandObject.CenterObject.transform);
+
+                    GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.GameObject.SetActive(true);
+                    
+                    if (GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.UsesRightHand){
+                         if (!RightHand.activeSelf)RightHand.SetActive(true);
+                         RightHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.RightHandPosition;
+                    }else{
+                         RightHand.SetActive(false);
+                    }
+
+                    if (GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.UsesLeftHand){
+                         if (!LeftHand.activeSelf)LeftHand.SetActive(true);
+                         LeftHand.transform.localPosition = GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.LeftHandPosition;
+                    }else{
+                         LeftHand.SetActive(false);
+                    }
+
+                    //GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].Item.ItemProperties.ItemBehavior?.Equipped();
+               }
 
           }
      }
@@ -240,4 +333,6 @@ public class ItemProperties : MonoBehaviour
           BothHands
      }
 
+
+     
 }

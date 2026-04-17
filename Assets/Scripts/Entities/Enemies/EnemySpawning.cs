@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawning : MonoBehaviour
@@ -17,11 +16,12 @@ public class EnemySpawning : MonoBehaviour
     }
 
     IEnumerator Spawn(){
+        yield return new WaitForSeconds(FirstDelay);
         while (true){
-            if (!GameServices.IsDayTime){
+            //if (!GameServices.IsDayTime){
                 yield return new WaitForSeconds(BaseDelay + 0.01f);
-                if (!GameServices.IsDayTime) Instantiate(Enemy, GameUtils.GetRandomPointInCircleRange(GameServices.GlobalVariables.Player.GameObject.transform.position, Range, Range - 10), Quaternion.identity);
-            }  
+                /*if (!GameServices.IsDayTime)*/ Instantiate(Enemy, GameUtils.GetRandomPointInCircleRange(GameServices.GlobalVariables.Player.GameObject.transform.position, Range, Range - 10), Quaternion.identity);
+            //}  
             yield return null;
         }
     }
