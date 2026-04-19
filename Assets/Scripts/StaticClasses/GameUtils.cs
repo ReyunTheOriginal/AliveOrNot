@@ -17,11 +17,6 @@ public static class GameUtils{
         RotatedObject.transform.rotation = Quaternion.Euler(0,0,rotate + Offsit);
     }
 
-    public static bool OverASpeedInDirection(Vector2 velocity, Vector2 dir, float speed){
-        dir = dir.normalized;
-        return Vector2.Dot(velocity, dir) > speed;
-    }
-
     public static Vector2 DirFromAToB(Vector2 A, Vector2 B){
         Vector2 dir = B - A;
         return dir.normalized;
@@ -121,11 +116,22 @@ public static class GameUtils{
         subject.position += (Vector3)(dir * Speed);
     }
 
+    public static bool OverASpeedInDirection(Vector2 velocity, Vector2 dir, float speed){
+        dir = dir.normalized;
+        return Vector2.Dot(velocity, dir) > speed;
+    }
+    
     public static void FollowObjectWithRig(Rigidbody2D subject, Transform Target, float Speed){
         Vector2 dir = DirFromAToB(subject.transform.position, Target.position);
 
+        // Get current speed in the target direction
+        float speedInDir = Vector2.Dot(subject.velocity, dir);
+
+        // Only add the force needed to reach exactly `speed`
+        float forceNeeded = Speed - speedInDir;
+
         if (!OverASpeedInDirection(subject.velocity, dir, Speed)){
-            subject.AddForce(dir * Speed, ForceMode2D.Force);
+            subject.AddForce(dir * forceNeeded, ForceMode2D.Force);
         }
     }
 
@@ -153,17 +159,17 @@ public static class GameUtils{
 
     //Use With a Lambda like this for Parameters: "() => MyFunction(type Parameter)"
     public static IndependentCoroutine StartIndependentCoroutine(System.Func<IEnumerator> func){
-        GameObject TempObject = new GameObject();
-        TempObject.name = "Temporary Coroutine Object";
-        Temporary TempScript = TempObject.AddComponent<Temporary>();
-        return TempScript.StartTempCoroutine(func);
+        GameObject IndependentFunctionsObject = new GameObject();
+        IndependentFunctionsObject.name = "Temporary Coroutine Object";
+        IndependentFunctionsHolder IndependentFunctionsScript = IndependentFunctionsObject.AddComponent<IndependentFunctionsHolder>();
+        return IndependentFunctionsScript.StartTempCoroutine(func);
     }
    
     public static void PlayAudio(AudioClip Clip, Vector2 Position, float VolumeFallOff = 0, float MaxDistanceToHear = 99, float Pitch = 1){
-        GameObject TempObject = new GameObject();
-        TempObject.transform.position = Position;
-        TempObject.name = "Temporary Coroutine Object";
-        Temporary TempScript = TempObject.AddComponent<Temporary>();
+        GameObject IndependentFunctionsHolderObject = new GameObject();
+        IndependentFunctionsHolderObject.transform.position = Position;
+        IndependentFunctionsHolderObject.name = "Temporary Coroutine Object";
+        IndependentFunctionsHolder TempScript = IndependentFunctionsHolderObject.AddComponent<IndependentFunctionsHolder>();
         TempScript.StartTempAudio(Clip, VolumeFallOff, MaxDistanceToHear, Pitch);
     }
 
@@ -218,7 +224,7 @@ public static class GameUtils{
 
     public class IndependentCoroutine{
         public Coroutine Coroutine;
-        public Temporary Owner;
+        public IndependentFunctionsHolder Owner;
         public void Stop(){
             if (Owner != null && Coroutine != null){
                 Owner.StopCoroutine(Coroutine);

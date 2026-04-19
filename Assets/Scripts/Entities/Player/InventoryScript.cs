@@ -5,14 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class InventoryScript : MonoBehaviour
+public class InventoryScript : ItemContainer
 {
-    public Dictionary<int, Item> Inventory = new Dictionary<int, Item>(); //the Dictionary of the Inventory's Items
-    public Item SelectedItem; //the Currently Selected Item, Selected by clicking on its inventory slot
-    public CanvasGroup FullInventoryUI; //the Whole Inventory Menu
-    public List<CanvasGroup> UnderInventoryUI; //the UI that the Inventory should close before Opening
-    public ItemInfoUI itemInfoUI; //the Window that Shows the Item Information such as Name, Description, and uses
-    public GameObject SlotPrefab; //a prefab of the Slot an Item is Displayed in, in the inventory
+    public Dictionary<int, ItemEntry> ItemAddOns = new Dictionary<int, ItemEntry>();
+    public ItemEntry SelectedItem; //the Currently Selected ItemEntry, Selected by clicking on its inventory slot
+    public CanvasGroup FullInventoryUI; //the Whole Items Menu
+    public List<CanvasGroup> UnderInventoryUI; //the UI that the Items should close before Opening
+    public ItemInfoUI itemInfoUI; //the Window that Shows the ItemEntry Information such as Name, Description, and uses
+    public GameObject SlotPrefab; //a prefab of the Slot an ItemEntry is Displayed in, in the inventory
     public Transform ContentTransform; //the parent the Slots Should be Children Of
     public Coroutine PickUpAnimationCoroutine;
     public float DistanceForPickup;
@@ -39,7 +39,7 @@ public class InventoryScript : MonoBehaviour
     public void UseButton(){
         if (SelectedItem != null){
             SelectedItem.ItemProperties.ItemBehavior.Use();
-            if (SelectedItem.ItemProperties.Consumable)ChangeItemAmount(SelectedItem, -1);
+            if (SelectedItem.ItemProperties.Consumable)ChangeItemAmount(SelectedItem.ItemProperties, -1);
         }
     }
 
@@ -54,7 +54,8 @@ public class InventoryScript : MonoBehaviour
 
         //toggle InventoryUI
         if (Input.GetKeyDown(KeyCode.Tab)){
-            GameServices.UI.ToggleCanvasGroup(true, FullInventoryUI, "Inventory");
+            UnSelectItem();
+            GameServices.UI.ToggleCanvasGroup(true, FullInventoryUI, "Items");
             foreach (CanvasGroup Group in UnderInventoryUI){
                 GameServices.UI.ToggleCanvasGroup(false, Group, "");
             }
@@ -87,7 +88,7 @@ public class InventoryScript : MonoBehaviour
             if (ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(false);
         }
         
-        //if you click outside of UI, Unselect the Item
+        //if you click outside of UI, Unselect the ItemEntry
         if (GameServices.UI.IsActiveCanvasGroup(FullInventoryUI)){
             if (Input.GetMouseButtonDown(0)){
                 if (!EventSystem.current.IsPointerOverGameObject()){
@@ -98,10 +99,10 @@ public class InventoryScript : MonoBehaviour
 
         bool HoveringOverAnySlots = false;
 
-        foreach(var Item in Inventory){
+        foreach(var Item in ItemAddOns){
             //attach the inactive item to the player
-            if (Item.Value.GameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.ItemInstanceID))
-                Item.Value.GameObject.transform.position = transform.position;
+            if (Item.Value.ItemProperties.gameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.ItemInstanceID))
+                Item.Value.ItemProperties.gameObject.transform.position = transform.position;
 
             //Update Durability UI
             if (Item.Value.ItemProperties.HasDurability && Item.Value.UISlot){
@@ -117,21 +118,21 @@ public class InventoryScript : MonoBehaviour
 
                 ImmediateInfo.rect.position = Input.mousePosition;
 
-                string FinalText = Item.Value.ItemProperties?.ItemName + "\n";
+                string FinalText = Item.Value?.ItemProperties.ItemName + "\n";
 
-                if (Item.Value.ItemProperties?.ArmorValue != 0) 
+                if (Item.Value?.ItemProperties.ArmorValue != 0) 
                     FinalText += $"<size=180%><sprite name=\"Armor\"></size>: {Item.Value.ItemProperties.ArmorValue}\n";
 
-                if (Item.Value.ItemProperties?.Damage != 0) 
+                if (Item.Value?.ItemProperties.Damage != 0) 
                     FinalText += $"<size=180%><sprite name=\"Damage\"></size>: {Item.Value.ItemProperties.Damage}\n";
 
-                if (Item.Value.ItemProperties?.KnockBack != 0) 
+                if (Item.Value?.ItemProperties.KnockBack != 0) 
                     FinalText += $"<size=180%><sprite name=\"KnockBack\"></size>: {Item.Value.ItemProperties.KnockBack}\n";
                     
-                if (Item.Value.ItemProperties?.AttackSpeed != 0) 
+                if (Item.Value?.ItemProperties.AttackSpeed != 0) 
                     FinalText += "<size=180%><sprite name=\"AttackSpeed\"></size>: " + Item.Value.ItemProperties.AttackSpeed.ToString("F2") + "\n";
                 
-                if (Item.Value.ItemProperties?.Durability != 0) 
+                if (Item.Value?.ItemProperties.Durability != 0) 
                     FinalText += $"<size=180%><sprite name=\"Durability\"></size>: {Item.Value.ItemProperties.MaxDurability}\n";
 
                 ImmediateInfo.text.text = FinalText;
@@ -146,7 +147,7 @@ public class InventoryScript : MonoBehaviour
         float CurrentDistance = float.MaxValue;
         ItemProperties CurrentItem = null;
         foreach (ItemProperties item in GameServices.GlobalVariables.AllItems){
-            if (item.gameObject.activeSelf){
+            if (item.enabled){
                 float DistanceAttempt = Vector2.Distance(item.transform.position, transform.position);
                 if (DistanceAttempt < CurrentDistance){
                     CurrentDistance = DistanceAttempt;
@@ -170,7 +171,7 @@ public class InventoryScript : MonoBehaviour
     public IEnumerator PickUpItem(ItemProperties ItemToPick){
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", true);
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.2f);
         AddItem(ItemToPick);
 
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", false);
@@ -178,121 +179,76 @@ public class InventoryScript : MonoBehaviour
         yield return null;
     }
 
-    public bool AlreadyHasItemWithID(int ItemID){
-        bool result = false;
-
-        foreach(var i in Inventory){
-            if (i.Value.ItemProperties.ID == ItemID){
-                result = true;
-                break;
-            }
+    public override void OnItemsChange(){
+        foreach(var entry in ItemAddOns){
+            Destroy(entry.Value.UISlot);
         }
-
-        return result;
-    }
-
-    public Item GetItemWithID(int ItemID){
-        Item result = null;
-
-        foreach(var i in Inventory){
-            if (i.Value.ItemProperties.ID == ItemID){
-                result = i.Value;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    public int GetItemAmountWithID(int ItemID){
-        Item item = GetItemWithID(ItemID);
-        if (item != null)
-            return item.Amount;
+        ItemAddOns.Clear();
         
-        return 0;
-    }
+        foreach(var entry in Items){
+            ItemProperties properties = entry.Value;
+                //runs if it's a new item;
 
-    public Item AddItem(ItemProperties properties){
-        if (!AlreadyHasItemWithID(properties.ID) || properties.Unstackable){
-            //runs if it's a new item;
+                //create a new ItemEntry entry
+                ItemEntry NewItem = new ItemEntry();
 
-            //create a new Item entry
-            Item NewItem = new Item();
+                //create the new UI slot;
+                GameObject NewSlot = Instantiate(SlotPrefab, ContentTransform);
 
-            //create the new UI slot;
-            GameObject NewSlot = Instantiate(SlotPrefab, ContentTransform);
+                //get the components to edit;
+                Image ItemIcon = NewSlot.transform.GetChild(0).GetComponent<Image>();
+                TMP_Text NumberText = NewSlot.transform.GetChild(1).GetComponent<TMP_Text>();
+                Button SlotButton = NewSlot.GetComponent<Button>();
+                HoverDetector Hover = NewSlot.GetComponent<HoverDetector>();
 
-            //get the components to edit;
-            Image ItemIcon = NewSlot.transform.GetChild(0).GetComponent<Image>();
-            TMP_Text NumberText = NewSlot.transform.GetChild(1).GetComponent<TMP_Text>();
-            Button SlotButton = NewSlot.GetComponent<Button>();
-            HoverDetector Hover = NewSlot.GetComponent<HoverDetector>();
+                //edit the components
+                ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
+                NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
+                SlotButton.onClick.AddListener(() => SlotClick(properties.ItemInstanceID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
 
-            //edit the components
-            ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
-            NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
-            SlotButton.onClick.AddListener(() => SlotClick(properties.ItemInstanceID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
+                //save the data to the ItemEntry class to enter
+                NewItem.ItemProperties = properties;
+                NewItem.UIIcon = ItemIcon;
+                NewItem.UIButton = SlotButton;
+                NewItem.UINumberText = NumberText;
+                NewItem.UIButton = SlotButton;
+                NewItem.UISlot = NewSlot;
+                NewItem.hoverDetector = Hover;
 
-            //save the data to the Item class to enter
-            NewItem.Amount = properties.Amount;
-            NewItem.ItemProperties = properties;
-            NewItem.UIIcon = ItemIcon;
-            NewItem.UIButton = SlotButton;
-            NewItem.UINumberText = NumberText;
-            NewItem.UIButton = SlotButton;
-            NewItem.UISlot = NewSlot;
-            NewItem.hoverDetector = Hover;
-            NewItem.GameObject = properties.gameObject;
+                if (properties.HasDurability){
+                    NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject;
+                    NewItem.DurabilityBar = NewSlot.transform.GetChild(2).GetChild(1).GetComponent<Image>();
+                    NewItem.DurabilityText = NewSlot.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
+                }else{
+                    Destroy(NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject);
+                }
 
-            if (properties.HasDurability){
-                NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject;
-                NewItem.DurabilityBar = NewSlot.transform.GetChild(2).GetChild(1).GetComponent<Image>();
-                NewItem.DurabilityText = NewSlot.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
-            }else{
-                Destroy(NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject);
-            }
+                //deactivate the scene item GameObject;
+                properties.gameObject.SetActive(false);
 
-            //deactivate the scene item GameObject;
-            properties.gameObject.SetActive(false);
+                if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
 
-            if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
-
-            //add to the Inventory Data
-            Inventory.Add(properties.ItemInstanceID, NewItem);
-            return NewItem;
-        }else{
-            //runs if the item type already exists;
-
-            //Destroy the scene object of the item
-            Destroy(properties.gameObject);
-                
-            //add the amount to the already existing item entry;
-            Item AlreadyExistingItem = GetItemWithID(properties.ID);
-            AlreadyExistingItem.Amount += properties.Amount;
-
-            //update the UI;
-            AlreadyExistingItem.UINumberText.text = "X" + AlreadyExistingItem.Amount.ToString();
-
-            return AlreadyExistingItem;
+                //add to the Items Data
+                ItemAddOns.Add(properties.ItemInstanceID, NewItem);
         }
     }
 
     public void SlotClick(int ItemInstanceID){
-        if (Inventory.ContainsKey(ItemInstanceID)){
+        if (Items.ContainsKey(ItemInstanceID)){
             if (itemInfoUI.DropInt == 0){
                 itemInfoUI.InputField.text = "1";
                 itemInfoUI.DropInt = 1;
             }
 
-            //assign the slot to the Selected Item Variable
-            SelectedItem = Inventory[ItemInstanceID]; 
+            //assign the slot to the Selected ItemEntry Variable
+            SelectedItem = ItemAddOns[ItemInstanceID]; 
 
             //Reset the Equipment Outlines to White
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
                 Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
             }
 
-            //HighLight the Slot that the selected Item can be Equipt in
+            //HighLight the Slot that the selected ItemEntry can be Equipt in
             if (SelectedItem.ItemProperties.Equippable){
                 GameServices.Equipment.Equipment.Slots[SelectedItem.ItemProperties.equipSlot].InvUI.Outline.color = Color.green;
             }
@@ -301,13 +257,13 @@ public class InventoryScript : MonoBehaviour
             GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
             //Edit the ItemInfo Window
-            itemInfoUI.Name.fontSize = Inventory[ItemInstanceID].ItemProperties.ItemName.Length / 0.31f;
-            itemInfoUI.Name.text = Inventory[ItemInstanceID].ItemProperties.ItemName;
-            itemInfoUI.Description.text = Inventory[ItemInstanceID].ItemProperties.Description;
-            itemInfoUI.UseButtonText.text = Inventory[ItemInstanceID].ItemProperties.UseLabel;
+            itemInfoUI.Name.fontSize = Items[ItemInstanceID].ItemName.Length / 0.31f;
+            itemInfoUI.Name.text = Items[ItemInstanceID].ItemName;
+            itemInfoUI.Description.text = Items[ItemInstanceID].Description;
+            itemInfoUI.UseButtonText.text = Items[ItemInstanceID].UseLabel;
 
             //Decide whether to show the Use Button
-            if (!Inventory[ItemInstanceID].ItemProperties.Useable){
+            if (!Items[ItemInstanceID].Useable){
                 if (itemInfoUI.UseButton.gameObject.activeSelf)
                     itemInfoUI.UseButton.gameObject.SetActive(false);
             }else{
@@ -317,12 +273,12 @@ public class InventoryScript : MonoBehaviour
         }
     }
 
-    public void DropItem(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
-           if (Item.Amount - Amount > 0){
+    public void DropItem(ItemEntry ItemEntry, int Amount){
+        if (Items.ContainsKey(ItemEntry.ItemProperties.ItemInstanceID)){
+           if (ItemEntry.ItemProperties.Amount - Amount > 0){
                 //if the item amount won't end up being 0 or less
 
-                GameObject NewItemDropped = Instantiate(Item.GameObject);
+                GameObject NewItemDropped = Instantiate(ItemEntry.ItemProperties.gameObject);
                 NewItemDropped.transform.position = transform.position;
                 NewItemDropped.transform.rotation = Quaternion.Euler(0,0,0);
                 NewItemDropped.SetActive(true);
@@ -330,60 +286,28 @@ public class InventoryScript : MonoBehaviour
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
                 
                 properties.Amount = Amount;
-                Item.Amount -= Amount;
-                Item.UINumberText.text = "X" + Item.Amount.ToString();
+                ItemEntry.ItemProperties.Amount -= Amount;
+                ItemEntry.UINumberText.text = "X" + ItemEntry.ItemProperties.Amount.ToString();
             }else{
                 //if the item amount will end up being 0 or less
 
-                GameObject NewItemDropped = Instantiate(Item.GameObject);
+                GameObject NewItemDropped = Instantiate(ItemEntry.ItemProperties.gameObject);
                 NewItemDropped.transform.position = transform.position;
                 NewItemDropped.transform.rotation = Quaternion.Euler(0,0,0);
                 NewItemDropped.SetActive(true);
 
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
-                properties.Amount = Item.Amount;
+                properties.Amount = ItemEntry.ItemProperties.Amount;
 
-                RemoveItem(Item);
+                RemoveItem(ItemEntry.ItemProperties);
             }
         }
     }
-
-    public void RemoveItem(Item Item){
-        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
-            Item ItemToDestroy = Item;
-
-            //Destroy Objects;
-            Destroy(ItemToDestroy.UISlot);
-            Destroy(ItemToDestroy.GameObject);
-
-            if (SelectedItem?.ItemProperties?.ItemInstanceID == Item?.ItemProperties?.ItemInstanceID)
-                UnSelectItem();
-            
-            //Remove Item from Inventory Data
-            Inventory.Remove(Item.ItemProperties.ItemInstanceID);
-        }
-    }
-
-    public void ChangeItemAmount(Item Item, int Amount){
-        if (Inventory.ContainsKey(Item.ItemProperties.ItemInstanceID)){
-            
-            if (Inventory[Item.ItemProperties.ItemInstanceID].Amount + Amount > 0){
-                //if the item amount won't end up being 0 or less
-                Inventory[Item.ItemProperties.ItemInstanceID].Amount += Amount;
-
-                Inventory[Item.ItemProperties.ItemInstanceID].UINumberText.text = "X" + Inventory[Item.ItemProperties.ItemInstanceID].Amount.ToString();
-            }else{
-                //if the item amount will end up being 0 or less
-                RemoveItem(Inventory[Item.ItemProperties.ItemInstanceID]);
-            }
-
-        }
-    }
+    
 
     [System.Serializable]
-    public class Item{
-        public GameObject GameObject;
-        public int Amount = 1;
+    public class ItemEntry{
+        public int InstanceID;
         public ItemProperties ItemProperties;
         public Image UIIcon;
         public Button UIButton;

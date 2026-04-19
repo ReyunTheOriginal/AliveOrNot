@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Temporary : MonoBehaviour
+public class IndependentFunctionsHolder : MonoBehaviour
 {
     public GameUtils.IndependentCoroutine StartTempCoroutine(System.Func<IEnumerator> func){
         var ICoroutine = new GameUtils.IndependentCoroutine();

@@ -28,7 +28,18 @@ public class PlayerMovement : MonoBehaviour
     };
     public Dictionary<Effects, float> CurrentEffects = new Dictionary<Effects, float>();
     public Direction CurrentDirection;
+
+    public bool LastWaterState = false;
+    public GameObject WaterSplatterPar;
+    public Vector2 WaterPosOffSit;
     void Update(){
+        if (LastWaterState != CurrentStates[State.InShallowWater]){
+            LastWaterState = CurrentStates[State.InShallowWater];
+            if (CurrentStates[State.InShallowWater]){
+                Instantiate(WaterSplatterPar, (Vector2)transform.position + WaterPosOffSit, Quaternion.identity);
+            }
+        }
+
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
@@ -60,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (CurrentStates[State.Walking] == true && !CurrentStates[State.InUI] && !CurrentStates[State.Dead]){
             Speed = CurrentStates[State.Running]? RunSpeed : WalkSpeed;
-            if (CurrentStates[State.InShallowWater]) Speed -= CurrentStates[State.Running]? 1 : 1.5f;
+            if (CurrentStates[State.InShallowWater]) Speed *= 0.75f;
             animator.speed = CurrentStates[State.Running]? RunSpeed/WalkSpeed : 1;
 
             switch (CurrentDirection){
@@ -97,8 +108,15 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {   
-        if (!GameUtils.OverASpeedInDirection(rig.velocity, DirectionalSpeed, Speed))
-            rig.velocity += DirectionalSpeed * Speed;
+        // Get current speed in the target direction
+        float speedInDir = Vector2.Dot(rig.velocity, DirectionalSpeed);
+
+        // Only add the force needed to reach exactly `speed`
+        float forceNeeded = Speed - speedInDir;
+
+        if (!GameUtils.OverASpeedInDirection(rig.velocity, DirectionalSpeed, Speed)){
+            rig.AddForce(DirectionalSpeed * forceNeeded, ForceMode2D.Force);
+        }
     }
 
     private void SetUpStates(){

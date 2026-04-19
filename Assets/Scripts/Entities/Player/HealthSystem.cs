@@ -70,7 +70,7 @@ public class HealthSystem : MonoBehaviour{
             }
 
             //Reduce the Durability of all armor worn at the time of the hit
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
+            /*if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
                 if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties)
                     GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties.Durability--;
 
@@ -80,7 +80,7 @@ public class HealthSystem : MonoBehaviour{
 
             if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item != null)
                 if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties)
-                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties.Durability--;
+                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties.Durability--;*/
         }
     }
     

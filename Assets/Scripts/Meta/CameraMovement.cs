@@ -6,7 +6,7 @@ public class CameraScript : MonoBehaviour
     [Header("-Settings-")]
     public GameObject FollowTarget;
     public float Size = 5;
-    public float SmoothFollowSpeed = 2;
+    public float SmoothFollowSpeedLerp = 0.1f;
     public PixelPerfectCamera pixelCam;
     [SerializeField] int minPixelSize = 90;   // more pixels = zoomed out
     [SerializeField] int maxPixelSize = 270;  // fewer pixels = zoomed in
@@ -46,10 +46,15 @@ public class CameraScript : MonoBehaviour
         transform.position = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, -10);
     }
     private void smoothFollow(){
-        Vector2 dir = (FollowTarget.transform.position - transform.position).normalized;
-        float dis = Vector2.Distance(FollowTarget.transform.position,transform.position);
+        Vector2 TargetPos = (Vector2)FollowTarget.transform.position + GameServices.GlobalVariables.Player.MovementScript.DirectionalSpeed;
+        float dis = Vector2.Distance(TargetPos,transform.position);
 
-        transform.position += new Vector3((dir * SmoothFollowSpeed * dis).x, (dir * SmoothFollowSpeed * dis).y);
-        transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        Vector3 newPos = new Vector3(
+            Mathf.Lerp(transform.position.x, TargetPos.x, SmoothFollowSpeedLerp * dis * Time.deltaTime), 
+            Mathf.Lerp(transform.position.y, TargetPos.y, SmoothFollowSpeedLerp * dis * Time.deltaTime),
+            -10
+        );
+
+        transform.position = newPos;
     }
 }

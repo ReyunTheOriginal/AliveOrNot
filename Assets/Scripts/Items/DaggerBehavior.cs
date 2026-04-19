@@ -13,6 +13,7 @@ public class DaggerBehavior : ItemBehavior
 
     public AudioClip SlashAudio;
     public AnimationClip SlashAnimation;
+    public GameObject SlashParticle;
 
     [Header("Debug")]
     public bool DebugMode;
@@ -24,6 +25,10 @@ public class DaggerBehavior : ItemBehavior
     public override void Equipped(){
         Properties.ItemRenderer.enabled = false;
         GameServices.GlobalVariables.OffHandObject.LeftHand.SetActive(false);
+    }
+
+    private void Update() {
+        if (SlashParticle.activeSelf != Hitting)SlashParticle.SetActive(Hitting);
     }
 
     public override void UnEquipped(){

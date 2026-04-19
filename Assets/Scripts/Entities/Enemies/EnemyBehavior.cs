@@ -15,22 +15,21 @@ public class EnemyBehavior : MonoBehaviour{
 
           Properties.CurrentStates[EnemyProperties.State.Chasing] = true;
 
-          if (Properties.CurrentStates[EnemyProperties.State.Chasing] && !Properties.CurrentEffects.ContainsKey(EnemyProperties.Effects.Stunned) && !Properties.CurrentStates[EnemyProperties.State.Attacking]){
-               GameUtils.FollowObjectWithRig(Properties.rig, GameServices.GlobalVariables.Player.GameObject.transform, Properties.WalkSpeed);
+          if (Properties.CurrentStates[EnemyProperties.State.Chasing] && !Properties.CurrentEffects.ContainsKey(EnemyProperties.Effects.Stunned)){
+               if (Properties.LightAttackTimer >= Properties.LightAttackCooldown && Vector2.Distance(GameServices.GlobalVariables.Player.GameObject.transform.position, transform.position) <= Properties.LightAttackRange){
+                    StartCoroutine(LightAttack());
+                    Properties.SpecialAttackTimer = 0;
+                    Properties.HeavyAttackTimer = 0;
+                    Properties.LightAttackTimer = 0;
+               }
+
+               if (!Properties.CurrentStates[EnemyProperties.State.Attacking])GameUtils.FollowObjectWithRig(Properties.rig, GameServices.GlobalVariables.Player.GameObject.transform, Properties.WalkSpeed);
           }
 
           SetupStates();
           SetUpTimers();
           Properties.animator.SetInteger("WalkingDirection", (int)Properties.CurrentDirection);
-
-          if (Properties.LightAttackTimer >= Properties.LightAttackCooldown && Vector2.Distance(GameServices.GlobalVariables.Player.GameObject.transform.position, transform.position) <= Properties.LightAttackRange){
-               StartCoroutine(LightAttack());
-               Properties.SpecialAttackTimer = 0;
-               Properties.HeavyAttackTimer = 0;
-               Properties.LightAttackTimer = 0;
-          }
           
-
           if (Properties.CurrentStates[EnemyProperties.State.Chasing])
                Chasing();
           if (Properties.CurrentStates[EnemyProperties.State.Roaming])

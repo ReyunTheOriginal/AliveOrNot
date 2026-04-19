@@ -61,7 +61,7 @@ public class BulletGun : ItemBehavior
 
     public override void UnEquipped(){
         GameUtils.ResetCursor();
-        GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", false, true);
+        if (AmmoUI.WholeUI)GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", false, true);
         if (ReloadCoroutine != null)ReloadCoroutine.Stop(); 
     }
 
@@ -151,7 +151,7 @@ public class BulletGun : ItemBehavior
 
     public IEnumerator Reload(){
         yield return new WaitForSeconds(ReloadAnimation.length);
-        InventoryScript.Item Bullet = GameServices.Inventory.GetItemWithID(BulletID);
+        ItemProperties Bullet = GameServices.Inventory.GetItemWithID(BulletID);
         if (Bullet != null){
             int needed = ChamberSize - BulletsInChamber;
             int available = Bullet.Amount;

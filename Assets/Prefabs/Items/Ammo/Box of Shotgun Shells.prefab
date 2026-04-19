@@ -98,14 +98,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: -355794468, guid: 03d5222bb69ade14895a07152360c92e, type: 3}
   ItemName: Box of Shotgun Shells
+  ID: 16
+  Amount: 0
   Description: Open to get a bunch of Shotgun Shells
   UseLabel: Open
-  ID: 16
-  Amount: 3
+  ItemSprite: {fileID: -355794468, guid: 03d5222bb69ade14895a07152360c92e, type: 3}
+  CustomUIPrefab: {fileID: 0}
   ItemBehavior: {fileID: 5682975815021178692}
+  ItemRenderer: {fileID: 7806121592106418474}
   AnimationPlayer: {fileID: 0}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
@@ -120,10 +121,12 @@ MonoBehaviour:
   Consumable: 1
   Equippable: 0
   equipSlot: 0
+  ItemInstanceID: 0
+  CustomUICanvasGroup: {fileID: 0}
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Accuracy: 0
+  KnockBack: 0
 --- !u!114 &5682975815021178692
 MonoBehaviour:
   m_ObjectHideFlags: 0

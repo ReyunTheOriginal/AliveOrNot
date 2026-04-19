@@ -241,7 +241,7 @@ MonoBehaviour:
   Range: 25
   amountOfRays: 1
   AttackRadius: 0
-  Accuracy: 0.75
+  Accuracy: 0.93
   GunShotAudio: {fileID: 8300000, guid: e76393aba7ca9314ebeabb5d906895b0, type: 3}
   BasePitch: 1
   PitchChangeRange: 0.05
