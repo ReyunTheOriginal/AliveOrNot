@@ -36,7 +36,9 @@ public class GlobalVariables : MonoBehaviour
     public class HandData{
         public GameObject CenterObject;
         public GameObject RightHand;
+        public SpriteSorter RightHandSorter;
         public GameObject LeftHand;
+        public SpriteSorter LeftHandSorter;
     }
 
     [System.Serializable]

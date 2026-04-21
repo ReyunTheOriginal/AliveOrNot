@@ -136,18 +136,18 @@ public static class GameUtils{
     }
 
     public static float GetDeterministicRandom(Vector2Int pos, int seed){
-        // Pack inputs using large primes to avoid symmetry artifacts
         uint h = (uint)seed;
         h ^= (uint)pos.x * 2246822519u;
+        h *= 3266489917u; // mix after x before combining y
         h ^= (uint)pos.y * 3266489917u;
-        
-        // Murmur3-style finalizer (excellent avalanche effect)
+        h *= 2246822519u; // mix after y
+
+        // Murmur3 finalizer
         h ^= h >> 16;
         h *= 2246822519u;
         h ^= h >> 13;
         h *= 3266489917u;
         h ^= h >> 16;
-
         return h / (float)uint.MaxValue;
     }
 

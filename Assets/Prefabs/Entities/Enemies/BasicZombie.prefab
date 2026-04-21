@@ -289,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   Health: 100
-  WalkSpeed: 70
+  WalkSpeed: 80
   CurrentDirection: 0
   BloodBurst: {fileID: 1534289318125768801, guid: 23303819341c853448657d0962388eab, type: 3}
   GibsDamage: -50

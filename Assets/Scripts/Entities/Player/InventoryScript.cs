@@ -20,11 +20,16 @@ public class InventoryScript : ItemContainer
     public float DistanceAwayFromClosestItem;
     public RectTransform ClickIndicator;
     public ImmediateInfoUI ImmediateInfo;
+    public int AddAmount;
 
     public void OnInputEdit(){
         if (int.TryParse(itemInfoUI.InputField.text, out int value)){
             itemInfoUI.DropInt = value;
+        } else {
+            itemInfoUI.DropInt = int.MaxValue;
+            itemInfoUI.InputField.text = int.MaxValue.ToString();
         }
+
         if (itemInfoUI.DropInt == 0){
             itemInfoUI.InputField.text = "1";
             itemInfoUI.DropInt = 1;
@@ -40,6 +45,46 @@ public class InventoryScript : ItemContainer
         if (SelectedItem != null){
             SelectedItem.ItemProperties.ItemBehavior.Use();
             if (SelectedItem.ItemProperties.Consumable)ChangeItemAmount(SelectedItem.ItemProperties, -1);
+        }
+    }
+
+    public void SlotClick(int ItemInstanceID){
+        if (Items.ContainsKey(ItemInstanceID)){
+            if (itemInfoUI.DropInt == 0){
+                itemInfoUI.InputField.text = "1";
+                itemInfoUI.DropInt = 1;
+            }
+
+            //assign the slot to the Selected ItemEntry Variable
+            SelectedItem = ItemAddOns[ItemInstanceID]; 
+
+            //Reset the Equipment Outlines to White
+            foreach(var Slot in GameServices.Equipment.Equipment.Slots){
+                Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
+            }
+
+            //HighLight the Slot that the selected ItemEntry can be Equipt in
+            if (SelectedItem.ItemProperties.Equippable){
+                GameServices.Equipment.Equipment.Slots[SelectedItem.ItemProperties.equipSlot].InvUI.Outline.color = Color.green;
+            }
+
+            //show the ItemInfo Window
+            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
+
+            //Edit the ItemInfo Window
+            itemInfoUI.Name.fontSize = Items[ItemInstanceID].ItemName.Length / 0.31f;
+            itemInfoUI.Name.text = Items[ItemInstanceID].ItemName;
+            itemInfoUI.Description.text = Items[ItemInstanceID].Description;
+            itemInfoUI.UseButtonText.text = Items[ItemInstanceID].UseLabel;
+
+            //Decide whether to show the Use Button
+            if (!Items[ItemInstanceID].Useable){
+                if (itemInfoUI.UseButton.gameObject.activeSelf)
+                    itemInfoUI.UseButton.gameObject.SetActive(false);
+            }else{
+                if (!itemInfoUI.UseButton.gameObject.activeSelf)
+                    itemInfoUI.UseButton.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -101,11 +146,11 @@ public class InventoryScript : ItemContainer
 
         foreach(var Item in ItemAddOns){
             //attach the inactive item to the player
-            if (Item.Value.ItemProperties.gameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.ItemInstanceID))
+            if (Item.Value.ItemProperties && Item.Value.ItemProperties.gameObject && !GameServices.Equipment.HasItemEquipped(Item.Value.ItemProperties.ItemInstanceID))
                 Item.Value.ItemProperties.gameObject.transform.position = transform.position;
 
             //Update Durability UI
-            if (Item.Value.ItemProperties.HasDurability && Item.Value.UISlot){
+            if (Item.Value.ItemProperties.HasDurability){
                 Item.Value.DurabilityText.text = (Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability *100).ToString("0") + "/100";
                 Item.Value.DurabilityBar.fillAmount = Item.Value.ItemProperties.Durability/Item.Value.ItemProperties.MaxDurability;
             }
@@ -147,7 +192,7 @@ public class InventoryScript : ItemContainer
         float CurrentDistance = float.MaxValue;
         ItemProperties CurrentItem = null;
         foreach (ItemProperties item in GameServices.GlobalVariables.AllItems){
-            if (item.enabled){
+            if (item.enabled && item.gameObject.activeInHierarchy){
                 float DistanceAttempt = Vector2.Distance(item.transform.position, transform.position);
                 if (DistanceAttempt < CurrentDistance){
                     CurrentDistance = DistanceAttempt;
@@ -172,104 +217,75 @@ public class InventoryScript : ItemContainer
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", true);
 
         yield return new WaitForSeconds(0.2f);
-        AddItem(ItemToPick);
+        AddItem(ItemToPick, AddAmount);
 
         GameServices.GlobalVariables.Player.Animator.SetBool("PickingUp", false);
         PickUpAnimationCoroutine = null;
         yield return null;
     }
 
-    public override void OnItemsChange(){
-        foreach(var entry in ItemAddOns){
-            Destroy(entry.Value.UISlot);
+    public override void OnItemsChange(ChangeCache Cache){
+        foreach(int entry in Cache.InstanceIDsOfChanges){
+            if (ItemAddOns[entry] != null && ItemAddOns[entry].UINumberText && ItemAddOns[entry].ItemProperties)
+                ItemAddOns[entry].UINumberText.text = "X" + Items[entry].Amount.ToString();
         }
-        ItemAddOns.Clear();
+
+        foreach(int entry in Cache.InstanceIDsOfRemovals){
+            if (SelectedItem != null && SelectedItem.ItemProperties && SelectedItem.InstanceID == entry){
+                UnSelectItem();
+            }
+
+            Destroy(ItemAddOns[entry].UISlot);
+            ItemAddOns.Remove(entry);
+        }
         
-        foreach(var entry in Items){
-            ItemProperties properties = entry.Value;
-                //runs if it's a new item;
+        
+        foreach(int entry in Cache.InstanceIDsOfAdditions){
+            ItemProperties properties = Items[entry];
+            //runs if it's a new item;
 
-                //create a new ItemEntry entry
-                ItemEntry NewItem = new ItemEntry();
+            //create a new ItemEntry entry
+            ItemEntry NewItem = new ItemEntry();
 
-                //create the new UI slot;
-                GameObject NewSlot = Instantiate(SlotPrefab, ContentTransform);
+            //create the new UI slot;
+            GameObject NewSlot = Instantiate(SlotPrefab, ContentTransform);
 
-                //get the components to edit;
-                Image ItemIcon = NewSlot.transform.GetChild(0).GetComponent<Image>();
-                TMP_Text NumberText = NewSlot.transform.GetChild(1).GetComponent<TMP_Text>();
-                Button SlotButton = NewSlot.GetComponent<Button>();
-                HoverDetector Hover = NewSlot.GetComponent<HoverDetector>();
+            //get the components to edit;
+            Image ItemIcon = NewSlot.transform.GetChild(0).GetComponent<Image>();
+            TMP_Text NumberText = NewSlot.transform.GetChild(1).GetComponent<TMP_Text>();
+            Button SlotButton = NewSlot.GetComponent<Button>();
+            HoverDetector Hover = NewSlot.GetComponent<HoverDetector>();
 
-                //edit the components
-                ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
-                NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
-                SlotButton.onClick.AddListener(() => SlotClick(properties.ItemInstanceID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
+            //edit the components
+            ItemIcon.sprite = properties.ItemSprite; //edit the slot Icon
+            NumberText.text = "X" + properties.Amount.ToString(); //Edit the Text for the amount
+            SlotButton.onClick.AddListener(() => SlotClick(properties.ItemInstanceID)); //Make the Slot Work when Clicked, Runs: SlotClick(ID)
 
-                //save the data to the ItemEntry class to enter
-                NewItem.ItemProperties = properties;
-                NewItem.UIIcon = ItemIcon;
-                NewItem.UIButton = SlotButton;
-                NewItem.UINumberText = NumberText;
-                NewItem.UIButton = SlotButton;
-                NewItem.UISlot = NewSlot;
-                NewItem.hoverDetector = Hover;
+            //save the data to the ItemEntry class to enter
+            NewItem.ItemProperties = properties;
+            NewItem.InstanceID = properties.ItemInstanceID;
+            NewItem.UIIcon = ItemIcon;
+            NewItem.UIButton = SlotButton;
+            NewItem.UINumberText = NumberText;
+            NewItem.UIButton = SlotButton;
+            NewItem.UISlot = NewSlot;
+            NewItem.hoverDetector = Hover;
 
-                if (properties.HasDurability){
-                    NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject;
-                    NewItem.DurabilityBar = NewSlot.transform.GetChild(2).GetChild(1).GetComponent<Image>();
-                    NewItem.DurabilityText = NewSlot.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
-                }else{
-                    Destroy(NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject);
-                }
-
-                //deactivate the scene item GameObject;
-                properties.gameObject.SetActive(false);
-
-                if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
-
-                //add to the Items Data
-                ItemAddOns.Add(properties.ItemInstanceID, NewItem);
-        }
-    }
-
-    public void SlotClick(int ItemInstanceID){
-        if (Items.ContainsKey(ItemInstanceID)){
-            if (itemInfoUI.DropInt == 0){
-                itemInfoUI.InputField.text = "1";
-                itemInfoUI.DropInt = 1;
-            }
-
-            //assign the slot to the Selected ItemEntry Variable
-            SelectedItem = ItemAddOns[ItemInstanceID]; 
-
-            //Reset the Equipment Outlines to White
-            foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-                Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
-            }
-
-            //HighLight the Slot that the selected ItemEntry can be Equipt in
-            if (SelectedItem.ItemProperties.Equippable){
-                GameServices.Equipment.Equipment.Slots[SelectedItem.ItemProperties.equipSlot].InvUI.Outline.color = Color.green;
-            }
-
-            //show the ItemInfo Window
-            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
-
-            //Edit the ItemInfo Window
-            itemInfoUI.Name.fontSize = Items[ItemInstanceID].ItemName.Length / 0.31f;
-            itemInfoUI.Name.text = Items[ItemInstanceID].ItemName;
-            itemInfoUI.Description.text = Items[ItemInstanceID].Description;
-            itemInfoUI.UseButtonText.text = Items[ItemInstanceID].UseLabel;
-
-            //Decide whether to show the Use Button
-            if (!Items[ItemInstanceID].Useable){
-                if (itemInfoUI.UseButton.gameObject.activeSelf)
-                    itemInfoUI.UseButton.gameObject.SetActive(false);
+            if (properties.HasDurability){
+                NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject;
+                NewItem.DurabilityBar = NewSlot.transform.GetChild(2).GetChild(1).GetComponent<Image>();
+                NewItem.DurabilityText = NewSlot.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
             }else{
-                if (!itemInfoUI.UseButton.gameObject.activeSelf)
-                    itemInfoUI.UseButton.gameObject.SetActive(true);
+                Destroy(NewItem.DurabilityUI = NewSlot.transform.GetChild(2).gameObject);
             }
+
+            //deactivate the scene item GameObject;
+            properties.gameObject.SetActive(false);
+
+            if (properties.Unstackable) NewItem.UINumberText.gameObject.SetActive(false);
+
+            //add to the Items Data
+            ItemAddOns.Add(properties.ItemInstanceID, NewItem);
         }
     }
 

@@ -9,6 +9,8 @@ public class WeaponPropertiesHolder : MonoBehaviour
     public WeaponTypes WeaponType;
     public float Cooldown;
     public float KnockBack;
+    public float Recoil;
+    public float StunLength;
     public int MaxHits;
     public ItemProperties Properties;
 

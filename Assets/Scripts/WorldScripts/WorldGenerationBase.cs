@@ -30,6 +30,10 @@ public class WorldGenerationBase : MonoBehaviour
         //calculate the Resolution
         ResolutionMultiplier = (float)ChunkSize / (float)ChunkResolution;
         Grid.cellSize = new Vector3(ResolutionMultiplier, ResolutionMultiplier, 0);
+
+        foreach(Transform child in Grid.transform)
+            Destroy(child.gameObject);
+            
     }
     
     //Get what Chunk any position is in

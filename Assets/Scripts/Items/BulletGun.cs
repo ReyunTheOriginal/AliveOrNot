@@ -9,8 +9,6 @@ public class BulletGun : ItemBehavior
     [Header("Settings")]
     public AnimationCurve DamageFalloff;
     public FireModes FireMode;
-    public float Recoil;
-    public float StunLength;
     public GameObject MuzzleFlash;
     public Transform BarrelEndLocation;
 [Header("UI")]
@@ -41,6 +39,7 @@ public class BulletGun : ItemBehavior
     public bool DebugMode;
     public float Timer;
     public float BurstTimer;
+    public float autoReloadTimer;
     public GameUtils.IndependentCoroutine ReloadCoroutine;
 
 
@@ -81,12 +80,26 @@ public class BulletGun : ItemBehavior
             Timer += Time.deltaTime;
             BurstTimer += Time.deltaTime;
 
-            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletID) && !Reloading && (Input.GetKeyDown(KeyCode.R) || (BulletsInChamber <= 0))){
+            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletID) && !Reloading && Input.GetKeyDown(KeyCode.R)){
                 //GameUtils.StartIndependentCoroutine(() => Reload());
                 Reloading = true;
 
                 ReloadCoroutine = GameUtils.StartIndependentCoroutine(() => Reload());
                 Properties.AnimationPlayer.PlayClip(ReloadAnimation);
+            }
+
+            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletID) && !Reloading && BulletsInChamber <= 0){
+                autoReloadTimer += Time.deltaTime;
+
+                if (autoReloadTimer >= 0.25f){
+                    autoReloadTimer = 0;
+
+                    //GameUtils.StartIndependentCoroutine(() => Reload());
+                    Reloading = true;
+
+                    ReloadCoroutine = GameUtils.StartIndependentCoroutine(() => Reload());
+                    Properties.AnimationPlayer.PlayClip(ReloadAnimation);
+                }
             }
 
             if (!Reloading){
@@ -238,7 +251,7 @@ public class BulletGun : ItemBehavior
         main.startRotation = -rotate;
 
         if (GunShotAnimation)Properties.AnimationPlayer.PlayClip(GunShotAnimation);
-        GameServices.GlobalVariables.Player.rig.AddForce(-dir * Recoil, ForceMode2D.Impulse);
+        GameServices.GlobalVariables.Player.rig.AddForce(-dir * WeaponProperties.Recoil, ForceMode2D.Impulse);
         if (Properties.HasDurability)Properties.Durability -= 1;
     }
 
@@ -247,7 +260,7 @@ public class BulletGun : ItemBehavior
             if (Col.gameObject.CompareTag("Enemy")){
                 EnemyProperties Properties = Col.gameObject.GetComponent<EnemyProperties>();
 
-                Properties.CurrentEffects[EnemyProperties.Effects.Stunned] = StunLength;
+                Properties.CurrentEffects[EnemyProperties.Effects.Stunned] = WeaponProperties.StunLength;
 
                 float distance = Vector2.Distance(
                     Col.ClosestPoint((Vector2)GameServices.GlobalVariables.Player.GameObject.transform.position),

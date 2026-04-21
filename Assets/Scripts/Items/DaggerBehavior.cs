@@ -8,9 +8,6 @@ public class DaggerBehavior : ItemBehavior
     [Header("Settings")]
     public bool Automatic;
     public float Range;
-    public float StunLength;
-    public float Recoil;
-
     public AudioClip SlashAudio;
     public AnimationClip SlashAnimation;
     public GameObject SlashParticle;
@@ -52,7 +49,7 @@ public class DaggerBehavior : ItemBehavior
                 HitEnemies.Clear();
 
                 Vector2 dir = GameUtils.DirFromAToB(GameServices.GlobalVariables.OffHandObject.CenterObject.transform.position, GameUtils.QuickWorldMousePosition());
-                GameServices.GlobalVariables.Player.rig.AddForce(Recoil * -dir, ForceMode2D.Impulse);
+                GameServices.GlobalVariables.Player.rig.AddForce(WeaponProperties.Recoil * -dir, ForceMode2D.Impulse);
 
                 Properties.AnimationPlayer.RunAfterAnimationIsOver = AfterHit;
                 Properties.AnimationPlayer.PlayClip(SlashAnimation);
@@ -107,7 +104,7 @@ public class DaggerBehavior : ItemBehavior
             
             float DamageOffsit = UnityEngine.Random.Range(-WeaponProperties.RandomDamageOffsit, WeaponProperties.RandomDamageOffsit);
             enemyProperties.HitEnemy(WeaponProperties.Damage + DamageOffsit, WeaponProperties.KnockBack * KnockBackDir, WeaponProperties);
-            enemyProperties.CurrentEffects[EnemyProperties.Effects.Stunned] = StunLength;
+            enemyProperties.CurrentEffects[EnemyProperties.Effects.Stunned] = WeaponProperties.StunLength;
             Properties.Durability -= 1;
         }
     }

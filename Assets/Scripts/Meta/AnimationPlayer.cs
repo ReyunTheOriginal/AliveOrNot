@@ -68,13 +68,15 @@ public class AnimationPlayer : MonoBehaviour
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
 
-        // 🔥 Destroy the old node before creating a new one
         if (playable.IsValid())
             playable.Destroy();
+
+        output.SetSourcePlayable(Playable.Null); // 🔥 disconnect before reassigning
 
         playable = AnimationClipPlayable.Create(graph, clip);
         output.SetSourcePlayable(playable);
         playable.SetTime(0);
+        graph.Evaluate(); // 🔥 force first frame immediately so there's no 1-frame delay
 
         currentAnimation = StartCoroutine(WaitForAnimation(clip));
     }
@@ -106,31 +108,31 @@ public class AnimationPlayer : MonoBehaviour
     }
 
 
-    IEnumerator WaitForAnimation(AnimationClip clip) {
-        // 1. Wait until the playable has actually finished based on its own clock
-        while (playable.IsValid() && !playable.IsDone() && playable.GetTime() < clip.length) {
-            yield return null; 
+    IEnumerator WaitForAnimation(AnimationClip clip){
+        float elapsed = 0f;
+        while (elapsed < clip.length)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        // 2. IMPORTANT: Force the graph to evaluate the exact final frame
-        if (playable.IsValid()) {
+        // Force final frame
+        if (playable.IsValid())
+        {
             playable.SetTime(clip.length);
-            graph.Evaluate(); 
+            graph.Evaluate();
         }
 
-        // 3. Give the engine one frame to render this final pose
         yield return new WaitForEndOfFrame();
 
-        // Now it is safe to cleanup
         output.SetSourcePlayable(Playable.Null);
-        
         if (playable.IsValid())
             playable.Destroy();
-
         playable = default;
         currentAnimation = null;
 
-        if (RunAfterAnimationIsOver != null) {
+        if (RunAfterAnimationIsOver != null)
+        {
             yield return StartCoroutine(RunAfterAnimationIsOver());
             RunAfterAnimationIsOver = null;
         }
