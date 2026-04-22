@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void SetUpStates(){
-        CurrentStates[State.InUI] = GameServices.UI.AMenuIsOpened();
+        CurrentStates[State.InUI] = UIManager.AMenuIsOpened();
         CurrentStates[State.Walking] = input != Vector2.zero;
         CurrentStates[State.Idle] = !CurrentStates[State.Walking] && !CurrentEffects.ContainsKey(Effects.Stunned);
         CurrentStates[State.Running] = Input.GetKey(KeyCode.LeftShift);

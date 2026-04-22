@@ -39,7 +39,7 @@ public class InventoryScript : ItemContainer
         DropItem(SelectedItem, itemInfoUI.DropInt);
     }
     public void DropButton(){
-        GameServices.UI.ToggleCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu");
+        UIManager.ToggleCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu");
     }
     public void UseButton(){
         if (SelectedItem != null){
@@ -69,7 +69,7 @@ public class InventoryScript : ItemContainer
             }
 
             //show the ItemInfo Window
-            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
+            UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo");
 
             //Edit the ItemInfo Window
             itemInfoUI.Name.fontSize = Items[ItemInstanceID].ItemName.Length / 0.31f;
@@ -100,12 +100,12 @@ public class InventoryScript : ItemContainer
         //toggle InventoryUI
         if (Input.GetKeyDown(KeyCode.Tab)){
             UnSelectItem();
-            GameServices.UI.ToggleCanvasGroup(true, FullInventoryUI, "Items");
+            UIManager.ToggleCanvasGroup(true, FullInventoryUI, "Items");
             foreach (CanvasGroup Group in UnderInventoryUI){
-                GameServices.UI.ToggleCanvasGroup(false, Group, "");
+                UIManager.ToggleCanvasGroup(false, Group, "");
             }
-            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
-            GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
+            UIManager.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
+            UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
             foreach(var Slot in GameServices.Equipment.Equipment.Slots){
                 Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
             }
@@ -117,7 +117,7 @@ public class InventoryScript : ItemContainer
             PickUpAnimationCoroutine = null;
         }
 
-        if (!GameServices.UI.AMenuIsOpened()){
+        if (!UIManager.AMenuIsOpened()){
              if (DistanceAwayFromClosestItem <= DistanceForPickup){
                 if (!ClickIndicator.gameObject.activeSelf) ClickIndicator.gameObject.SetActive(true);
                 ClickIndicator.position = ClosestItem.transform.position + new Vector3(0, 0.5f, 0);
@@ -134,7 +134,7 @@ public class InventoryScript : ItemContainer
         }
         
         //if you click outside of UI, Unselect the ItemEntry
-        if (GameServices.UI.IsActiveCanvasGroup(FullInventoryUI)){
+        if (UIManager.IsActiveCanvasGroup(FullInventoryUI)){
             if (Input.GetMouseButtonDown(0)){
                 if (!EventSystem.current.IsPointerOverGameObject()){
                     UnSelectItem();
@@ -158,8 +158,8 @@ public class InventoryScript : ItemContainer
             if (Item.Value.hoverDetector.isHovering){
                 HoveringOverAnySlots = true;
 
-                if (!GameServices.UI.IsActiveCanvasGroup(ImmediateInfo.WholeUI))
-                    GameServices.UI.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", true, true);
+                if (!UIManager.IsActiveCanvasGroup(ImmediateInfo.WholeUI))
+                    UIManager.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", true, true);
 
                 ImmediateInfo.rect.position = Input.mousePosition;
 
@@ -185,7 +185,7 @@ public class InventoryScript : ItemContainer
         }
 
         if (!HoveringOverAnySlots)
-            GameServices.UI.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", false, true);
+            UIManager.SetActiveCanvasGroup(false, ImmediateInfo.WholeUI, "", false, true);
     }
 
     public void CheckForClosestItem(){
@@ -205,7 +205,7 @@ public class InventoryScript : ItemContainer
     }
 
     public void UnSelectItem(){
-        GameServices.UI.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
+        UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
         
         SelectedItem = null;
         foreach(var Slot in GameServices.Equipment.Equipment.Slots){

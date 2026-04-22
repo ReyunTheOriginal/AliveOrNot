@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4023969323343331541}
   - component: {fileID: 2982093296017423432}
   - component: {fileID: 8865574681524194031}
-  - component: {fileID: 5756249697919563410}
   m_Layer: 0
   m_Name: TallDryGrass
   m_TagString: Untagged
@@ -98,20 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortingPosition: {fileID: 0}
+  YOffsit: 0
   SpriteRenderer: {fileID: 2982093296017423432}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
---- !u!114 &5756249697919563410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3639018669116971440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb1807f76db9224ebaf102fd6ab2205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 1
+  AlwaysOnTopOf: {fileID: 0}

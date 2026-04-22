@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6968192842572248948}
   - component: {fileID: 4043359098283233173}
   - component: {fileID: 3627514922708554153}
+  - component: {fileID: 4520624987212279524}
   m_Layer: 0
   m_Name: 5.56x45mm Rounds
   m_TagString: Item
@@ -107,9 +108,10 @@ MonoBehaviour:
   UseLabel: Use
   ItemSprite: {fileID: -1023089797, guid: 03d5222bb69ade14895a07152360c92e, type: 3}
   CustomUIPrefab: {fileID: 0}
-  ItemBehavior: {fileID: 0}
+  ItemBehavior: {fileID: 4520624987212279524}
   ItemRenderer: {fileID: 6968192842572248948}
   AnimationPlayer: {fileID: 0}
+  SpriteSorter: {fileID: 3627514922708554153}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -145,6 +147,20 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 6968192842572248948}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &4520624987212279524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007733987466460511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab03c3962f84dc242bd89418cd98c842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties: {fileID: 0}
 --- !u!1 &5297269230615351720
 GameObject:
   m_ObjectHideFlags: 0

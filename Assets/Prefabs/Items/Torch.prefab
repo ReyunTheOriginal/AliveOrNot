@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4053776469636551038}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.041666668, y: 0, z: 0}
+  m_LocalPosition: {x: 0.20312469, y: 0.203125, z: 0}
   m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Intensity: 3.5
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: ddc07734b7f9b19800000000879649761f2b3ed31b3f0325
+  m_ApplyToSortingLayers: ddc07734b7f9b19800000000879649761b3f03251f2b3ed3
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -108,8 +108,8 @@ Transform:
   m_GameObject: {fileID: 4960916359430315562}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.36117917, w: 0.9324965}
-  m_LocalPosition: {x: 0.0728, y: 0.0378, z: 0}
-  m_LocalScale: {x: 0.7570011, y: 0.65181375, z: 0}
+  m_LocalPosition: {x: 0.099, y: 0.038, z: 0}
+  m_LocalScale: {x: 0.6237689, y: 0.53709453, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 52957846868223440}
@@ -276,7 +276,7 @@ MonoBehaviour:
   Description: a quick and dirty way of getting light at night
   UseLabel: Use
   ItemSprite: {fileID: -1628318377, guid: 06e5a2c77b297ef41bb824f07fc4b3f7, type: 3}
-  CustomUIPrefab: {fileID: 0}
+  CustomUIPrefab: {fileID: 1291422806331276254, guid: 7fc34c88e919350458621f17ab16e14c, type: 3}
   ItemBehavior: {fileID: 3930536217880006354}
   ItemRenderer: {fileID: 6165228168953037813}
   AnimationPlayer: {fileID: 190689304095880394}

@@ -26,7 +26,7 @@ public class BulletGun : ItemBehavior
     public AnimationClip GunShotAnimation;
 [Header("Reloading Settings")]
     public AnimationClip ReloadAnimation;
-    public int BulletID;
+    public ItemProperties BulletProperty;
     public int ChamberSize;
     public AudioClip EmptyChamberClick;
 [Header("Burst Settings")]
@@ -60,27 +60,25 @@ public class BulletGun : ItemBehavior
 
     public override void UnEquipped(){
         GameUtils.ResetCursor();
-        if (AmmoUI.WholeUI)GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", false, true);
         if (ReloadCoroutine != null)ReloadCoroutine.Stop(); 
     }
 
     public override void LateHold(){
-        if (!GameServices.UI.AMenuIsOpened() && !Reloading)
+        if (!UIManager.AMenuIsOpened() && !Reloading)
             //make the primary hand face the mouse for aiming
             GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.PrimaryHandObject.CenterObject.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
 
     }
 
     public override void Hold(){
-        GameServices.UI.SetActiveCanvasGroup(false, AmmoUI.WholeUI, "Ammo", true, true);
-        AmmoUI.Text.text = $"{BulletsInChamber}/{GameServices.Inventory.GetItemAmountWithID(BulletID)}";
+        AmmoUI.Text.text = $"{BulletsInChamber}/{GameServices.Inventory.GetItemAmountWithID(BulletProperty.ID)}";
 
-        if (!GameServices.UI.AMenuIsOpened()){
+        if (!UIManager.AMenuIsOpened()){
             //increase the timer for the cooldown
             Timer += Time.deltaTime;
             BurstTimer += Time.deltaTime;
 
-            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletID) && !Reloading && Input.GetKeyDown(KeyCode.R)){
+            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletProperty.ID) && !Reloading && Input.GetKeyDown(KeyCode.R)){
                 //GameUtils.StartIndependentCoroutine(() => Reload());
                 Reloading = true;
 
@@ -88,7 +86,7 @@ public class BulletGun : ItemBehavior
                 Properties.AnimationPlayer.PlayClip(ReloadAnimation);
             }
 
-            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletID) && !Reloading && BulletsInChamber <= 0){
+            if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletProperty.ID) && !Reloading && BulletsInChamber <= 0){
                 autoReloadTimer += Time.deltaTime;
 
                 if (autoReloadTimer >= 0.25f){
@@ -164,7 +162,7 @@ public class BulletGun : ItemBehavior
 
     public IEnumerator Reload(){
         yield return new WaitForSeconds(ReloadAnimation.length);
-        ItemProperties Bullet = GameServices.Inventory.GetItemWithID(BulletID);
+        ItemProperties Bullet = GameServices.Inventory.GetItemWithID(BulletProperty.ID);
         if (Bullet != null){
             int needed = ChamberSize - BulletsInChamber;
             int available = Bullet.Amount;
@@ -278,8 +276,7 @@ public class BulletGun : ItemBehavior
 
     [System.Serializable]
     public class AmmoDataUI{
-        public CanvasGroup WholeUI;
-        public RectTransform Rect;
+        public GameObject WholeUI;
         public TMP_Text Text;
     }
 }

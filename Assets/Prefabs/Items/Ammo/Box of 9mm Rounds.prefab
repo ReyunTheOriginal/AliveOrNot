@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Box of 9mm Ammo
   ID: 15
-  Amount: 99
+  Amount: 1
   Shadow: {fileID: 8674774255049022395}
   Description: Open to get a bunch of 9mm Ammo
   UseLabel: Open
@@ -111,6 +111,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 8403686633304497302}
   ItemRenderer: {fileID: 5749585039379462234}
   AnimationPlayer: {fileID: 0}
+  SpriteSorter: {fileID: -8485071407935890920}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -161,6 +162,7 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 5749585039379462234}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
 --- !u!1 &8674774255049022395
 GameObject:
   m_ObjectHideFlags: 0

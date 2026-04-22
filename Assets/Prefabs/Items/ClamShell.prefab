@@ -95,9 +95,8 @@ GameObject:
   - component: {fileID: 5043582823200114621}
   - component: {fileID: 143650982897697626}
   - component: {fileID: 8770379663484367474}
-  - component: {fileID: 7953186985586554154}
-  - component: {fileID: 6167715838433254911}
   - component: {fileID: 6523077475127894260}
+  - component: {fileID: -3057050036258937908}
   m_Layer: 0
   m_Name: ClamShell
   m_TagString: Item
@@ -193,9 +192,9 @@ MonoBehaviour:
   UseLabel: Use
   ItemSprite: {fileID: 21300000, guid: da7cf0807d032ca408e62952aa57b952, type: 3}
   CustomUIPrefab: {fileID: 0}
-  ItemBehavior: {fileID: 0}
+  ItemBehavior: {fileID: -3057050036258937908}
   ItemRenderer: {fileID: 143650982897697626}
-  AnimationPlayer: {fileID: 7953186985586554154}
+  AnimationPlayer: {fileID: 0}
   SpriteSorter: {fileID: 6523077475127894260}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
@@ -216,39 +215,6 @@ MonoBehaviour:
   ArmorValue: 0
   AttackSpeed: 0
   KnockBack: 0
---- !u!114 &7953186985586554154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7484215700746330689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5454461b9f8dd384f80839f50e8a965f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!95 &6167715838433254911
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7484215700746330689}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6523077475127894260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,3 +232,16 @@ MonoBehaviour:
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &-3057050036258937908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484215700746330689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab03c3962f84dc242bd89418cd98c842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties: {fileID: 0}

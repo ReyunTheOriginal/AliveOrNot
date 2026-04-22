@@ -168,8 +168,8 @@ public class EquiptmentScript : MonoBehaviour
         ESlot.HotBarUI.Icon.sprite = ESlot.DefaultIcon;
 
         //hide the Durability UI
-        GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
-        GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
+        UIManager.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
+        UIManager.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
 
         Properties.enabled = true;
         if (ESlot.ItemProperties.ItemRenderer)ESlot.ItemProperties.ItemRenderer.sortingLayerName = "Item";
@@ -230,12 +230,12 @@ public class EquiptmentScript : MonoBehaviour
             //Handle Durability UI
             if (ESlot.ItemProperties.HasDurability){
                 //Show Durability UI
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", true);
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", true);
+                UIManager.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", true);
+                UIManager.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", true);
             }else{
                 //Hide Durability UI
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
-                GameServices.UI.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
+                UIManager.SetActiveCanvasGroup(false, ESlot.InvUI.DurabilityUI, "", false);
+                UIManager.SetActiveCanvasGroup(false, ESlot.HotBarUI.DurabilityUI, "", false);
             }
 
             Properties.transform.localRotation = Quaternion.Euler(0,0,0);

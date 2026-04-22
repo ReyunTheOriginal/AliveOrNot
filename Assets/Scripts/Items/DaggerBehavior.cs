@@ -33,13 +33,13 @@ public class DaggerBehavior : ItemBehavior
     }
 
     public override void LateHold(){
-        if (!GameServices.UI.AMenuIsOpened())
+        if (!UIManager.AMenuIsOpened())
             if (!Hitting)
                 GameUtils.MakeObjectLookAt(GameServices.GlobalVariables.OffHandObject.CenterObject.transform, GameServices.GlobalVariables.Camera.ScreenToWorldPoint(Input.mousePosition), 0);
     }
 
     public override void Hold(){
-        if (!GameServices.UI.AMenuIsOpened()){
+        if (!UIManager.AMenuIsOpened()){
             Timer += Time.deltaTime;
 
             if (Timer >= WeaponProperties.Cooldown && Input.GetMouseButtonDown(1)){

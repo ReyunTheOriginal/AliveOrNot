@@ -335,7 +335,7 @@ MonoBehaviour:
   PitchChangeRange: 0.15
   GunShotAnimation: {fileID: 7400000, guid: cd2f3094647ea9a45b556fcb85abd04f, type: 2}
   ReloadAnimation: {fileID: 7400000, guid: 3e04c13f660f754428b56c9c8077b0c8, type: 2}
-  BulletID: 13
+  BulletProperty: {fileID: 1720499158532367034, guid: 117cb89ed134e0d458b5b528a49f6a08, type: 3}
   ChamberSize: 30
   EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   BurstCoolDown: 0.1

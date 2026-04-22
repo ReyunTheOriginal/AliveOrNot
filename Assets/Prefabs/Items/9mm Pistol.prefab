@@ -230,6 +230,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 946463028155045486}
   ItemRenderer: {fileID: 3402432031525072063}
   AnimationPlayer: {fileID: 1069673678754709898}
+  SpriteSorter: {fileID: 5295473996116972374}
   LocalPosition: {x: 0.5, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 0
@@ -267,6 +268,7 @@ MonoBehaviour:
   WeaponType: 3
   Cooldown: 0.3
   KnockBack: 15
+  Recoil: 0
   StunLength: 0
   MaxHits: 1
   Properties: {fileID: 5145709596745320950}
@@ -333,7 +335,7 @@ MonoBehaviour:
   PitchChangeRange: 0.05
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
   ReloadAnimation: {fileID: 7400000, guid: ef3656e7fba9c9a43b42077854dfa178, type: 2}
-  BulletID: 13
+  BulletProperty: {fileID: 1720499158532367034, guid: 117cb89ed134e0d458b5b528a49f6a08, type: 3}
   ChamberSize: 16
   EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   BurstCoolDown: 0
@@ -344,6 +346,7 @@ MonoBehaviour:
   DebugMode: 1
   Timer: 0
   BurstTimer: 0
+  autoReloadTimer: 0
 --- !u!114 &1069673678754709898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,3 +396,4 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 3402432031525072063}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}

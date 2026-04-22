@@ -276,7 +276,7 @@ MonoBehaviour:
   Description: a handy tool for night time sticky situations
   UseLabel: Use
   ItemSprite: {fileID: 21300000, guid: 29b4716474046ac478a1e4dc15c467ea, type: 3}
-  CustomUIPrefab: {fileID: 0}
+  CustomUIPrefab: {fileID: 1291422806331276254, guid: 7fc34c88e919350458621f17ab16e14c, type: 3}
   ItemBehavior: {fileID: 5584092616661054476}
   ItemRenderer: {fileID: 61753912669475877}
   AnimationPlayer: {fileID: -6237222009132045725}

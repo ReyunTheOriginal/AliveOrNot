@@ -32,7 +32,7 @@ public class CameraScript : MonoBehaviour
             Camera.orthographicSize = 0.5f;
         }
 
-        if (!GameServices.UI.AMenuIsOpened()){
+        if (!UIManager.AMenuIsOpened()){
             float scroll = Input.GetAxis("Mouse ScrollWheel");
 
             if (scroll < 0f)

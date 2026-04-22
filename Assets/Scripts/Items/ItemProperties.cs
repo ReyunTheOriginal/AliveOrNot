@@ -58,7 +58,7 @@ public class ItemProperties : MonoBehaviour
      public EquipSlot equipSlot;
 
      [HideInInspector]public int ItemInstanceID;
-     [HideInInspector]public CanvasGroup CustomUICanvasGroup;
+     [HideInInspector]public GameObject CustomUICanvasGroup;
      [HideInInspector] public float Damage = 0;
      [HideInInspector] public float ArmorValue = 0;
      [HideInInspector] public float AttackSpeed = 0;
@@ -67,11 +67,11 @@ public class ItemProperties : MonoBehaviour
      private void OnValidate() {
           if (!AnimationPlayer)AnimationPlayer = GetComponent<AnimationPlayer>();
           if (!ItemRenderer)ItemRenderer = GetComponent<SpriteRenderer>();
-          if (!ItemBehavior)ItemBehavior = GetComponent<ItemBehavior>();
           if (!SpriteSorter)SpriteSorter = GetComponent<SpriteSorter>();
      }
 
      private void Awake() {
+          if (!ItemBehavior)ItemBehavior = gameObject.AddComponent<ItemBehavior>();
           if (ItemBehavior)ItemBehavior.Properties = this;
 
           ItemInstanceID = ItemInstanceIDIncr;
@@ -87,7 +87,7 @@ public class ItemProperties : MonoBehaviour
      }
 
      private void OnDestroy() {
-          if (GameServices.GlobalVariables.AllItems.Contains(this))
+          if (GameServices.GlobalVariables && GameServices.GlobalVariables.AllItems.Contains(this))
                GameServices.GlobalVariables.AllItems.Remove(this);
      }
 
@@ -96,7 +96,7 @@ public class ItemProperties : MonoBehaviour
                if (Shadow.activeSelf) Shadow.SetActive(false);
 
           if(CustomUIPrefab)
-               CustomUICanvasGroup = Instantiate(CustomUIPrefab, GameServices.GlobalVariables.CustomItemUICanvasGroup.transform).GetComponent<CanvasGroup>();
+               CustomUICanvasGroup = Instantiate(CustomUIPrefab, GameServices.GlobalVariables.CustomItemUICanvasGroup.transform);
           
           if (equipSlot == EquipSlot.PrimaryHand){
                if (!gameObject.activeSelf)gameObject.SetActive(true);
@@ -207,17 +207,6 @@ public class ItemProperties : MonoBehaviour
                     GameServices.GlobalVariables.PrimaryHandObject.LeftHandSorter.AlwaysOnTopOf = null;
                }
                ///////
-
-               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand)){
-                   GameServices.Equipment.GetItemInSlot(EquipSlot.OffHand)?.UnSetUpItem();
-                   GameServices.Equipment.GetItemInSlot(EquipSlot.OffHand)?.gameObject.SetActive(false);
-               }
-
-               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand)){
-                    GameServices.Equipment.GetItemInSlot(EquipSlot.PrimaryHand)?.UnSetUpItem();
-                     GameServices.Equipment.GetItemInSlot(EquipSlot.PrimaryHand)?.gameObject.SetActive(false);
-               }
-
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].DefaultColor = Color.black;
                
                GameServices.Equipment.Equipment.Slots[EquipSlot.PrimaryHand].HotBarUI.Outline.color = Color.black;
@@ -239,7 +228,7 @@ public class ItemProperties : MonoBehaviour
                if (!Shadow.activeSelf) Shadow.SetActive(true);
 
           if (CustomUICanvasGroup)
-            Destroy(CustomUICanvasGroup.gameObject);
+               Destroy(CustomUICanvasGroup.gameObject);
 
           if (equipSlot == EquipSlot.PrimaryHand){
                transform.parent = null;
@@ -295,12 +284,6 @@ public class ItemProperties : MonoBehaviour
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].HotBarUI.Outline.color = Color.white;
                GameServices.Equipment.Equipment.Slots[EquipSlot.OffHand].InvUI.Outline.color = Color.white;
 
-               if(GameServices.Equipment.HasAnItemInSlot(EquipSlot.PrimaryHand))
-                    GameServices.Equipment.GetItemInSlot(EquipSlot.PrimaryHand)?.SetUpItem();
-
-               if (GameServices.Equipment.HasAnItemInSlot(EquipSlot.OffHand))
-                    GameServices.Equipment.GetItemInSlot(EquipSlot.OffHand)?.SetUpItem();
-
                GameServices.GlobalVariables.PrimaryHandObject.RightHandSorter.AlwaysOnTopOf = null;
                GameServices.GlobalVariables.PrimaryHandObject.LeftHandSorter.AlwaysOnTopOf = null;
           }
@@ -316,7 +299,5 @@ public class ItemProperties : MonoBehaviour
           OffHand,
           BothHands
      }
-
-
      
 }

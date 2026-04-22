@@ -115,6 +115,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 4841240488167989892}
   ItemRenderer: {fileID: 7011517330005295484}
   AnimationPlayer: {fileID: -7622822707297766374}
+  SpriteSorter: {fileID: 8016014856248631744}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 1
@@ -152,6 +153,7 @@ MonoBehaviour:
   WeaponType: 0
   Cooldown: 0.3
   KnockBack: 5
+  Recoil: 0
   StunLength: 0
   MaxHits: 1
   Properties: {fileID: 5180272834801611583}
@@ -227,6 +229,7 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 7011517330005295484}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
 --- !u!1 &3064006853657464264
 GameObject:
   m_ObjectHideFlags: 0
@@ -5083,8 +5086,8 @@ Transform:
   m_GameObject: {fileID: 6786211007230453076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: 0.125, y: 0.125, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalPosition: {x: 0.152, y: 0.085, z: 0}
+  m_LocalScale: {x: 0.7214, y: 0.7214, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8735329611669649398}

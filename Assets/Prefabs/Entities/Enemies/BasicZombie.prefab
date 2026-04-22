@@ -97,10 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offsit: 0
+  YOffsit: 0
   SpriteRenderer: {fileID: 9080222270858068061}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
 --- !u!1 &8946135273592330025
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +114,6 @@ GameObject:
   - component: {fileID: 4440526391049521916}
   - component: {fileID: 3316901115261333066}
   - component: {fileID: 830443202794021237}
-  - component: {fileID: -6640778349695167188}
   - component: {fileID: 59188811905971032}
   - component: {fileID: 6393800952233574166}
   - component: {fileID: 4048229837323071607}
@@ -227,19 +227,6 @@ MonoBehaviour:
   Properties: {fileID: 0}
   WeaponKilledBy: {fileID: 0}
   GibsLifeTime: 10
---- !u!114 &-6640778349695167188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8946135273592330025}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb1807f76db9224ebaf102fd6ab2205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 3
 --- !u!70 &59188811905971032
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ public class HealthSystem : MonoBehaviour{
     }
 
     public void RegenerateHealth(){
-        Health += Time.deltaTime * RegenerationSpeed;
+        Health = Mathf.Clamp(Health + Time.deltaTime * RegenerationSpeed, 0 ,MaxHealth);
     }
 
     public void TakeDamage(float Damage, Vector2 KnockBack, float StunLength){
@@ -70,17 +70,14 @@ public class HealthSystem : MonoBehaviour{
             }
 
             //Reduce the Durability of all armor worn at the time of the hit
-            /*if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item != null)
-                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties)
-                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].Item.ItemProperties.Durability--;
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].ItemProperties)
+                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Head].ItemProperties.Durability--;
 
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item != null)
-                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties)
-                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].Item.ItemProperties.Durability--;
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].ItemProperties)
+                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Torso].ItemProperties.Durability--;
 
-            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item != null)
-                if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties)
-                    GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].Item.ItemProperties.Durability--;*/
+            if (GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].ItemProperties)
+                GameServices.GlobalVariables.Player.Equiptment.Equipment.Slots[ItemProperties.EquipSlot.Feet].ItemProperties.Durability--;
         }
     }
     

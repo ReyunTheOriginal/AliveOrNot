@@ -186,7 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Box of 5.56x45mm Ammo
   ID: 14
-  Amount: 99
+  Amount: 1
   Shadow: {fileID: 1433121940073146893}
   Description: Open to get a bunch of 5.56x45mm Ammo
   UseLabel: Open
@@ -195,6 +195,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 3287888939006153154}
   ItemRenderer: {fileID: 6868566832731451208}
   AnimationPlayer: {fileID: 0}
+  SpriteSorter: {fileID: -1744234887509072553}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -245,3 +246,4 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 6868566832731451208}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}

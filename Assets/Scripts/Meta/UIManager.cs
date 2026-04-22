@@ -1,17 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public static class UIManager
 {
-    public Canvas OverlayCanvas;
-    public Canvas WorldCanvas;
-    public Dictionary<string, CanvasGroup> OpenedMenus = new Dictionary<string, CanvasGroup>();
+    public static Canvas OverlayCanvas;
+    public static Canvas WorldCanvas;
+    public static Dictionary<string, CanvasGroup> OpenedMenus = new Dictionary<string, CanvasGroup>();
 
-    private void Awake() {
-        GameServices.UI = this;
-    }
-
-    public void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true, bool Ghost = false){
+    public static void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true, bool Ghost = false){
         if (Group){
             Group.alpha = state? 1: 0;
             if(!Ghost)Group.interactable = state;
@@ -31,7 +27,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void CloseAllMenus(){
+    public static void CloseAllMenus(){
         foreach (var menu in OpenedMenus.Values){
             SetActiveCanvasGroup(true, menu, "", false);
         }
@@ -39,18 +35,18 @@ public class UIManager : MonoBehaviour
         OpenedMenus.Clear();
     }
 
-    public void ToggleCanvasGroup(bool IsAMenu, CanvasGroup group, string name){
+    public static void ToggleCanvasGroup(bool IsAMenu, CanvasGroup group, string name){
         bool state = !IsActiveCanvasGroup(group);
         SetActiveCanvasGroup(IsAMenu, group, name, state);
     }
 
-    public bool IsActiveCanvasGroup(CanvasGroup Group, bool Ghost = false){
+    public static bool IsActiveCanvasGroup(CanvasGroup Group, bool Ghost = false){
         if (Ghost) return Group.alpha == 1;
 
         return Group.alpha == 1 && Group.blocksRaycasts && Group.interactable;
     }
 
-    public bool AMenuIsOpened(){
+    public static bool AMenuIsOpened(){
         return OpenedMenus.Count > 0;
     }
 }

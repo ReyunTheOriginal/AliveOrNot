@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Box of Shotgun Shells
   ID: 16
-  Amount: 99
+  Amount: 1
   Shadow: {fileID: 8745716543355947429}
   Description: Open to get a bunch of Shotgun Shells
   UseLabel: Open
@@ -111,6 +111,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 5682975815021178692}
   ItemRenderer: {fileID: 7806121592106418474}
   AnimationPlayer: {fileID: 0}
+  SpriteSorter: {fileID: 5607346047638258382}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -161,6 +162,7 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 7806121592106418474}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
 --- !u!1 &8745716543355947429
 GameObject:
   m_ObjectHideFlags: 0

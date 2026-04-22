@@ -2,13 +2,22 @@ using UnityEngine;
 
 public class ItemBehavior : MonoBehaviour
 {
+    public string InstanceID => "idk";
+    public int TypeID => Properties.ID;
+    public string ObjectType => "Item";
     [HideInInspector] public ItemProperties Properties; 
+
+    public string Save(){
+        return "";
+    }
+    public void Load(string Json){
+
+    }
+
     //Runs one time when used with the "Use" button in the inventory
     public virtual void Use(){
 
     }
-    
-
     //runs one time when the item is Equipped
     public virtual void Equipped(){
 
@@ -17,8 +26,6 @@ public class ItemBehavior : MonoBehaviour
     public virtual void UnEquipped(){
 
     }
-
-
     //happens every frame when Equipped
     public virtual void Hold(){
 

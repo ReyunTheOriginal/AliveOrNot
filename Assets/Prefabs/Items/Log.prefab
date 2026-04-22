@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -2919140876171719125}
   - component: {fileID: -8821015243754979414}
   - component: {fileID: -4641397832272050476}
+  - component: {fileID: -7251259723928399312}
   m_Layer: 0
   m_Name: Log
   m_TagString: Item
@@ -193,9 +194,10 @@ MonoBehaviour:
   UseLabel: Use
   ItemSprite: {fileID: 21300000, guid: 21ed5d614c405ea418e844c30a96aeae, type: 3}
   CustomUIPrefab: {fileID: 0}
-  ItemBehavior: {fileID: 0}
+  ItemBehavior: {fileID: -7251259723928399312}
   ItemRenderer: {fileID: 5576323272689285079}
   AnimationPlayer: {fileID: -2919140876171719125}
+  SpriteSorter: {fileID: -4641397832272050476}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -264,3 +266,17 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 5576323272689285079}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &-7251259723928399312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2849798943248196329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab03c3962f84dc242bd89418cd98c842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties: {fileID: 0}

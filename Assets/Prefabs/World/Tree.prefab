@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7337406012882065471}
   - component: {fileID: 2169799478563782814}
   - component: {fileID: 5308505750711211952}
-  - component: {fileID: 8671173837407156017}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -99,10 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortingPosition: {fileID: 0}
+  YOffsit: 0
   SpriteRenderer: {fileID: 7337406012882065471}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
 --- !u!60 &5308505750711211952
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -162,16 +162,3 @@ PolygonCollider2D:
       - {x: 0.24398518, y: -0.26802912}
       - {x: 0.21815395, y: -0.1442107}
   m_UseDelaunayMesh: 0
---- !u!114 &8671173837407156017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8794325339577908604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb1807f76db9224ebaf102fd6ab2205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 0
