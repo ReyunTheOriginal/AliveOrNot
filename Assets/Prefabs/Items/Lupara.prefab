@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: -3602373164368249548}
   - component: {fileID: -800585360880444589}
   - component: {fileID: 2035420288255340023}
+  - component: {fileID: 5855573101074193909}
   m_Layer: 0
   m_Name: Lupara
   m_TagString: Item
@@ -231,6 +232,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 6659041193508121473}
   AnimationPlayer: {fileID: -3602373164368249548}
   SpriteSorter: {fileID: 2035420288255340023}
+  ChunkListValidator: {fileID: 5855573101074193909}
   LocalPosition: {x: 0.5, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 1
@@ -263,13 +265,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 80
-  RandomDamageOffsit: 0
+  RandomDamageOffsit: 15
   CanGib: 1
   WeaponType: 3
   Cooldown: 0.1
   KnockBack: 25
-  Recoil: 0
-  StunLength: 0
+  Recoil: 15
+  StunLength: 1.6
   MaxHits: 4
   Properties: {fileID: 7399423943410637772}
 --- !u!114 &8660202736199624358
@@ -333,7 +335,6 @@ MonoBehaviour:
   BarrelEndLocation: {fileID: 6857734585597588267}
   AmmoUI:
     WholeUI: {fileID: 0}
-    Rect: {fileID: 0}
     Text: {fileID: 0}
   Range: 15
   amountOfRays: 16
@@ -406,3 +407,17 @@ MonoBehaviour:
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &5855573101074193909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682245839499569793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

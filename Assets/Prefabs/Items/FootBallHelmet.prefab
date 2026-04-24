@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -427891367676416130}
   - component: {fileID: -8023265473805019623}
   - component: {fileID: 5442433982216698939}
+  - component: {fileID: 6102741276274009637}
   m_Layer: 0
   m_Name: FootBallHelmet
   m_TagString: Item
@@ -113,6 +114,7 @@ MonoBehaviour:
   ItemBehavior: {fileID: 3601289686136523276}
   ItemRenderer: {fileID: 2936904200859156947}
   AnimationPlayer: {fileID: -427891367676416130}
+  SpriteSorter: {fileID: 5442433982216698939}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -195,6 +197,21 @@ MonoBehaviour:
   SpriteRenderer: {fileID: 2936904200859156947}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &6102741276274009637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2918967597021370492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
 --- !u!1 &7166254322277296513
 GameObject:
   m_ObjectHideFlags: 0

@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 190689304095880394}
   - component: {fileID: 4561305080853161704}
   - component: {fileID: 5284083774916514934}
+  - component: {fileID: -1014975651018377484}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Item
@@ -364,3 +365,17 @@ MonoBehaviour:
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &-1014975651018377484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247121109943182819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

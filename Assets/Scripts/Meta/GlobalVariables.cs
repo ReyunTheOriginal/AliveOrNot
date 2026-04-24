@@ -13,6 +13,7 @@ public class GlobalVariables : MonoBehaviour
     public HashSet<EnemyProperties> AllEnemies = new HashSet<EnemyProperties>();
     public HashSet<ItemProperties> AllItems = new HashSet<ItemProperties>();
     public CanvasGroup CustomItemUICanvasGroup;
+    public List<ChunkRendering> ChunkRenderers;
 
     private void Awake() {
         GameServices.GlobalVariables = this;
@@ -37,8 +38,11 @@ public class GlobalVariables : MonoBehaviour
         public GameObject CenterObject;
         public GameObject RightHand;
         public SpriteSorter RightHandSorter;
+        public SpriteSorter RightHandPropSorter;
+        /////////////////
         public GameObject LeftHand;
         public SpriteSorter LeftHandSorter;
+        public SpriteSorter LeftHandPropSorter;
     }
 
     [System.Serializable]

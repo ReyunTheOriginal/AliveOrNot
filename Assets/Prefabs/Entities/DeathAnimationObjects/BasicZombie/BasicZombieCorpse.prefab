@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6219586502383502549}
   - component: {fileID: 42421497105628189}
   - component: {fileID: -4175880040224535950}
+  - component: {fileID: -925244828852113228}
   m_Layer: 0
   m_Name: BasicZombieCorpse
   m_TagString: Untagged
@@ -119,7 +120,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offsit: 0
+  YOffsit: 0
   SpriteRenderer: {fileID: 6219586502383502549}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &-925244828852113228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437462350042973929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

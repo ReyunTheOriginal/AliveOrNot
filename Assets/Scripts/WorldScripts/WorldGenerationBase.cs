@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,30 +25,37 @@ public class WorldGenerationBase : MonoBehaviour
     public float ResolutionMultiplier;
 
     void Awake(){
+        DontDestroyOnLoad(gameObject);
+
+        if (GameServices.WorldGenerationBase)
+            Destroy(GameServices.WorldGenerationBase.gameObject);
+            
         GameServices.WorldGenerationBase = this;
         //calculate the Resolution
         ResolutionMultiplier = (float)ChunkSize / (float)ChunkResolution;
         Grid.cellSize = new Vector3(ResolutionMultiplier, ResolutionMultiplier, 0);
-
-        foreach(Transform child in Grid.transform)
-            Destroy(child.gameObject);
-            
     }
-    
-    //Get what Chunk any position is in
-    public Vector2Int GetChunkPos(Vector2 pos){
-        int chunkX = Mathf.FloorToInt(pos.x / (ChunkSize * ResolutionMultiplier));
-        int chunkY = Mathf.FloorToInt(pos.y / (ChunkSize * ResolutionMultiplier));
 
-        return new Vector2Int(chunkX, chunkY);
+    private void Start() {
+        foreach(Transform child in Grid.transform){
+            Chunk OldChunk = child.gameObject.GetComponent<Chunk>();
+            if (!OldChunk)continue;
+            
+            OldChunk.ChunkPos = GameUtils.GetChunkPos(child.position);
+            OldChunk.Parent = this;
+
+            ChunkDict.Add(OldChunk.ChunkPos, OldChunk);
+        }
     }
 
     //Generate Chunks
     public IEnumerator GenerateChunk(Vector2Int ChunkPos){
         //check if the chunk already exists
         if (ChunkDict.ContainsKey(ChunkPos) == false){
-            Chunk NewChunk = new Chunk(); //new Chunk
             ChunkDict.Add(ChunkPos, null); //cache it's position
+
+            GameObject NewWorldObject = new GameObject(); //create it
+            Chunk NewChunk = NewWorldObject.AddComponent<Chunk>();
 
             // snapshot everything the thread will need — no Unity objects
             List<Biome> biomesSnapshot = new List<Biome>(Biomes);
@@ -103,7 +109,6 @@ public class WorldGenerationBase : MonoBehaviour
             // --- BACK ON MAIN THREAD ---
 
             //Configure Chunk Object
-            GameObject NewWorldObject = new GameObject(); //create it
             NewWorldObject.name = $"Chunk[{ChunkPos.x}, {ChunkPos.y}]"; //name it: "Chunk[0, 0]"
             NewWorldObject.transform.parent = Grid.transform; //set its parent to the Grid
             NewWorldObject.transform.position = (Vector2)ChunkPos * ChunkSize * ResolutionMultiplier; // set its position
@@ -113,7 +118,6 @@ public class WorldGenerationBase : MonoBehaviour
             Ren.material = GameServices.GlobalVariables.SpriteLitDefault; // game it work with lighting
 
             //apply Configured stuff to the Chunk
-            NewChunk.WorldObject = NewWorldObject;
             NewChunk.ChunkPos = ChunkPos;
             NewChunk.TileMap = TileMap;
             NewChunk.TilemapRenderer = Ren;
@@ -157,7 +161,7 @@ public class WorldGenerationBase : MonoBehaviour
     }
 
     public void HandleWaterTiles(Chunk chunk, ValueCache Cache){
-        TilemapCollider2D Col = chunk.WorldObject.AddComponent<TilemapCollider2D>();
+        TilemapCollider2D Col = chunk.gameObject.AddComponent<TilemapCollider2D>();
         //Rigidbody2D rig = chunk.WorldObject.AddComponent<Rigidbody2D>();
         //CompositeCollider2D Com = chunk.WorldObject.AddComponent<CompositeCollider2D>();
 
@@ -166,7 +170,7 @@ public class WorldGenerationBase : MonoBehaviour
         Col.isTrigger = true;
         Col.excludeLayers = GameUtils.LayerMaskFromNumbers(2);
 
-        chunk.WorldObject.AddComponent<WaterTiles>();
+        chunk.gameObject.AddComponent<WaterTiles>();
 
         for (int i=0;i<Cache.Positions.Length;i++){
             if (Cache.Biomes[i].Block == WaterTileAsset){
@@ -179,52 +183,6 @@ public class WorldGenerationBase : MonoBehaviour
         }
     }
 
-    [System.Serializable]
-    public class Chunk{
-        public GameObject WorldObject;
-        public Tilemap TileMap;
-        public TilemapRenderer TilemapRenderer;
-        public bool Modified = false;
-        public Vector2Int ChunkPos;
-        public WorldGenerationBase Parent;
-
-        
-        public bool AlwaysActive = false;
-        public bool NeverActive = false;
-
-        public HashSet<GameObject> ObjectsInChunk = new HashSet<GameObject>();
-        public HashSet<WaterTile> WaterTiles = new HashSet<WaterTile>();
-
-        public void Activate(){
-            if (!NeverActive){
-                if (!WorldObject.activeSelf)WorldObject.SetActive(true);
-                foreach (GameObject obj in ObjectsInChunk){
-                    if (!obj.activeSelf)obj.SetActive(true);
-                }
-            }
-        }
-        public void Deactivate(){
-            if (!AlwaysActive){
-                foreach (GameObject obj in ObjectsInChunk){
-                    if (obj.activeSelf)obj.SetActive(false);
-                }
-                if (WorldObject.activeSelf)WorldObject.SetActive(false);
-            }
-        }
-        public void Delete(bool force = false){
-            if (!Modified || force){
-                foreach (GameObject obj in ObjectsInChunk){
-                    if (obj)Destroy(obj);
-                }
-                ObjectsInChunk.Clear();
-
-                if (Parent.ChunkDict.ContainsKey(ChunkPos))
-                    Parent.ChunkDict.Remove(ChunkPos);
-
-                Destroy(WorldObject);
-            }
-        }
-    }
     public class WaterTile{
         public Vector2Int Position;
         public int Depth;

@@ -97,7 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortingPosition: {fileID: 0}
+  YOffsit: 0
   SpriteRenderer: {fileID: 1045579545978567036}
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}

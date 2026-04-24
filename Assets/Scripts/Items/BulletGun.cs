@@ -89,7 +89,7 @@ public class BulletGun : ItemBehavior
             if (ReloadAnimation && BulletsInChamber < ChamberSize && GameServices.Inventory.AlreadyHasItemWithID(BulletProperty.ID) && !Reloading && BulletsInChamber <= 0){
                 autoReloadTimer += Time.deltaTime;
 
-                if (autoReloadTimer >= 0.25f){
+                if (autoReloadTimer >= 0.4f){
                     autoReloadTimer = 0;
 
                     //GameUtils.StartIndependentCoroutine(() => Reload());

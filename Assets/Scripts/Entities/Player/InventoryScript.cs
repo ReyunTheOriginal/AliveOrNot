@@ -11,6 +11,7 @@ public class InventoryScript : ItemContainer
     public ItemEntry SelectedItem; //the Currently Selected ItemEntry, Selected by clicking on its inventory slot
     public CanvasGroup FullInventoryUI; //the Whole Items Menu
     public List<CanvasGroup> UnderInventoryUI; //the UI that the Items should close before Opening
+    public List<CanvasGroup> OverInventoryUI;//UI that the inventory should not open if they are open
     public ItemInfoUI itemInfoUI; //the Window that Shows the ItemEntry Information such as Name, Description, and uses
     public GameObject SlotPrefab; //a prefab of the Slot an ItemEntry is Displayed in, in the inventory
     public Transform ContentTransform; //the parent the Slots Should be Children Of
@@ -93,22 +94,35 @@ public class InventoryScript : ItemContainer
         PickUpAnimationCoroutine = null;
     }
 
-    void Update()
-    {   
+    void Update(){   
        CheckForClosestItem();
 
         //toggle InventoryUI
         if (Input.GetKeyDown(KeyCode.Tab)){
-            UnSelectItem();
-            UIManager.ToggleCanvasGroup(true, FullInventoryUI, "Items");
-            foreach (CanvasGroup Group in UnderInventoryUI){
-                UIManager.ToggleCanvasGroup(false, Group, "");
+            bool OverUIOpened = false;
+
+            foreach(CanvasGroup UI in OverInventoryUI){
+                if (UIManager.IsActiveCanvasGroup(UI)){
+                    OverUIOpened = true;
+                    break;
+                }
             }
-            UIManager.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
-            UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
-            foreach(var Slot in GameServices.Equipment.Equipment.Slots){
-                Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
+
+            if (!OverUIOpened){
+                UnSelectItem();
+                UIManager.ToggleCanvasGroup(true, FullInventoryUI, "Items");
+
+                foreach (CanvasGroup Group in UnderInventoryUI)
+                    UIManager.ToggleCanvasGroup(false, Group, "");
+
+                UIManager.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
+                UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);
+
+                foreach(var Slot in GameServices.Equipment.Equipment.Slots){
+                    Slot.Value.InvUI.Outline.color = Slot.Value.DefaultColor;
+                }
             }
+
         }
 
         if (PickUpAnimationCoroutine != null && GameServices.GlobalVariables.Player.rig.velocity.magnitude > 4.2f){
@@ -300,6 +314,8 @@ public class InventoryScript : ItemContainer
                 NewItemDropped.SetActive(true);
 
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
+
+                properties.ChunkListValidator.Enable();
                 
                 properties.Amount = Amount;
                 ItemEntry.ItemProperties.Amount -= Amount;
@@ -313,6 +329,7 @@ public class InventoryScript : ItemContainer
                 NewItemDropped.SetActive(true);
 
                 ItemProperties properties = NewItemDropped.GetComponent<ItemProperties>();
+                properties.ChunkListValidator.Enable();
                 properties.Amount = ItemEntry.ItemProperties.Amount;
 
                 RemoveItem(ItemEntry.ItemProperties);

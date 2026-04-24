@@ -18,39 +18,34 @@ public class DayNightCycle : MonoBehaviour
 [Header("Debug")]
     public float LightIntinsity;
     public float CurrentPercentageOfDay;
-    public float DayTimer = 0;
+    public float GlobalTimer = 0;
     public bool IsDayTime = true;
     public int CurrentDay = 0;
 
     private void Update(){
-        IsDayTime = GameServices.IsDayTime;
-        CurrentDay = GameServices.CurrentDay;
-
-        DayTimer += Time.deltaTime;
-        float t = DayTimer / DayLengthInSeconds; // 0 to 1 across full day
-
+        GameServices.GlobalTimer += Time.deltaTime;
+        GlobalTimer = GameServices.GlobalTimer;
+    
+        float t = (GameServices.GlobalTimer % DayLengthInSeconds) / DayLengthInSeconds; // 0 to 1 within current day
+        
+        GameServices.CurrentDay = (int)(GameServices.GlobalTimer / DayLengthInSeconds);
         GameServices.IsDayTime = t <= DayAndNightLength;
+        
+        CurrentDay = GameServices.CurrentDay;
+        IsDayTime = GameServices.IsDayTime;
         CurrentPercentageOfDay = t * 100f;
 
-        if (DayTimer >= DayLengthInSeconds){
-            DayTimer = 0;
-            GameServices.CurrentDay++;
-        }
-
-        // transition duration as fraction of day
-        float transitionSize = 0.05f; // 5% of day length for dusk/dawn
-
-        float dusk  = DayAndNightLength - transitionSize;
-        float dawn  = 1f - transitionSize;
+        float dusk = DayAndNightLength - transitionSize;
+        float dawn = 1f - transitionSize;
 
         if (t < dusk)
-            LightIntinsity = 1f; // full day
+            LightIntinsity = 1f;
         else if (t < DayAndNightLength)
-            LightIntinsity = Mathf.Lerp(1f, 0f, (t - dusk) / transitionSize); // dusk
+            LightIntinsity = Mathf.Lerp(1f, 0f, (t - dusk) / transitionSize);
         else if (t < dawn)
-            LightIntinsity = 0f; // full night
+            LightIntinsity = 0f;
         else
-            LightIntinsity = Mathf.Lerp(0f, 1f, (t - dawn) / transitionSize); // dawn
+            LightIntinsity = Mathf.Lerp(0f, 1f, (t - dawn) / transitionSize);
 
         GlobalLight.intensity = LightIntinsity;
     }

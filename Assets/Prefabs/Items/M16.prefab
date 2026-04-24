@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: -5793730290437268200}
   - component: {fileID: 9126831116791158303}
   - component: {fileID: -901517260241985356}
+  - component: {fileID: 9142591149470018777}
   m_Layer: 0
   m_Name: M16
   m_TagString: Item
@@ -200,6 +201,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 7653093282317680551}
   AnimationPlayer: {fileID: -5793730290437268200}
   SpriteSorter: {fileID: -901517260241985356}
+  ChunkListValidator: {fileID: 9142591149470018777}
   LocalPosition: {x: 0.5, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 1
@@ -237,8 +239,8 @@ MonoBehaviour:
   WeaponType: 3
   Cooldown: 0.8
   KnockBack: 15
-  Recoil: 0
-  StunLength: 0
+  Recoil: 0.2
+  StunLength: 0.2
   MaxHits: 2
   Properties: {fileID: 3862617522731429240}
 --- !u!114 &4761300887807394316
@@ -293,7 +295,6 @@ MonoBehaviour:
   BarrelEndLocation: {fileID: 5982850523211467254}
   AmmoUI:
     WholeUI: {fileID: 0}
-    Rect: {fileID: 0}
     Text: {fileID: 0}
   Range: 25
   amountOfRays: 1
@@ -366,6 +367,20 @@ MonoBehaviour:
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &9142591149470018777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965063697606708813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
 --- !u!1 &7871387496280634982
 GameObject:
   m_ObjectHideFlags: 0

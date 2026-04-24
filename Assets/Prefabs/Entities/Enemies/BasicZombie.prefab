@@ -117,6 +117,8 @@ GameObject:
   - component: {fileID: 59188811905971032}
   - component: {fileID: 6393800952233574166}
   - component: {fileID: 4048229837323071607}
+  - component: {fileID: 6877959635868666701}
+  - component: {fileID: 8237876886844741401}
   m_Layer: 8
   m_Name: BasicZombie
   m_TagString: Enemy
@@ -322,3 +324,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6877959635868666701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946135273592330025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2285fc0524bbcb14492d24e5c1617254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IDDraft: 66af3e0b-adcc-4425-a491-4a0a7b9eb02f
+  TypeIDDraft: -524127143
+  Properties: {fileID: 6393800952233574166}
+--- !u!114 &8237876886844741401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946135273592330025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

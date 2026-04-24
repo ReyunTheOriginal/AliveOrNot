@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 8770379663484367474}
   - component: {fileID: 6523077475127894260}
   - component: {fileID: -3057050036258937908}
+  - component: {fileID: -3456906429639307805}
   m_Layer: 0
   m_Name: ClamShell
   m_TagString: Item
@@ -245,3 +246,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+--- !u!114 &-3456906429639307805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484215700746330689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

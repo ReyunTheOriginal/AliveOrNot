@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 3958159361294680586}
   - component: {fileID: 3633616377313790647}
   - component: {fileID: -8320720940950921011}
+  - component: {fileID: 5135560665785797761}
   m_Layer: 0
   m_Name: Planks
   m_TagString: Item
@@ -280,3 +281,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+--- !u!114 &5135560665785797761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338058358303534183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}

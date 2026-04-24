@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyProperties : MonoBehaviour{
     public float MaxHealth;
-    [SerializeField]private float Health;
+    [SerializeField]private float Health ;
     public float WalkSpeed;
     
     public Dictionary<State, bool> CurrentStates = new Dictionary<State, bool>{
@@ -15,6 +14,7 @@ public class EnemyProperties : MonoBehaviour{
         {State.Attacking, false},
         {State.Spawning, false},
     };
+
     public Direction CurrentDirection;
     public Dictionary<Effects, float> CurrentEffects = new Dictionary<Effects, float>();
     public GameObject BloodBurst;
@@ -54,6 +54,9 @@ public class EnemyProperties : MonoBehaviour{
     private void Awake(){if (behavior)behavior.Properties = this;}
 
     private void Start(){GameServices.GlobalVariables.AllEnemies.Add(this);}
+
+    public float GetHealth(){return Health;}
+    public void SetHealth(float value){Health = value;}
     
     public void HitEnemy(float DamageDealt, Vector2 KnockBack, WeaponPropertiesHolder WeaponUsed){
         if (DamageDealt > 0){

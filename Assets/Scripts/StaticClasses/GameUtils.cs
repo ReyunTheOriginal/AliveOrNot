@@ -22,6 +22,25 @@ public static class GameUtils{
         return dir.normalized;
     }
 
+    public static void MarkChunkModified(Chunk ChunkToMod, bool State = true){
+        ChunkToMod.Modified = State;
+    }
+
+    public static void PartialSetActive(Behaviour component, bool state = true){
+        Behaviour[] allComponents = component.gameObject.GetComponentsInChildren<Behaviour>(true);
+
+        foreach(Behaviour com in allComponents){
+            com.enabled = state;
+        }
+    }
+    
+    public static Vector2Int GetChunkPos(Vector2 pos){
+        int chunkX = Mathf.FloorToInt(pos.x / (GameServices.WorldGenerationBase.ChunkSize * GameServices.WorldGenerationBase.ResolutionMultiplier));
+        int chunkY = Mathf.FloorToInt(pos.y / (GameServices.WorldGenerationBase.ChunkSize * GameServices.WorldGenerationBase.ResolutionMultiplier));
+
+        return new Vector2Int(chunkX, chunkY);
+    }
+
     public static LayerMask LayerMaskFromNumbers(params int[] layers){
         if (layers == null || layers.Length == 0)
             return ~0; // all layers
@@ -235,6 +254,11 @@ public static class GameUtils{
     }
     public static void RunIndependent(this IEnumerator coroutine){
         StartIndependentCoroutine(() => coroutine);
+    }
+
+    public static void SetAllChunkRendering(bool state = true){
+        foreach (ChunkRendering renderer in GameServices.GlobalVariables.ChunkRenderers)
+            renderer.RenderWorld = state;
     }
 }
    

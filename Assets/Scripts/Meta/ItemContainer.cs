@@ -3,6 +3,28 @@ using UnityEngine;
 
 public class ItemContainer : MonoBehaviour
 {
+
+    public static Dictionary<string, SaveableObject> UsedGUIDs = new Dictionary<string, SaveableObject>();
+    public static Dictionary<int, SaveableObject> UsedTypeIDs = new Dictionary<int, SaveableObject>();
+    public string IDDraft;
+    public string InstanceID
+    {
+        get => IDDraft;
+        set => IDDraft = value;
+    }
+    public int TypeIDDraft;
+    public int TypeID => TypeIDDraft;
+    public bool DoNotInstantiate => false;
+    public string ObjectType => "ItemContainers";
+    public bool SaveTransform => true;
+
+    public string Save(){
+        return "";
+    }
+    public void Load(string Json){
+
+    }
+
     //int = ItemInstanceID
     public Dictionary<int, ItemProperties> Items = new Dictionary<int, ItemProperties>();
     public int MaximumAmountOfItems;
@@ -123,6 +145,8 @@ public class ItemContainer : MonoBehaviour
             Debug.Log("Container Full: " + gameObject.name);
             return null;    
         }
+
+        NewItem.ChunkListValidator.Disable();
 
         ChangeCache Cache = new ChangeCache();
 

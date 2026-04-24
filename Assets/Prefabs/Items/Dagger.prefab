@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -7622822707297766374}
   - component: {fileID: 184813738963703149}
   - component: {fileID: 8016014856248631744}
+  - component: {fileID: 2780050133918236760}
   m_Layer: 0
   m_Name: Dagger
   m_TagString: Item
@@ -116,6 +117,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 7011517330005295484}
   AnimationPlayer: {fileID: -7622822707297766374}
   SpriteSorter: {fileID: 8016014856248631744}
+  ChunkListValidator: {fileID: 2780050133918236760}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 1
@@ -153,8 +155,8 @@ MonoBehaviour:
   WeaponType: 0
   Cooldown: 0.3
   KnockBack: 5
-  Recoil: 0
-  StunLength: 0
+  Recoil: 5
+  StunLength: 0.35
   MaxHits: 1
   Properties: {fileID: 5180272834801611583}
 --- !u!114 &4841240488167989892
@@ -230,6 +232,20 @@ MonoBehaviour:
   TileRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+--- !u!114 &2780050133918236760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166095832711921992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
 --- !u!1 &3064006853657464264
 GameObject:
   m_ObjectHideFlags: 0

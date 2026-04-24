@@ -1,6 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+[CustomEditor(typeof(CanvasGroup)), CanEditMultipleObjects]
+public class CanvasGroupEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        CanvasGroup group = (CanvasGroup)target;
+        if (GUILayout.Button("Toggle")){
+            UIManager.ToggleCanvasGroup(false, group, "");
+        }
+
+        DrawDefaultInspector();
+    }
+}
+#endif
+
 public static class UIManager
 {
     public static Canvas OverlayCanvas;

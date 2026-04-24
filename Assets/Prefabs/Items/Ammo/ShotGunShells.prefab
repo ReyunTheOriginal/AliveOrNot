@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7129501221038990698}
   - component: {fileID: 2969636806316390115}
   - component: {fileID: 3556350881732844271}
+  - component: {fileID: -1015557255084539443}
   m_Layer: 0
   m_Name: ShotGunShells
   m_TagString: Item
@@ -161,6 +162,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Properties: {fileID: 0}
+--- !u!114 &-1015557255084539443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4125618682925713115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
 --- !u!1 &7141841672031921038
 GameObject:
   m_ObjectHideFlags: 0
