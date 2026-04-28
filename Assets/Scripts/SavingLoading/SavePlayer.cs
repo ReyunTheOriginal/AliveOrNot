@@ -1,18 +1,16 @@
 using UnityEngine;
 
-public class SavePlayer : MonoBehaviour, SaveableObject
+public class SavePlayer : BasicSave
 {
-    public string InstanceIDDraft = "Player";
-    public string InstanceID{
-        get => InstanceIDDraft;
-        set => InstanceIDDraft = value;
-    }
-    public int TypeID => int.MaxValue;
-    public bool DoNotInstantiate => true;
-    public string ObjectType => "PlayerStats";
-    public bool SaveTransform => true;
+    public override string InstanceID => "Player";
+    public override int TypeID => int.MaxValue;
+    public override bool DoNotInstantiate => true;
+    public override string ObjectType => "PlayerStats";
+    public override bool SaveTransform => true;
+    public override bool SavedByParent => false;
+    public override bool CanBeSave => true;
 
-    public string Save(){
+    public override string Save(){
         PlayerStats SavedStats = new PlayerStats();
 
         SavedStats.Health = GameServices.GlobalVariables.Player.PlayerHealth.Health;
@@ -25,7 +23,7 @@ public class SavePlayer : MonoBehaviour, SaveableObject
     }
 
     // Update is called once per frame
-    public void Load(string Json){
+    public override void Load(string Json){
         PlayerStats LoadedStats = JsonUtility.FromJson<PlayerStats>(Json);
 
         GameServices.GlobalVariables.Player.PlayerHealth.Health = LoadedStats.Health;

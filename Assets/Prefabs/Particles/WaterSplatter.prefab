@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4068394839961753948}
   - component: {fileID: 1945227920306248918}
   - component: {fileID: 3159835082282756186}
+  - component: {fileID: -2222035453609804253}
   m_Layer: 0
   m_Name: WaterSplatter
   m_TagString: Untagged
@@ -4888,3 +4889,22 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-2222035453609804253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6638277507838119651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  YOffsit: 0
+  SpriteRenderer: {fileID: 0}
+  TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 1945227920306248918}
+  ParticleSystemRenderer: {fileID: 3159835082282756186}
+  OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}

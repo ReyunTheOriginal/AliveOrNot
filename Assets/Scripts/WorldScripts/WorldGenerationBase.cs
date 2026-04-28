@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class WorldGenerationBase : MonoBehaviour
 {
+    public GameObject ChunkPrefab;
     public int Seed = 69420; //Seed for Deterministic Generation
     public Dictionary<Vector2Int, Chunk> ChunkDict = new Dictionary<Vector2Int, Chunk>(); //a list of all Chunks
     public int ChunkResolution = 64; // the Resolution of Chunks (64x64) tiles
@@ -25,8 +26,6 @@ public class WorldGenerationBase : MonoBehaviour
     public float ResolutionMultiplier;
 
     void Awake(){
-        DontDestroyOnLoad(gameObject);
-
         if (GameServices.WorldGenerationBase)
             Destroy(GameServices.WorldGenerationBase.gameObject);
             
@@ -41,21 +40,44 @@ public class WorldGenerationBase : MonoBehaviour
             Chunk OldChunk = child.gameObject.GetComponent<Chunk>();
             if (!OldChunk)continue;
             
-            OldChunk.ChunkPos = GameUtils.GetChunkPos(child.position);
-            OldChunk.Parent = this;
-
-            ChunkDict.Add(OldChunk.ChunkPos, OldChunk);
+            AddChunkToSystem(OldChunk);
         }
     }
 
+    public void AddChunkToSystem(Chunk subject){
+        subject.ChunkPos = GameUtils.GetChunkPos(subject.transform.position);
+
+        if (ChunkDict.ContainsKey(subject.ChunkPos) && ChunkDict[subject.ChunkPos] != subject){
+            if (ChunkDict[subject.ChunkPos] && ChunkDict != null && subject && ChunkDict[subject.ChunkPos].gameObject)
+                Destroy(ChunkDict[subject.ChunkPos].gameObject);
+
+            ChunkDict.Remove(subject.ChunkPos);
+        }
+
+         subject.transform.parent = Grid.transform;
+        if (!ChunkDict.ContainsKey(subject.ChunkPos))ChunkDict.Add(subject.ChunkPos, subject);
+    }
     //Generate Chunks
     public IEnumerator GenerateChunk(Vector2Int ChunkPos){
         //check if the chunk already exists
         if (ChunkDict.ContainsKey(ChunkPos) == false){
             ChunkDict.Add(ChunkPos, null); //cache it's position
 
-            GameObject NewWorldObject = new GameObject(); //create it
-            Chunk NewChunk = NewWorldObject.AddComponent<Chunk>();
+            GameObject NewWorldObject = Instantiate(ChunkPrefab); //create it
+            Chunk NewChunk = NewWorldObject.GetComponent<Chunk>();
+
+            //Configure Chunk Object
+            NewWorldObject.name = $"Chunk[{ChunkPos.x}, {ChunkPos.y}]"; //name it: "Chunk[0, 0]"
+            NewWorldObject.transform.parent = Grid.transform; //set its parent to the Grid
+            NewWorldObject.transform.position = (Vector2)ChunkPos * ChunkSize * ResolutionMultiplier; // set its position
+            Tilemap TileMap = NewWorldObject.GetComponent<Tilemap>(); //add a tilemap
+            TilemapRenderer Ren = NewWorldObject.GetComponent<TilemapRenderer>(); //render the tilemap
+            Ren.sortingLayerName = "Ground"; //add it to the Ground Render Layer
+            Ren.material = GameServices.GlobalVariables.SpriteLitDefault; // game it work with lighting
+
+            //apply Configured stuff to the Chunk
+            NewChunk.TileMap = TileMap;
+            NewChunk.TilemapRenderer = Ren;
 
             // snapshot everything the thread will need — no Unity objects
             List<Biome> biomesSnapshot = new List<Biome>(Biomes);
@@ -108,28 +130,11 @@ public class WorldGenerationBase : MonoBehaviour
             yield return new WaitUntil(() => done);
             // --- BACK ON MAIN THREAD ---
 
-            //Configure Chunk Object
-            NewWorldObject.name = $"Chunk[{ChunkPos.x}, {ChunkPos.y}]"; //name it: "Chunk[0, 0]"
-            NewWorldObject.transform.parent = Grid.transform; //set its parent to the Grid
-            NewWorldObject.transform.position = (Vector2)ChunkPos * ChunkSize * ResolutionMultiplier; // set its position
-            Tilemap TileMap = NewWorldObject.AddComponent<Tilemap>(); //add a tilemap
-            TilemapRenderer Ren = NewWorldObject.AddComponent<TilemapRenderer>(); //render the tilemap
-            Ren.sortingLayerName = "Ground"; //add it to the Ground Render Layer
-            Ren.material = GameServices.GlobalVariables.SpriteLitDefault; // game it work with lighting
-
-            //apply Configured stuff to the Chunk
-            NewChunk.ChunkPos = ChunkPos;
-            NewChunk.TileMap = TileMap;
-            NewChunk.TilemapRenderer = Ren;
-            NewChunk.Parent = this;
-
             if(Cache.HasWater)HandleWaterTiles(NewChunk, Cache);
 
             // set the tiles of the chunk all at once 
             TileMap.SetTiles(Cache.Positions, Cache.Tiles); 
 
-            // now fill the real chunk in
-            ChunkDict[ChunkPos] = NewChunk;
             NewChunk.Deactivate(); 
 
             //finally Decorate the Chunk
@@ -170,7 +175,11 @@ public class WorldGenerationBase : MonoBehaviour
         Col.isTrigger = true;
         Col.excludeLayers = GameUtils.LayerMaskFromNumbers(2);
 
-        chunk.gameObject.AddComponent<WaterTiles>();
+        WaterTiles WaterScript = chunk.gameObject.AddComponent<WaterTiles>();
+
+        chunk.HasWater = true;
+
+        chunk.WaterTilesScript = WaterScript;
 
         for (int i=0;i<Cache.Positions.Length;i++){
             if (Cache.Biomes[i].Block == WaterTileAsset){

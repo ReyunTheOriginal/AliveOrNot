@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,6 +64,8 @@ public class EquiptmentScript : MonoBehaviour
     }
 
     void Update(){   
+        keepHandRotation();
+        
         //go through each Equipped object and run its Hold() Code, the code that runs every frame if equipped. also update Durability UI
         foreach(var E in Equipment.Slots){
             //check if the slot actually has an item
@@ -159,9 +162,8 @@ public class EquiptmentScript : MonoBehaviour
         //run the UnEquippted() Function
         ItemProperties Properties = ESlot.ItemContainer.Items.FirstOrDefault().Value;
 
-        ResetHands();
-
         Properties.UnSetUpItem();
+        ResetHands();
 
         //reset the slot icons to the defaults
         ESlot.InvUI.Icon.sprite = ESlot.DefaultIcon;
@@ -220,11 +222,10 @@ public class EquiptmentScript : MonoBehaviour
             }
 
             if (Slot == (int)ItemProperties.EquipSlot.PrimaryHand || Slot == (int)ItemProperties.EquipSlot.OffHand){
-                if (!HasAnItemInSlot(ItemProperties.EquipSlot.BothHands)){
+                if (!HasAnItemInSlot(ItemProperties.EquipSlot.BothHands))
                     Properties.SetUpItem();
-                }
             }else{
-                    Properties.SetUpItem();
+                Properties.SetUpItem();
             }
 
             //Handle Durability UI
@@ -248,11 +249,38 @@ public class EquiptmentScript : MonoBehaviour
     }
 
     public void ResetHands(){
-        GameServices.GlobalVariables.PrimaryHandObject.RightHand.transform.localRotation = Quaternion.Euler(0,0,0);
-        GameServices.GlobalVariables.PrimaryHandObject.LeftHand.transform.localRotation = Quaternion.Euler(0,0,0);
+        GameObject PrimaryRightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
+        GameObject PrimaryLeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
 
-        GameServices.GlobalVariables.OffHandObject.RightHand.transform.localRotation = Quaternion.Euler(0,0,0);
-        GameServices.GlobalVariables.OffHandObject.LeftHand.transform.localRotation = Quaternion.Euler(0,0,0);
+        GameObject OffHandRightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
+        GameObject OffHandLeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
+
+        SetActiveChildren(PrimaryRightHand.transform);
+        SetActiveChildren(PrimaryLeftHand.transform);
+
+        SetActiveChildren(OffHandRightHand.transform);
+        SetActiveChildren(OffHandLeftHand.transform);
+    }
+
+    public void keepHandRotation(){
+        GameObject PrimaryRightHand = GameServices.GlobalVariables.PrimaryHandObject.RightHand;
+        GameObject PrimaryLeftHand = GameServices.GlobalVariables.PrimaryHandObject.LeftHand;
+
+        GameObject OffHandRightHand = GameServices.GlobalVariables.OffHandObject.RightHand;
+        GameObject OffHandLeftHand = GameServices.GlobalVariables.OffHandObject.LeftHand;
+
+
+        PrimaryRightHand.transform.localRotation = Quaternion.Euler(0,0,0);
+        PrimaryLeftHand.transform.localRotation = Quaternion.Euler(0,0,0);
+
+        OffHandRightHand.transform.localRotation = Quaternion.Euler(0,0,0);
+        OffHandLeftHand.transform.localRotation = Quaternion.Euler(0,0,0);
+    }
+
+    private void SetActiveChildren(Transform parent, bool state = false){
+        foreach(Transform child in parent)
+            if (child.gameObject.activeSelf != state)
+                child.gameObject.SetActive(state);
     }
 
     [System.Serializable]

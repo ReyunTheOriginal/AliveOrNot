@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GlobalVariables : MonoBehaviour
 {
@@ -14,8 +15,13 @@ public class GlobalVariables : MonoBehaviour
     public HashSet<ItemProperties> AllItems = new HashSet<ItemProperties>();
     public CanvasGroup CustomItemUICanvasGroup;
     public List<ChunkRendering> ChunkRenderers;
+    [SerializeField]private List<IDTiles> _Tiles;
+    public Dictionary<int, Tile> Tiles = new Dictionary<int, Tile>();
 
     private void Awake() {
+        foreach(IDTiles T in _Tiles)
+            Tiles.Add(T.ID, T.Tile);
+        
         GameServices.GlobalVariables = this;
     }
 
@@ -38,16 +44,20 @@ public class GlobalVariables : MonoBehaviour
         public GameObject CenterObject;
         public GameObject RightHand;
         public SpriteSorter RightHandSorter;
-        public SpriteSorter RightHandPropSorter;
         /////////////////
         public GameObject LeftHand;
         public SpriteSorter LeftHandSorter;
-        public SpriteSorter LeftHandPropSorter;
     }
 
     [System.Serializable]
     public class CursorTextures{
         public Texture2D Default;
         //public Texture2D Gun;
+    }
+
+    [System.Serializable]
+    public class IDTiles{
+        public int ID;
+        public Tile Tile;
     }
 }

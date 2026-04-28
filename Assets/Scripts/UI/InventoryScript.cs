@@ -10,7 +10,7 @@ public class InventoryScript : ItemContainer
     public Dictionary<int, ItemEntry> ItemAddOns = new Dictionary<int, ItemEntry>();
     public ItemEntry SelectedItem; //the Currently Selected ItemEntry, Selected by clicking on its inventory slot
     public CanvasGroup FullInventoryUI; //the Whole Items Menu
-    public List<CanvasGroup> UnderInventoryUI; //the UI that the Items should close before Opening
+    //public List<CanvasGroup> UnderInventoryUI; //the UI that the Items should close before Opening
     public List<CanvasGroup> OverInventoryUI;//UI that the inventory should not open if they are open
     public ItemInfoUI itemInfoUI; //the Window that Shows the ItemEntry Information such as Name, Description, and uses
     public GameObject SlotPrefab; //a prefab of the Slot an ItemEntry is Displayed in, in the inventory
@@ -110,10 +110,10 @@ public class InventoryScript : ItemContainer
 
             if (!OverUIOpened){
                 UnSelectItem();
-                UIManager.ToggleCanvasGroup(true, FullInventoryUI, "Items");
 
-                foreach (CanvasGroup Group in UnderInventoryUI)
-                    UIManager.ToggleCanvasGroup(false, Group, "");
+                bool state = UIManager.IsActiveCanvasGroup(FullInventoryUI);
+
+                UIManager.SetActiveCanvasGroup(true, FullInventoryUI, "Inventory", !state);
 
                 UIManager.SetActiveCanvasGroup(false, itemInfoUI.ConfirmationMenu, "Menu", false);
                 UIManager.SetActiveCanvasGroup(false, itemInfoUI.WholeUI, "ItemInfo", false);

@@ -18,20 +18,16 @@ public class DayNightCycle : MonoBehaviour
 [Header("Debug")]
     public float LightIntinsity;
     public float CurrentPercentageOfDay;
-    public float GlobalTimer = 0;
     public bool IsDayTime = true;
-    public int CurrentDay = 0;
 
     private void Update(){
         GameServices.GlobalTimer += Time.deltaTime;
-        GlobalTimer = GameServices.GlobalTimer;
     
         float t = (GameServices.GlobalTimer % DayLengthInSeconds) / DayLengthInSeconds; // 0 to 1 within current day
         
         GameServices.CurrentDay = (int)(GameServices.GlobalTimer / DayLengthInSeconds);
         GameServices.IsDayTime = t <= DayAndNightLength;
         
-        CurrentDay = GameServices.CurrentDay;
         IsDayTime = GameServices.IsDayTime;
         CurrentPercentageOfDay = t * 100f;
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8277039791808863391}
   - component: {fileID: 1596285937271761705}
+  - component: {fileID: 4402617679050683114}
   m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
@@ -84,6 +85,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4402617679050683114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3071257414234212025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  YOffsit: 0
+  SpriteRenderer: {fileID: 1596285937271761705}
+  TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
+  OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: -1813373650981804590}
 --- !u!1 &6693448416339413777
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +219,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 6695489490532198392}
   AnimationPlayer: {fileID: 0}
   SpriteSorter: {fileID: -1813373650981804590}
+  ChunkListValidator: {fileID: -3872242753547572986}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -232,8 +254,11 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 6695489490532198392}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
 --- !u!114 &5691630593544545800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,3 +286,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunkPos: {x: 0, y: 0}
   LastChunkPos: {x: 0, y: 0}
+  active: 1

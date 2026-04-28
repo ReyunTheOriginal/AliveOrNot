@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 42421497105628189}
   - component: {fileID: -4175880040224535950}
   - component: {fileID: -925244828852113228}
+  - component: {fileID: 4529431098545075899}
   m_Layer: 0
   m_Name: BasicZombieCorpse
   m_TagString: Untagged
@@ -123,6 +124,8 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 6219586502383502549}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
 --- !u!114 &-925244828852113228
@@ -139,3 +142,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunkPos: {x: 0, y: 0}
   LastChunkPos: {x: 0, y: 0}
+  active: 1
+--- !u!114 &4529431098545075899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437462350042973929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 1
+  m_ApplyToSortingLayers: ddc077341b3f0325b7f9b19800000000879649761f2b3ed3
+  m_ShapePath:
+  - {x: -0.3342743, y: -0.0052275658, z: 0}
+  - {x: -0.34534454, y: 0.17043114, z: 0}
+  - {x: -0.24300575, y: 0.2550156, z: 0}
+  - {x: 0.098897934, y: 0.074879885, z: 0}
+  - {x: 0.1373272, y: -0.19977403, z: 0}
+  - {x: -0.07634163, y: -0.26669812, z: 0}
+  m_ShapePathHash: 335403485
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 149936
+  m_LocalBounds:
+    m_Center: {x: -0.104008675, y: -0.005841255, z: 0}
+    m_Extent: {x: 0.24133587, y: 0.26085687, z: 0}

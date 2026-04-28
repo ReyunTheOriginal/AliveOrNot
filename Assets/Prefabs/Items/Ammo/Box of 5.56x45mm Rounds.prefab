@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6137913891659031391}
   - component: {fileID: 2227175529845531914}
+  - component: {fileID: 1664908903395790485}
   m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
@@ -84,6 +85,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1664908903395790485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433121940073146893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  YOffsit: 0
+  SpriteRenderer: {fileID: 2227175529845531914}
+  TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
+  OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: -1744234887509072553}
 --- !u!1 &5772324870464502954
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Box of 5.56x45mm Ammo
   ID: 14
-  Amount: 1
+  Amount: 99
   Shadow: {fileID: 1433121940073146893}
   Description: Open to get a bunch of 5.56x45mm Ammo
   UseLabel: Open
@@ -197,6 +218,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 6868566832731451208}
   AnimationPlayer: {fileID: 0}
   SpriteSorter: {fileID: -1744234887509072553}
+  ChunkListValidator: {fileID: 6042932756265151212}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -246,8 +268,11 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 6868566832731451208}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
 --- !u!114 &6042932756265151212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,3 +287,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunkPos: {x: 0, y: 0}
   LastChunkPos: {x: 0, y: 0}
+  active: 1

@@ -14,7 +14,7 @@ public class DecorGeneration : MonoBehaviour
                 if (roll < cumulative){
                     Vector2 Pos = (Vector2)(Vector3)Cache.Positions[i] + (chunk.ChunkPos * GameServices.WorldGenerationBase.ChunkSize) + new Vector2(0.5f, 0.5f);
                     GameObject newObject = Instantiate(Decor.Object, Pos, Quaternion.identity, GameServices.WorldGenerationBase.Grid.transform);
-
+                    newObject.name = $"{Decor.Object.name}_{Pos}";
                     chunk.ObjectsInChunk.Add(newObject);
                     break;
                 }

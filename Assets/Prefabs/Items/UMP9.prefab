@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2353281971755276177}
+  - component: {fileID: 8775149447510967767}
   m_Layer: 7
   m_Name: MuzzleFlashLocation
   m_TagString: Untagged
@@ -24,13 +25,63 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437994890095661624}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.38833374, y: 0.0570833, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1746507294195773127}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!114 &8775149447510967767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437994890095661624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 1
+  m_LightType: 3
+  m_BlendStyleIndex: 0
+  m_FalloffIntensity: 0.784
+  m_Color: {r: 1, g: 0.51855165, b: 0, a: 1}
+  m_Intensity: 0
+  m_LightVolumeIntensity: 1
+  m_LightVolumeIntensityEnabled: 0
+  m_ApplyToSortingLayers: ddc077341b3f0325b7f9b19800000000879649761f2b3ed3
+  m_LightCookieSprite: {fileID: 0}
+  m_DeprecatedPointLightCookieSprite: {fileID: 0}
+  m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
+  m_OverlapOperation: 0
+  m_NormalMapDistance: 3
+  m_NormalMapQuality: 2
+  m_UseNormalMap: 0
+  m_ShadowIntensityEnabled: 1
+  m_ShadowIntensity: 0.75
+  m_ShadowVolumeIntensityEnabled: 0
+  m_ShadowVolumeIntensity: 0.75
+  m_LocalBounds:
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
+  m_PointLightInnerAngle: 0
+  m_PointLightOuterAngle: 298.36
+  m_PointLightInnerRadius: 0
+  m_PointLightOuterRadius: 10.363378
+  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricAngleOffset: 0
+  m_ShapeLightParametricRadius: 1
+  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffOffset: {x: 0, y: 0}
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
 --- !u!1 &2002258930748774896
 GameObject:
   m_ObjectHideFlags: 0
@@ -41,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9197969544043618731}
   - component: {fileID: 8003701180212867610}
+  - component: {fileID: 9026191998694923210}
   m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
@@ -115,6 +167,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &9026191998694923210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002258930748774896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  YOffsit: 0
+  SpriteRenderer: {fileID: 8003701180212867610}
+  TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
+  OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 4186597216005220697}
 --- !u!1 &3071631947334285417
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,6 +396,7 @@ MonoBehaviour:
   FireMode: 0
   MuzzleFlash: {fileID: 9105014085624569928, guid: a9592b8faf9c705498fe92d129593a0e, type: 3}
   BarrelEndLocation: {fileID: 2353281971755276177}
+  MuzzleFlashIntensity: 6.5
   AmmoUI:
     WholeUI: {fileID: 0}
     Text: {fileID: 0}
@@ -396,8 +469,11 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 6602910105219030636}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
 --- !u!114 &2975079390612285444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,3 +488,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunkPos: {x: 0, y: 0}
   LastChunkPos: {x: 0, y: 0}
+  active: 1

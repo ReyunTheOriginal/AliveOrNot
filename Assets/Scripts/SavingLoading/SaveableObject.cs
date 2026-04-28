@@ -7,6 +7,8 @@ public interface SaveableObject
     string ObjectType {get;}
     bool SaveTransform {get;}
     bool DoNotInstantiate {get;}
+    bool SavedByParent {get; set;}
+    bool CanBeSave {get; set;}
     GameObject gameObject{get;}
     string Save();
     void Load(string Json);

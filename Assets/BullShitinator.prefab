@@ -99,29 +99,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a596f5886c06849bb67c4ff8a54e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UniqueItemID: 0
-  ItemSprite: {fileID: 21300000, guid: 1cf0735ab5e992a49aa74d89078ca131, type: 3}
   ItemName: Lupara
-  Description: the perfect tool for a quick zombie smoothy
-  ID: 8
+  ID: 23
   Amount: 1
+  Shadow: {fileID: 0}
+  Description: the perfect tool for a quick zombie smoothy
+  UseLabel: Use
+  ItemSprite: {fileID: 21300000, guid: 1cf0735ab5e992a49aa74d89078ca131, type: 3}
+  CustomUIPrefab: {fileID: 0}
   ItemBehavior: {fileID: 7071738241803979486}
-  Useable: 0
-  Equippable: 1
-  equipSlot: 5
-  RightHandPosition: {x: -0.2968751, y: -0.04687497}
-  LeftHandPosition: {x: 0.046875, y: -0.015625}
+  ItemRenderer: {fileID: 7629638228396604195}
+  AnimationPlayer: {fileID: 0}
+  SpriteSorter: {fileID: 0}
+  ChunkListValidator: {fileID: 0}
+  LocalPosition: {x: 1, y: 0}
   UsesRightHand: 1
   UsesLeftHand: 1
+  RightHandPosition: {x: -0.2968751, y: -0.04687497}
+  LeftHandPosition: {x: 0.046875, y: -0.015625}
   MaxDurability: 1e+20
   Durability: 1e+28
   HasDurability: 1
+  Useable: 0
   Unstackable: 1
   Consumable: 0
+  Equippable: 1
+  equipSlot: 5
+  ItemInstanceID: 0
+  CustomUICanvasGroup: {fileID: 0}
   Damage: 0
   ArmorValue: 0
   AttackSpeed: 0
-  Accuracy: 0
+  KnockBack: 0
 --- !u!114 &7261473713035577478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,10 +145,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 9999999
   RandomDamageOffsit: 0
-  KillType: 0
+  CanGib: 0
   WeaponType: 3
   Cooldown: 0
   KnockBack: 999
+  Recoil: 0
+  StunLength: 0
+  MaxHits: 0
+  Properties: {fileID: 1599335498396922293}
 --- !u!114 &7071738241803979486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,12 +209,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxHits: 5
   FireMode: 0
-  Recoil: 51
-  StunLength: 87.59
   MuzzleFlash: {fileID: 1723987602390721538, guid: 83a8d0a29f6a458419d4c8e13dd7a99c, type: 3}
-  BarrelEndLocation: {x: 0.4124994, y: 0.09687498}
+  BarrelEndLocation: {fileID: 0}
+  MuzzleFlashIntensity: 0
+  AmmoUI:
+    WholeUI: {fileID: 0}
+    Text: {fileID: 0}
   Range: 1328.6
   amountOfRays: 720
   AttackRadius: 360
@@ -210,10 +224,10 @@ MonoBehaviour:
   BasePitch: 1
   PitchChangeRange: 0.15
   GunShotAnimation: {fileID: 7400000, guid: 71956a8ea7304c24f95dd3ef97435755, type: 2}
-  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   ReloadAnimation: {fileID: 7400000, guid: 793300a365b359e43a1b7c00e59b5145, type: 2}
-  BulletID: 13
+  BulletProperty: {fileID: 0}
   ChamberSize: 28655
+  EmptyChamberClick: {fileID: 8300000, guid: 205f450f315f6674694d19fa1b62283e, type: 3}
   BurstCoolDown: 0
   ShotsPerBurst: 0
   CurrentBurstShots: 0
@@ -222,3 +236,4 @@ MonoBehaviour:
   DebugMode: 1
   Timer: 0
   BurstTimer: 0
+  autoReloadTimer: 0

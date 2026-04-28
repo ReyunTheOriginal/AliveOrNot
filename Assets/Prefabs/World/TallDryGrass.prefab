@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 4023969323343331541}
   - component: {fileID: 2982093296017423432}
   - component: {fileID: 8865574681524194031}
+  - component: {fileID: 6161030094658386377}
+  - component: {fileID: -1469183596348047655}
+  - component: {fileID: 3912071557890558963}
   m_Layer: 0
   m_Name: TallDryGrass
   m_TagString: Untagged
@@ -100,5 +103,67 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 2982093296017423432}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
+--- !u!114 &6161030094658386377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3639018669116971440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 
+  m_ShapePath:
+  - {x: -0.18894893, y: -0.02286838, z: 0}
+  - {x: -0.19031593, y: 0.12382239, z: 0}
+  - {x: 0.1882849, y: 0.12382239, z: 0}
+  - {x: 0.18652228, y: -0.022663072, z: 0}
+  m_ShapePathHash: -334381105
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 77284
+  m_LocalBounds:
+    m_Center: {x: -0.0010155141, y: 0.050477006, z: 0}
+    m_Extent: {x: 0.18930042, y: 0.073345385, z: 0}
+--- !u!114 &-1469183596348047655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3639018669116971440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
+  active: 1
+--- !u!114 &3912071557890558963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3639018669116971440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2169d89dbe1196442ae3acb19aa94a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IDDraft: 80acdd1d-1ece-45a7-83ad-6197aba0c395
+  TypeIDDraft: 1057547745

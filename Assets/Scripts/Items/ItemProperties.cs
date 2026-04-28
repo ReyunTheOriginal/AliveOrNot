@@ -112,6 +112,7 @@ public class ItemProperties : MonoBehaviour
 
                     RightHand.transform.SetParent(transform);
                     LeftHand.transform.SetParent(transform);
+
                     
                     //setting Up Hands
                     if (UsesRightHand){
@@ -119,8 +120,6 @@ public class ItemProperties : MonoBehaviour
                          RightHand.transform.localPosition = RightHandPosition;
 
                          GameServices.GlobalVariables.PrimaryHandObject.RightHandSorter.AlwaysOnTopOf = SpriteSorter;
-
-                         GameServices.GlobalVariables.PrimaryHandObject.RightHandPropSorter.AlwaysOnTopOf = SpriteSorter;
                     }else{
                          if (RightHand.activeSelf)RightHand.SetActive(false);
                          GameServices.GlobalVariables.PrimaryHandObject.RightHandSorter.AlwaysOnTopOf = null;
@@ -131,8 +130,6 @@ public class ItemProperties : MonoBehaviour
                          LeftHand.transform.localPosition = LeftHandPosition;
 
                          GameServices.GlobalVariables.PrimaryHandObject.LeftHandSorter.AlwaysOnTopOf = SpriteSorter;
-
-                         GameServices.GlobalVariables.PrimaryHandObject.LeftHandPropSorter.AlwaysOnTopOf = SpriteSorter;
                     }else{
                          if (RightHand.activeSelf)LeftHand.SetActive(false);
                          GameServices.GlobalVariables.PrimaryHandObject.LeftHandSorter.AlwaysOnTopOf = null;
@@ -160,8 +157,6 @@ public class ItemProperties : MonoBehaviour
                          RightHand.transform.localPosition = RightHandPosition;
 
                          GameServices.GlobalVariables.OffHandObject.RightHandSorter.AlwaysOnTopOf = SpriteSorter;
-
-                         GameServices.GlobalVariables.OffHandObject.RightHandPropSorter.AlwaysOnTopOf = SpriteSorter;
                     }else{
                          RightHand.SetActive(false);
 
@@ -202,8 +197,6 @@ public class ItemProperties : MonoBehaviour
                     RightHand.transform.localPosition = RightHandPosition;
 
                     GameServices.GlobalVariables.PrimaryHandObject.RightHandSorter.AlwaysOnTopOf = SpriteSorter;
-
-                    GameServices.GlobalVariables.PrimaryHandObject.RightHandPropSorter.AlwaysOnTopOf = SpriteSorter;
                }else{
                     if (RightHand.activeSelf)RightHand.SetActive(false);
                     GameServices.GlobalVariables.PrimaryHandObject.RightHandSorter.AlwaysOnTopOf = null;

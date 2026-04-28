@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,6 +24,7 @@ public static class UIManager
 {
     public static Canvas OverlayCanvas;
     public static Canvas WorldCanvas;
+    public static KeyValuePair<string, CanvasGroup> TopMenu => OpenedMenus.Last();
     public static Dictionary<string, CanvasGroup> OpenedMenus = new Dictionary<string, CanvasGroup>();
 
     public static void SetActiveCanvasGroup(bool IsAMenu, CanvasGroup Group, string MenuName = "UI", bool state = true, bool Ghost = false){
@@ -45,9 +48,8 @@ public static class UIManager
     }
 
     public static void CloseAllMenus(){
-        foreach (var menu in OpenedMenus.Values){
+        foreach (var menu in OpenedMenus.Values)
             SetActiveCanvasGroup(true, menu, "", false);
-        }
 
         OpenedMenus.Clear();
     }

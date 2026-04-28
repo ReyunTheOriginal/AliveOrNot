@@ -12,8 +12,16 @@ public class ButtonFunctions : MonoBehaviour
     public CanvasGroup MainMenuCanvasGroup;
 
     public List<SaveFileUI> saveFileUIs;
+    public GameObject OptionsUI;
 
-    public SavingLoadingBase SaveScript;
+    public void Options(){
+        StartCoroutine(OptionsTroll());
+    }
+    public IEnumerator OptionsTroll(){
+        OptionsUI.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.05f);
+        OptionsUI.gameObject.SetActive(false);
+    }
    public void Quit(){
     #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -23,32 +31,33 @@ public class ButtonFunctions : MonoBehaviour
    } 
 
    private void Start() {
-        for (int i=0; i<3; i++)
-            SaveScript.LoadSaveFileInformation(i);
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu")){
+            for (int i=0; i<3; i++){
+                Saving.SavefileInfo info = Saving.LoadSaveFileInformation(i);
 
-        for (int i=0; i<3; i++){
-            if (SaveScript.SavefileInformation.ContainsKey(i)){
-                TimeSpan t = TimeSpan.FromSeconds((double)SaveScript.SavefileInformation[i].PlayTime);
-                string formatted = "";
+                if (info != null){
+                    TimeSpan t = TimeSpan.FromSeconds((double)info.PlayTime);
+                    string formatted = "";
 
-                if (t.Hours > 0)formatted += $"{t.Hours}h";
-                if (t.Minutes > 0)formatted += $"{t.Minutes}m";
-                if (t.Seconds > 0)formatted += $"{t.Seconds}s";
+                    if (t.Hours > 0)formatted += $"{t.Hours}h";
+                    if (t.Minutes > 0)formatted += $"{t.Minutes}m";
+                    if (t.Seconds > 0)formatted += $"{t.Seconds}s";
 
-                if (string.IsNullOrEmpty(formatted))
-                    formatted += "0s";
+                    if (string.IsNullOrEmpty(formatted))
+                        formatted += "1s";
 
-                saveFileUIs[i].PlayTimeText.text = "PlayTime: \n" + formatted;
+                    saveFileUIs[i].PlayTimeText.text = "PlayTime: \n" + formatted;
+                }
+
+
+                saveFileUIs[i].StartButtonText.text = Saving.SaveFileAvailable(i)? "Play" : "Create";
+
+                saveFileUIs[i].DeleteButton.SetActive(Saving.SaveFileAvailable(i));
+
+                if (!Saving.SaveFileAvailable(i))
+                    saveFileUIs[i].PlayTimeText.text = "PlayTime: \n" + "N/A";;
+                    
             }
-
-
-            saveFileUIs[i].StartButtonText.text = SaveScript.SaveFileAvailable(i)? "Play" : "Create";
-
-            saveFileUIs[i].DeleteButton.SetActive(SaveScript.SaveFileAvailable(i));
-
-            if (!SaveScript.SaveFileAvailable(i))
-                saveFileUIs[i].PlayTimeText.text = "PlayTime: \n" + "N/A";;
-                
         }
    }
 
@@ -58,30 +67,43 @@ public class ButtonFunctions : MonoBehaviour
    }
 
    public void Play(int index){
-        GameUtils.StartIndependentCoroutine(() => TransitionToScene("OverWorld", "MainMenu", index));
+        GameUtils.StartIndependentCoroutine(() => StartGame("OverWorld", "MainMenu", index));
         Destroy(gameObject);
    }
 
    public void Delete(int index){
-        if (SaveScript.SaveFileAvailable(index))
+        if (Saving.SaveFileAvailable(index))
             Directory.Delete(Path.Combine(Application.persistentDataPath, $"SaveFile_{index}"), true);
 
         Start();
    }
 
-   public IEnumerator TransitionToScene(string newScene, string oldScene, int index){
+   public IEnumerator StartGame(string newScene, string oldScene, int index){
         Time.timeScale = 0;
+
         AsyncOperation load = SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Additive);
         yield return load; // wait until fully loaded
         GameUtils.SetAllChunkRendering(false);
         // Now safe to unload the old one
         SceneManager.UnloadSceneAsync(oldScene);
 
-        SaveScript.SaveFileIndex = index;
+        Saving.SaveFileIndex = index;
 
-        SaveScript.LoadAll(index);
+        if (!Saving.SaveFileAvailable(index)){
+            GameServices.WorldGenerationBase.Seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+            Saving.SaveAll(index);
+        }else{
+            Saving.LoadAll(index);
+        }
+
+        Saving.SavefileInfo info = Saving.LoadSaveFileInformation(index);
+
+        GameServices.GlobalTimer = info.PlayTime;
+
+        GameServices.WorldGenerationBase.Seed = info.Seed;
 
         GameUtils.SetAllChunkRendering();
+
         Time.timeScale = 1;
     }
 

@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Box of Shotgun Shells
   ID: 16
-  Amount: 1
+  Amount: 99
   Shadow: {fileID: 8745716543355947429}
   Description: Open to get a bunch of Shotgun Shells
   UseLabel: Open
@@ -113,6 +113,7 @@ MonoBehaviour:
   ItemRenderer: {fileID: 7806121592106418474}
   AnimationPlayer: {fileID: 0}
   SpriteSorter: {fileID: 5607346047638258382}
+  ChunkListValidator: {fileID: 3435434413059231546}
   LocalPosition: {x: 1, y: 0}
   UsesRightHand: 0
   UsesLeftHand: 0
@@ -162,8 +163,11 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 7806121592106418474}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
 --- !u!114 &3435434413059231546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunkPos: {x: 0, y: 0}
   LastChunkPos: {x: 0, y: 0}
+  active: 1
 --- !u!1 &8745716543355947429
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,6 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7363196882038743141}
   - component: {fileID: 7225572579906354934}
+  - component: {fileID: 2324956719606594222}
   m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
@@ -262,3 +268,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2324956719606594222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745716543355947429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4825b16240e563d4aa3f5d8ca6c9a1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  YOffsit: 0
+  SpriteRenderer: {fileID: 7225572579906354934}
+  TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
+  OrderOffsit: 0
+  AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 5607346047638258382}

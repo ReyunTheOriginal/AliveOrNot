@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Rendering.Universal;
 
 public class BulletGun : ItemBehavior
 {
     public WeaponPropertiesHolder WeaponProperties;
-    [Header("Settings")]
+[Header("Settings")]
     public AnimationCurve DamageFalloff;
     public FireModes FireMode;
     public GameObject MuzzleFlash;
     public Transform BarrelEndLocation;
+    public float MuzzleFlashIntensity;
+    private Light2D Light;
 [Header("UI")]
     public AmmoDataUI AmmoUI;
 [Header("Raycast Settings")]
@@ -41,8 +44,13 @@ public class BulletGun : ItemBehavior
     public float BurstTimer;
     public float autoReloadTimer;
     public GameUtils.IndependentCoroutine ReloadCoroutine;
+    public Coroutine FlashCoroutine;
 
-
+    #if UNITY_EDITOR
+    private void OnValidate() {
+        if (BarrelEndLocation && !Light) Light = BarrelEndLocation.GetComponent<Light2D>();
+    }
+    #endif
     public enum FireModes{
         Automatic,
         Burst,
@@ -72,6 +80,9 @@ public class BulletGun : ItemBehavior
 
     public override void Hold(){
         AmmoUI.Text.text = $"{BulletsInChamber}/{GameServices.Inventory.GetItemAmountWithID(BulletProperty.ID)}";
+
+        if (FlashCoroutine == null)
+            if (Light)Light.intensity = 0;
 
         if (!UIManager.AMenuIsOpened()){
             //increase the timer for the cooldown
@@ -242,6 +253,8 @@ public class BulletGun : ItemBehavior
 
         //Create a MuzzleFlash
         GameObject flash = Instantiate(MuzzleFlash, BarrelEndLocation.position, Quaternion.Euler(0,0,rotate * Mathf.Rad2Deg - 90));
+        if (FlashCoroutine == null)
+            FlashCoroutine = StartCoroutine(Flash());
 
         //Rotate the MuzzleFlash to face the Mouse
         ParticleSystem ps = flash.GetComponent<ParticleSystem>();
@@ -251,6 +264,13 @@ public class BulletGun : ItemBehavior
         if (GunShotAnimation)Properties.AnimationPlayer.PlayClip(GunShotAnimation);
         GameServices.GlobalVariables.Player.rig.AddForce(-dir * WeaponProperties.Recoil, ForceMode2D.Impulse);
         if (Properties.HasDurability)Properties.Durability -= 1;
+    }
+
+    private IEnumerator Flash(){
+        if(Light)Light.intensity = MuzzleFlashIntensity;
+        yield return new WaitForSeconds(0.1f);
+        if(Light)Light.intensity = 0;
+        FlashCoroutine = null;
     }
 
     public void Hit(Collider2D Col, Vector2 KnockBackDir){

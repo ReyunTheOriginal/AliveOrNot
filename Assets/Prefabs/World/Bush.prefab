@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 8327428578319405341}
   - component: {fileID: 1045579545978567036}
   - component: {fileID: 6508437281076927895}
+  - component: {fileID: 5365897108898902003}
+  - component: {fileID: -4464674745977179825}
+  - component: {fileID: 739666878187563679}
   m_Layer: 0
   m_Name: Bush
   m_TagString: Untagged
@@ -100,5 +103,67 @@ MonoBehaviour:
   YOffsit: 0
   SpriteRenderer: {fileID: 1045579545978567036}
   TileRenderer: {fileID: 0}
+  ParticleSystem: {fileID: 0}
+  ParticleSystemRenderer: {fileID: 0}
   OrderOffsit: 0
   AlwaysOnTopOf: {fileID: 0}
+  AlwaysUnder: {fileID: 0}
+--- !u!114 &5365897108898902003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713855091252189226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 1
+  m_ApplyToSortingLayers: ddc077341b3f0325b7f9b19800000000879649761f2b3ed3
+  m_ShapePath:
+  - {x: -0.12614234, y: 0.0036048442, z: 0}
+  - {x: -0.21854687, y: 0.227635, z: 0}
+  - {x: 0.22184707, y: 0.2523862, z: 0}
+  - {x: 0.19544579, y: 0.0069049895, z: 0}
+  m_ShapePathHash: 1235545160
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -1439406
+  m_LocalBounds:
+    m_Center: {x: 0.001650095, y: 0.12799552, z: 0}
+    m_Extent: {x: 0.22019696, y: 0.124390684, z: 0}
+--- !u!114 &-4464674745977179825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713855091252189226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8514bea7a207094db2229e89be4f6ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChunkPos: {x: 0, y: 0}
+  LastChunkPos: {x: 0, y: 0}
+  active: 1
+--- !u!114 &739666878187563679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713855091252189226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2169d89dbe1196442ae3acb19aa94a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IDDraft: 75514ee5-c015-4cba-892b-022290aafd9e
+  TypeIDDraft: -1192053479

@@ -154,7 +154,7 @@ public static class GameUtils{
         }
     }
 
-    public static float GetDeterministicRandom(Vector2Int pos, int seed){
+    public static float GetDeterministicRandom(Vector2 pos, int seed){
         uint h = (uint)seed;
         h ^= (uint)pos.x * 2246822519u;
         h *= 3266489917u; // mix after x before combining y
@@ -176,7 +176,7 @@ public static class GameUtils{
         return new Vector2Int(x,y);
     } 
 
-    //Use With a Lambda like this for Parameters: "() => MyFunction(type Parameter)"
+    //Use With a Lambda like this for Parameters: "() => MyFunction(type ParameterName)"
     public static IndependentCoroutine StartIndependentCoroutine(System.Func<IEnumerator> func){
         GameObject IndependentFunctionsObject = new GameObject();
         IndependentFunctionsObject.name = "Temporary Coroutine Object";
@@ -252,6 +252,7 @@ public static class GameUtils{
             }
         }
     }
+    
     public static void RunIndependent(this IEnumerator coroutine){
         StartIndependentCoroutine(() => coroutine);
     }

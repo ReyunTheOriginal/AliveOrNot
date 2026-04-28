@@ -20,29 +20,36 @@ public class BasicSave : MonoBehaviour, SaveableObject
     virtual public int TypeID => TypeIDDraft;
     virtual public bool DoNotInstantiate => false;
     virtual public string ObjectType => "BasicObjects";
-    public bool SaveTransform => true;
+    virtual public bool SaveTransform => true;
+    private bool _SavedByParent = false;
+    virtual public bool SavedByParent{
+        get => _SavedByParent;
+        set => _SavedByParent = value;
+    }
+
+    private bool _CanBeSaved = false;
+    virtual public bool CanBeSave{
+        get => _CanBeSaved;
+        set => _CanBeSaved = value;
+    }
 
 #if UNITY_EDITOR
-    private void OnValidate()
-    {
+    private void OnValidate(){
         // In editor, only assign if truly empty (i.e. a brand new object)
-        // Do NOT reassign — this is what causes prefab instances to diverge correctly
         EnsureUniqueID();
         if (TypeIDDraft == 0)
             DraftTypeID();
     }
 
     // Called by Unity when a prefab instance is created in the scene
-    private void Reset()
-    {
+    private void Reset(){
         // Force a fresh GUID whenever this component is first added or the object is reset
         IDDraft = string.Empty;
         EnsureUniqueID();
     }
 #endif
 
-    private void Awake()
-    {
+    private void Awake(){
         EnsureUniqueID();
         if (TypeIDDraft == 0)
             DraftTypeID();
@@ -52,8 +59,7 @@ public class BasicSave : MonoBehaviour, SaveableObject
     /// Assigns a new GUID only if the slot is empty or already claimed by a different object.
     /// Otherwise registers the existing ID as-is.
     /// </summary>
-    private void EnsureUniqueID()
-    {
+    private void EnsureUniqueID(){
         // No ID yet — generate one
         if (string.IsNullOrEmpty(IDDraft))
         {
@@ -75,16 +81,14 @@ public class BasicSave : MonoBehaviour, SaveableObject
     }
 
     // Marks the object dirty in the editor so the new GUID is saved to the scene file
-    private void MarkDirty()
-    {
-#if UNITY_EDITOR
-        if (!Application.isPlaying)
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
+    private void MarkDirty(){
+        #if UNITY_EDITOR
+            if (!Application.isPlaying)
+                UnityEditor.EditorUtility.SetDirty(this);
+        #endif
     }
 
-    public void DraftTypeID()
-    {
+    public void DraftTypeID(){
         int candidate = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         while (UsedTypeIDs.TryGetValue(candidate, out var existing) && !ReferenceEquals(existing, this))
             candidate = UnityEngine.Random.Range(int.MinValue, int.MaxValue);

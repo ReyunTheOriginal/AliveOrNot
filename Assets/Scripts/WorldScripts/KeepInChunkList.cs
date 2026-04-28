@@ -19,10 +19,10 @@ public class KeepInChunkList : MonoBehaviour
         Dictionary<Vector2Int, Chunk> dict = GameServices.WorldGenerationBase.ChunkDict;
         ChunkPos = GameUtils.GetChunkPos(transform.position);
 
-        if (dict.TryGetValue(LastChunkPos, out Chunk lastChunk))
+        if (dict.TryGetValue(LastChunkPos, out Chunk lastChunk) && lastChunk && lastChunk.ObjectsInChunk != null)
             lastChunk.ObjectsInChunk.Remove(gameObject);
 
-        if (dict.TryGetValue(ChunkPos, out Chunk newChunk))
+        if (dict.TryGetValue(ChunkPos, out Chunk newChunk) && lastChunk && lastChunk.ObjectsInChunk != null)
             newChunk.ObjectsInChunk.Add(gameObject);
     }
 
@@ -30,6 +30,9 @@ public class KeepInChunkList : MonoBehaviour
         active = false;
         if (GameServices.WorldGenerationBase.ChunkDict.TryGetValue(LastChunkPos, out Chunk lastChunk))
             lastChunk.ObjectsInChunk.Remove(gameObject);
+
+        if (GameServices.WorldGenerationBase.ChunkDict.TryGetValue(ChunkPos, out Chunk Chunk))
+            Chunk.ObjectsInChunk.Remove(gameObject);
     }
 
     public void Enable() {

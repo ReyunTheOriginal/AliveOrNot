@@ -3,7 +3,10 @@ using UnityEngine.Rendering.Universal;
 
 public class FlashLightBehavior : ItemBehavior
 {
-    public GameObject Light;
+    public Light2D Light;
+    public Light2D ambLight;
+
+    public float LightIntensity;
 
     public override void LateHold()
     {
@@ -13,7 +16,8 @@ public class FlashLightBehavior : ItemBehavior
 
     public override void Hold(){
         if (Input.GetKeyDown(KeyCode.F)){
-            Light.gameObject.SetActive(!Light.gameObject.activeInHierarchy);
+            Light.intensity = (Light.intensity == 0? LightIntensity : 0);
+            ambLight.intensity = (ambLight.intensity == 0? 0.09f : 0);
         }
     }
 }
